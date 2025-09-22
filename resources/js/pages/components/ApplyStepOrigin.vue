@@ -3,8 +3,12 @@
 import { useApplyForm } from '../composables';
 import FormField from './FormField.vue';
 
-const {fieldOrigin,form}=useApplyForm()
+const {fieldOrigin}=useApplyForm()
 
+
+defineProps({
+  form: Object,
+})
 </script>
 
 <template>
@@ -16,7 +20,7 @@ const {fieldOrigin,form}=useApplyForm()
               v-for="value in field"
               :key="value.key"
               :field="value"
-              v-model="form.identification[value.key]"
+              v-model="form.origin[value.key]"
             />
             </div>
         </div>

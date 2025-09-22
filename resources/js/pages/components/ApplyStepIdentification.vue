@@ -3,7 +3,11 @@
 import { useApplyForm } from '../composables';
 import FormField from './FormField.vue';
 
-const {fieldIdentification,form}=useApplyForm()
+
+defineProps({
+  form: Object,
+})
+const {fieldIdentification}=useApplyForm()
 
 </script>
 

@@ -8,15 +8,40 @@ Route::get('/', [AppController::class, 'index']);
 Route::post('/register', [AppController::class, 'register']);
 Route::post('/verify-email', [AppController::class, 'verifyEmail']);
 Route::post('/verify-pin', [AppController::class, 'verifyPin']);
+Route::post('/logout', [AppController::class, 'logout'])->middleware('auth');
 
 
 Route::get('/login',function(){
     return Inertia::render('LoginPage');
 } )->name('login');
 
-Route::get('/apply-job',function(){
-    return Inertia::render('ApplyPage');
-})->middleware('auth');
+    // Route::prefix('manager')->name('manager.')->group(function () {
+    //     // Page d'accueil du manager
+    //     Route::get('/{step?}', [AppController::class,'manager'])->name('dashboard');
+    //     Route::get('/{step?}/{uuid}', [AppController::class,'show'])->name('show');
+    //     // // Page des produits
+    //     Route::get('/offre/add', function () {
+    //         return Inertia::render('AddOffrePage');
+    //     })->name('offre.add');
+    //     // // Page des prix
+    //     // Route::get('/prix', function () {
+    //     //     return Inertia::render('PrixPage');
+    //     // })->name('prix');
+
+    // })->middleware('auth');
+
+    Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:admin'])->group(function () {
+        Route::get('/{step?}', [AppController::class,'manager'])->name('dashboard');
+        Route::get('/{step?}/{uuid}', [AppController::class,'show'])->name('show');
+        Route::post('/offre/add',[AppController::class,'storeOffre'])->name('offre.add');
+    });
+
+
+Route::get('/apply-job/{uuid}', [AppController::class, 'applyJob'])
+    ->middleware('auth')
+    ->name('apply.job');
+
+Route::post('/apply-job/save',[AppController::class, 'storeOrUpdate'])->middleware('auth');
 
 
 Route::get('/register',function(){
