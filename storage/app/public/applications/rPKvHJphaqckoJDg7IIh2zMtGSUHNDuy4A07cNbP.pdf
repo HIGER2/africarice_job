@@ -1,0 +1,226 @@
+%PDF-1.4
+%“Œ‹ž ReportLab Generated PDF document http://www.reportlab.com
+1 0 obj
+<<
+/F1 2 0 R /F2 3 0 R /F3 4 0 R /F4 5 0 R
+>>
+endobj
+2 0 obj
+<<
+/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
+>>
+endobj
+3 0 obj
+<<
+/BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
+>>
+endobj
+4 0 obj
+<<
+/BaseFont /ZapfDingbats /Name /F3 /Subtype /Type1 /Type /Font
+>>
+endobj
+5 0 obj
+<<
+/BaseFont /Symbol /Name /F4 /Subtype /Type1 /Type /Font
+>>
+endobj
+6 0 obj
+<<
+/Contents 26 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
+>>
+endobj
+7 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://docs.python.org/3/tutorial/)
+>> /Border [ 0 0 0 ] /Rect [ 84.28 590.8898 147.64 602.8898 ] /Subtype /Link /Type /Annot
+>>
+endobj
+8 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://docs.docker.com/get-started/)
+>> /Border [ 0 0 0 ] /Rect [ 84.28 578.8898 145.41 590.8898 ] /Subtype /Link /Type /Annot
+>>
+endobj
+9 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://platform.openai.com/docs/)
+>> /Border [ 0 0 0 ] /Rect [ 84.28 520.8898 188.22 532.8898 ] /Subtype /Link /Type /Annot
+>>
+endobj
+10 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://huggingface.co/inference-api)
+>> /Border [ 0 0 0 ] /Rect [ 84.28 508.8898 165.43 520.8898 ] /Subtype /Link /Type /Annot
+>>
+endobj
+11 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://docs.pinecone.io/)
+>> /Border [ 0 0 0 ] /Rect [ 84.28 450.8898 151.53 462.8898 ] /Subtype /Link /Type /Annot
+>>
+endobj
+12 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://weaviate.io/developers/weaviate)
+>> /Border [ 0 0 0 ] /Rect [ 84.28 438.8898 151.52 450.8898 ] /Subtype /Link /Type /Annot
+>>
+endobj
+13 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://github.com/pgvector/pgvector)
+>> /Border [ 0 0 0 ] /Rect [ 84.28 426.8898 171.53 438.8898 ] /Subtype /Link /Type /Annot
+>>
+endobj
+14 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://docs.langchain.com/)
+>> /Border [ 0 0 0 ] /Rect [ 84.28 368.8898 158.2 380.8898 ] /Subtype /Link /Type /Annot
+>>
+endobj
+15 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://docs.llamaindex.ai/)
+>> /Border [ 0 0 0 ] /Rect [ 84.28 356.8898 161.53 368.8898 ] /Subtype /Link /Type /Annot
+>>
+endobj
+16 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://huggingface.co/docs/peft/index)
+>> /Border [ 0 0 0 ] /Rect [ 84.28 298.8898 143.19 310.8898 ] /Subtype /Link /Type /Annot
+>>
+endobj
+17 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://huggingface.co/models)
+>> /Border [ 0 0 0 ] /Rect [ 84.28 286.8898 202.66 298.8898 ] /Subtype /Link /Type /Annot
+>>
+endobj
+18 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://fastapi.tiangolo.com/)
+>> /Border [ 0 0 0 ] /Rect [ 84.28 228.8898 145.41 240.8898 ] /Subtype /Link /Type /Annot
+>>
+endobj
+19 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://www.runpod.io/)
+>> /Border [ 0 0 0 ] /Rect [ 84.28 216.8898 180.42 228.8898 ] /Subtype /Link /Type /Annot
+>>
+endobj
+20 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://openai.com/research/whisper)
+>> /Border [ 0 0 0 ] /Rect [ 84.28 158.8898 157.64 170.8898 ] /Subtype /Link /Type /Annot
+>>
+endobj
+21 0 obj
+<<
+/A <<
+/S /URI /Type /Action /URI (https://huggingface.co/models?pipeline_tag=automatic-speech-recognition)
+>> /Border [ 0 0 0 ] /Rect [ 84.28 146.8898 218.23 158.8898 ] /Subtype /Link /Type /Annot
+>>
+endobj
+22 0 obj
+<<
+/Annots [ 7 0 R 8 0 R 9 0 R 10 0 R 11 0 R 12 0 R 13 0 R 14 0 R 15 0 R 16 0 R 
+  17 0 R 18 0 R 19 0 R 20 0 R 21 0 R ] /Contents 27 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 
+  /Trans <<
+
+>> /Type /Page
+>>
+endobj
+23 0 obj
+<<
+/PageMode /UseNone /Pages 25 0 R /Type /Catalog
+>>
+endobj
+24 0 obj
+<<
+/Author (\(anonymous\)) /CreationDate (D:20250905091539+00'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20250905091539+00'00') /Producer (ReportLab PDF Library - www.reportlab.com) 
+  /Subject (\(unspecified\)) /Title (\(anonymous\)) /Trapped /False
+>>
+endobj
+25 0 obj
+<<
+/Count 2 /Kids [ 6 0 R 22 0 R ] /Type /Pages
+>>
+endobj
+26 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 1836
+>>
+stream
+Gau0D>BALX'RnB33);VHbJe[!he8KiZU;/8f_1"8@4S#%Q5rUne,Ard,QeW1Qn]Tl!uN:(lT7%RT5Ch%Aa@Yj"aIM,_6"0T",f[R]tO`0$/@)7T!%GIb[CcEcgHSI.)Zi[@-N5OI>)J(]fB>bU+$?6:ml>DA]V@X_nZV!GS/u/HSF+2f<G&HbF/pb1(pK1L\ige=]rOqV<cm^1s,<YQA'iBFJW%kre0.E*H9o.n9)6bgY_JuVkG7*)o2$OLI/[C]+<@WmAcgT,nmoH*4p\3%/2\@jm;$:[a_E@97&W\YlAHd'HC4>"i7/\i-d2*hoa+U_Ui<m"h]QR&%TeA/3DS?ajP1!qsj4qhLNPZKd>&)fT6i3,u&@0ht+ZnhM'9%*W/jMaQ7QZ(;K=IM;L6Zpab\<lmqkeSY5S7#Qu70HT\tXn-@0Tk)4O2T%bS)_g4*aG>.#i5@i/#>#YZh:jAjk?lA,aV-F(elG$G4Cn>02s&kE5[G/XbT'n&IZaP`0jcC+c;/l#o4dGg"ZBOBJ,>Kq8ha1'@E&Al764d0o&.E(UV.9neKg*bG:TO[PF'[*TFA,!i.aVs"]p%g@<,;$Ai54()oW*EWAL5>m@asVE,h7'P_.h_sr#ff1E2N;?JU=#cGsQ_7EC^ARm.%>qT0/j@Hqps$GMuuYKb*sM9HNJ)n,#D?0`CUj3tCl>._CSi`c<o>FPHb];a.qa_I)DNc1i2p8OUr09]4-j$Y(eJ7@(9Yh@Z@2VBZN8%HFR!CI^Wb-'QIbfiKX<nn:DO.[+/bP=1h=0/Z\V(Pt=XX5DW."]7.:SI5gUV<Y^npP(Ib<KZ-OFC@VLI@-#_YeeP^//Wd^8T.k:<=>WXgeghI9eNX8G34Kq2H80%j`RO`CV$6[N7k-JWf@:"8Xak5DX$r4G2t$/Gk=C%n[(*j^^EVKH6bHlm^aVIP;1(pA6Z,B;MMGPP):qJ:8<bXVLG6"R1ZFa2L-oD(U=\EFZ$oT^>C7j1p&]ghm<0FjZ"L?_KY3;=\]V5MjWsY9OG#q)lLSY<m1[Wm9O<\2_q/UL)0(1I-iL`,0gP2Lg?Cq@h]sje[u5bVL;PujeJTUoph4_aEB1P6XCkSCMZ$5:Wg8eE^su<#c@:P3#WkHP1&f%nP,:4Os9?RKQ0-L'9X!!C:2%@L/+3T_t,TDeP20U@ZD89R?B%)9@pNDI%UkJ,Q.fAH)?C3rTWGSXYs#qesiAIX/K9sR%6F`dgZ%q=8SYB[1sef@:HE3dP?rdVl!+MT/kM/s.kHpSWaCWf25O2YLW9FS,>J*@W1SSOt6D%#<Wi<!9Fm^P[MLGMGh&HX3FCW>&P/l'-+j>$^5Bb*_^Ki(R7T,\^hXW<+T5'=#j5!$tn(eU,T25_gB^l3L>jTN*FpQ-](F/.nNGpo8JS`$0QtYC44S-D_t<Y]k42hH32KgS6C(_'Cmg]f+8V),`*4(XTr^A]:Xl6nA6X_[X*,sg]7fM,:`AN#u-n)2rq@!n4`/mU+iLa1TM/2Lk2]`;p=3]Q/[G;&@&gFlMhE\6=sq[(p#VA]P7>]gq+k!,*p'i$VCXIi6C5u-_ci3>RSq#[41!-lcgPi',.)'?p9j/9D2_h6'iU1`T//[O#(ohLM\e#ds<fl]/ok@p]O(Oo5riCpISE*.SGIfl:@a.iC#28JWr/hWB(he174>SH7l;88bm58Qceb?o%ld>mlW$&?l,eZ)7J"kc8Md`oDN=!*lh`hTRagW65M"6">q9;S4b?49t>(DD[7n(07-g]q$aGCMtn5E,L'qW5s&IJlO=fFAjg3]-&rdId-PkL*\])KMa=A77U_F\(in;5N0T3tG4Ff(Y5S[5l$%O~>endstream
+endobj
+27 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 1056
+>>
+stream
+Gau0B968f@&AI`dp;E%N$'tM)oL9HaR7X9?dcA9afSWOA9@U7'l+c]0"p.LN(mbXe*rOa\U"-V!@,[02a"R\,RR)-cJ5DUr!HB_4R,,Stf)!o@lR.$CoGmVRp\R.gJN'\$7M`K&?*Z&;0;_j/@Zds\Y7#JCp>1'bSAFR4S&[QD8HJq?S5L9,<Z)Q2="9"DbW@^hoK5Yj=7`chmF__=n14M38^cI]A=]`M;n"UVcCFNQHhCaHpV"9*FV`?H!lVK=>ZtmS8*3&h."$W9\a>PV(=+PT)%7j%"WnnP6KM@d1BrP`E#I^ER=d%5dnd"gAOUcV'MdHX'M].A]g9/fZH)2Zd99FQ=-dQce%mU=cRd$7$l4D'J1%nO3(jlr(2MUl.<_V8"0i>n]e5YRP)121nk/+O+QD]u^kGXVf-g$cDRXooFmas=qF4_oMnBU+`7V_b(;!0aBB`I^-r;qtG5"I\5FK')]q2]Eo_0rhfcg5NC+-1cL6`_J"<0@$k*2447s6\$pG,E"pEtC)^^6E\2GBN:ZH2ORaP-?'=^/V&od1G5q6sqk\\_XF.87%)dBA-@8[s2L%]N]#ZM%q;P-7Ef8Y@WjRJb?s;?11td#?PVeTEuXeIZ\(n;%su]NTejgM]!,3r@SL0hCrD)%U\l6nB!`6M(CeU\[;qOs&q$q3Mg0K<Z#q^6O]``I/#aM`B;"FVKKuPto*FG/nCPeiN'M0ME96MNELraW1$h/WKRZ,F&<+D+:j-i9qluSp?D>JO[?Q7pEs_R)I=FM,\bjYlilO%]R]Sg\2WSUk,+P$H</]Z<c?Ba6VOkc%G`DmKr6n97eu;Mho%d`cLF)-+-\^m$6DSg4jsRLT?]-B+aO'_IkkL5SkcbdEIF.T>9OD1t!:FU+i8V7bmjD"R7g$qe#lOV2^>%o9?:2SrIRM#om<%,9?,,>2N#oK1u_.OV*>fmGp?6-aJQPWBmXi^IbVCC(+Hi-5:d,ON7OUs3BRhns=F-0+tWu7R=n4]ddW;`'&\OebFj=-!)U_)<'jBXC9S->;6mGf=c*U[Wg=(>(6O;aI&q~>endstream
+endobj
+xref
+0 28
+0000000000 65535 f 
+0000000073 00000 n 
+0000000134 00000 n 
+0000000241 00000 n 
+0000000353 00000 n 
+0000000436 00000 n 
+0000000513 00000 n 
+0000000718 00000 n 
+0000000900 00000 n 
+0000001083 00000 n 
+0000001263 00000 n 
+0000001447 00000 n 
+0000001620 00000 n 
+0000001807 00000 n 
+0000001991 00000 n 
+0000002165 00000 n 
+0000002340 00000 n 
+0000002526 00000 n 
+0000002703 00000 n 
+0000002880 00000 n 
+0000003050 00000 n 
+0000003233 00000 n 
+0000003452 00000 n 
+0000003775 00000 n 
+0000003845 00000 n 
+0000004129 00000 n 
+0000004196 00000 n 
+0000006124 00000 n 
+trailer
+<<
+/ID 
+[<61e6db6a989d0ed77a02486f8b889fb6><61e6db6a989d0ed77a02486f8b889fb6>]
+% ReportLab generated PDF document -- digest (http://www.reportlab.com)
+
+/Info 24 0 R
+/Root 23 0 R
+/Size 28
+>>
+startxref
+7272
+%%EOF
