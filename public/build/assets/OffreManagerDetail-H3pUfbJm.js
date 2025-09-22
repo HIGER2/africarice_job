@@ -1,0 +1,1 @@
+import{_ as o}from"./OffreManagerDetail.vue_vue_type_script_setup_true_lang-BHOivpvu.js";import"./Table.vue_vue_type_script_setup_true_lang-BeSqXLMf.js";import"./app-akjv1TV5.js";export{o as default};
