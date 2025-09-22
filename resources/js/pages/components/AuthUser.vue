@@ -27,11 +27,17 @@ function logout() {
               <li class="text-sm hover:bg-gray-300 w-full px-3 py-2 rounded-md cursor-pointer">
                 <a href="/" class="w-full block">Accueil</a>
             </li>
-            <li v-if="user.role=='admin'" class="text-sm hover:bg-gray-300 w-full px-3 py-2 rounded-md cursor-pointer">
+            <li  class="text-sm hover:bg-gray-300 w-full px-3 py-2 rounded-md cursor-pointer">
                 <a href="/manager/offres" class="w-full block">
                     Admin Panel
                 </a>
             </li>
+
+             <!-- <li v-if="user.role=='admin'" class="text-sm hover:bg-gray-300 w-full px-3 py-2 rounded-md cursor-pointer">
+                <a href="/manager/offres" class="w-full block">
+                    Admin Panel
+                </a>
+            </li> -->
           
             <!-- <li class="text-sm hover:bg-gray-100 px-3 py-2 rounded-md cursor-pointer">Parametres</li> -->
             <li @click="logout" class="text-sm hover:bg-gray-300 w-full px-3 py-2 rounded-md cursor-pointer">Deconnexion</li>
