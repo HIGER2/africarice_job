@@ -37,7 +37,7 @@ import { ref, onMounted } from 'vue'
 import Spinnercomponent from './components/Spinnercomponent.vue'
 import { Inertia } from '@inertiajs/inertia'
 
-const email = ref('ddd@gmail.com')
+const email = ref('')
 const message = ref('')
 const loading =ref(false)
 

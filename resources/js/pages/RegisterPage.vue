@@ -45,10 +45,10 @@ import Spinnercomponent from './components/Spinnercomponent.vue'
 
 
 const formData = reactive({
-    name: 'douma',
-    last_name: 'armand',
-    email: 'ddd@gmail.com',
-    phone:'0778618454'
+    name: '',
+    last_name: '',
+    email: '',
+    phone:''
 })
 const loading=ref(false)
 

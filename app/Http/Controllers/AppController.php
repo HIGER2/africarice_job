@@ -80,10 +80,10 @@ class AppController extends Controller
         $user->save();
         session(['user_email' => $user->email]);
         // Envoyer email avec code PIN
-        // Mail::raw("Votre code PIN pour se connecter : $pin", function($message) use ($user){
-        //     $message->to($user->email)
-        //             ->subject('Code PIN de connexion');
-        // });
+        Mail::raw("Votre code PIN pour se connecter : $pin", function($message) use ($user){
+            $message->to($user->email)
+                    ->subject('Code PIN de connexion');
+        });
         // return redirect()->route('verify');
         return response()->json(['message'=>'Inscription réussie. Vérifiez votre email pour le code PIN.']);
     }
@@ -105,10 +105,10 @@ class AppController extends Controller
         $user->pin = $pin;
         $user->save();
 
-        // Mail::raw("Votre code PIN pour se connecter : $pin", function($message) use ($user){
-        //     $message->to($user->email)
-        //             ->subject('Code PIN de connexion');
-        // });
+        Mail::raw("Votre code PIN pour se connecter : $pin", function($message) use ($user){
+            $message->to($user->email)
+                    ->subject('Code PIN de connexion');
+        });
 
         return response()->json(['message'=>'Email envoyé avec le code PIN']);
     }
