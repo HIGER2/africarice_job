@@ -10,24 +10,24 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'         => $this->id,
+            // 'id'         => $this->id,
             'uuid'       => $this->uuid,
             'name'       => $this->name,
             'last_name'  => $this->last_name,
             'phone'      => $this->phone,
             'email'      => $this->email,
             'role'       => $this->role,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            // 'created_at' => $this->created_at,
+            // 'updated_at' => $this->updated_at,
 
             'application' => $this->whenLoaded('application') ? [
-                'id'         => $this->application->id,
+                // 'id'         => $this->application->id,
                 'uuid'       => $this->application->uuid,
-                'created_at' => $this->application->created_at,
-                'updated_at' => $this->application->updated_at,
+                // 'created_at' => $this->application->created_at,
+                // 'updated_at' => $this->application->updated_at,
 
                 'origin' => $this->application->origin ? [
-                    'id'               => $this->application->origin->id,
+                    // 'id'               => $this->application->origin->id,
                     'uuid'             => $this->application->origin->uuid,
                     'nationality'      => $this->application->origin->nationality,
                     'country'          => $this->application->origin->country,
@@ -39,7 +39,7 @@ class UserResource extends JsonResource
 
                 'documents' => $this->application->documents->map(function($doc){
                     return [
-                        'id'   => $doc->id,
+                        // 'id'   => $doc->id,
                         'uuid' => $doc->uuid,
                         'name' => $doc->name,
                         'path' => $doc->path,
@@ -48,7 +48,7 @@ class UserResource extends JsonResource
 
                 'diplomas' => $this->application->diplomas->map(function($d){
                     return [
-                        'id'     => $d->id,
+                        // 'id'     => $d->id,
                         'uuid'   => $d->uuid,
                         'diploma'=> $d->diploma,
                         'option' => $d->option,
@@ -56,7 +56,7 @@ class UserResource extends JsonResource
                 }),
 
                 'cgiar_information' => $this->application->cgiarInformation ? [
-                    'id'           => $this->application->cgiarInformation->id,
+                    // 'id'           => $this->application->cgiarInformation->id,
                     'uuid'         => $this->application->cgiarInformation->uuid,
                     'current'      => $this->application->cgiarInformation->current,
                     'cgiar_center' => $this->application->cgiarInformation->cgiar_center,
@@ -65,7 +65,7 @@ class UserResource extends JsonResource
 
                 'experiences' => $this->application->experiences->map(function($e){
                     return [
-                        'id'           => $e->id,
+                        // 'id'           => $e->id,
                         'uuid'         => $e->uuid,
                         'company_name' => $e->company_name,
                         'position'     => $e->position,
@@ -75,8 +75,18 @@ class UserResource extends JsonResource
                     ];
                 }),
 
+                'references' => $this->application->references->map(function($r){
+                    return [
+                        'uuid'       => $r->uuid,
+                        'full_name'      => $r->full_name,
+                        'phone'   => $r->phone,
+                        'email'   => $r->email,
+                        'function'   => $r->function,
+                    ];
+                }),
+
                 'identification' => $this->application->identification ? [
-                    'id'         => $this->application->identification->id,
+                    // 'id'         => $this->application->identification->id,
                     'uuid'       => $this->application->identification->uuid,
                     'birth_date' => $this->application->identification->birth_date,
                     'address'    => $this->application->identification->address,

@@ -6,48 +6,51 @@ import FormField from './FormField.vue';
 
 const props =defineProps({
   form: Object,
+  documents: Array
 })
 
 const initReference={
         id:null,
-        full_name:'douma',
-        function:'armand',
-        phone:'0778618454',
-        email:'douma@gmail.com',
+        full_name:'',
+        function:'',
+        phone:'',
+        email:'',
     }
 
-const {fieldDocument,fieldReference,handleFile}=useApplyForm()
+const {fieldDocument,fieldReference,handleFile,documentPreview}=useApplyForm()
 
 const addReference = () => {
 
- if (props.form.reference.length >= 3) {
+ if (props.form.references.length >= 3) {
   alert('Vous avez atteint la limite de références.')
   return false
 }
-  props.form.reference.push({ ...initReference })
+  props.form.references.push({ ...initReference })
 }
 
 // Supprimer une référence
 const removeReference = (index: number) => {
-  props.form.reference.splice(index, 1)
+  props.form.references.splice(index, 1)
 }
 
 </script>
 
 <template>
 <div class=" w-full">
+  <!-- {{ documents }}wwew  -->
+  <!-- <h1>dsdhksa</h1> -->
           <div class="w-full">
             <h2 class="text-xl font-bold mb-4">References</h2>
-            <div class="w-full mb-2 border-b border-b-gray-300 py-3" v-for="(refItem, indexRef) in form.reference" :key="indexRef">
+            <div class="w-full mb-2 border-b border-b-gray-300 py-3" v-for="(refItem, indexRef) in form.references" :key="indexRef">
               <div class="w-full flex gap-2" v-for="(fieldGroup, index) in fieldReference" :key="index">
                 <template v-for="value in fieldGroup" :key="value.key">
                   <FormField
                     :field="value"
-                    v-model="form.reference[indexRef][value.key]"
+                    v-model="form.references[indexRef][value.key]"
                   />
                 </template>
               </div>
-              <button v-if="indexRef > 0" type="button" @click="() => removeReference(indexRef)" 
+              <button v-if="indexRef > 0 && !form.references[indexRef]?.uuid" type="button" @click="() => removeReference(indexRef)" 
                 class="p-1 w-full bg-red-50 text-red-900 text-[11px] font-bold cursor-pointer rounded-md border border-gray-200 mt-2">
                 Supprimer cette référence
               </button>
@@ -55,7 +58,7 @@ const removeReference = (index: number) => {
               <button type="button" @click="addReference" class="p-1 w-full bg-gray-50 my-3  text-[11px] font-bold cursor-pointer rounded-md border border-gray-200 ">Ajouter une reference</button>
           </div>
 
-            <div class="w-full">
+            <div class="w-full" v-if="!documents?.length > 0">
               <!-- {{ form.documents }} -->
             <h2 class="text-xl font-bold mb-4">CV and Cover letter</h2>
                 <div  class="w-full mb-4" v-for="(value,index) in fieldDocument" :key="index">
@@ -85,6 +88,29 @@ const removeReference = (index: number) => {
                           </div>
                   </label>
                 </div>
+            </div>
+            <div v-else class="w-full"> 
+                  <h2 class="text-xl font-semibold text-gray-800 mb-4">📂 Liste des documents</h2>
+                        <ul class="divide-y divide-gray-200">
+                          <li
+                            v-for="doc in documents"
+                            :key="doc.uuid"
+                            class="flex items-center justify-between py-3"
+                          >
+                            <!-- Nom du fichier -->
+                            <span class="text-gray-700 text-sm truncate">{{ doc.name }}</span>
+
+                            <!-- Bouton télécharger -->
+                            <a
+                              :href="doc.path"
+                              download
+                              target="_blank"
+                              class="text-blue-600 hover:underline text-sm font-medium"
+                            >
+                              Télécharger
+                            </a>
+                          </li>
+                        </ul>
             </div>
           
   </div>

@@ -42,6 +42,7 @@ Route::get('/apply-job/{uuid}', [AppController::class, 'applyJob'])
     ->name('apply.job');
 
 Route::post('/apply-job/save',[AppController::class, 'storeOrUpdate'])->middleware('auth');
+Route::get('/profile',[AppController::class, 'profile'])->middleware('auth');
 
 
 Route::get('/register',function(){

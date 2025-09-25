@@ -6,7 +6,7 @@ import { usePage } from '@inertiajs/vue3'
 // const page = usePage()
 // const user = page.props?.auth?.user
 
-defineProps({
+const props = defineProps({
   uuid: String,
   publication: Object,
   user: Object,
@@ -20,18 +20,35 @@ const formatDate = (date) => {
   })
 }
 
-const { fields, form, currentStep, handleFile,components, nextStep, prevStep, submitForm } = useApplyForm()
+const { fields, form, payLoad,documentPreview, currentStep, handleFile, components, nextStep, prevStep, submitForm } = useApplyForm()
+
+
+payLoad(props?.user?.data?.application)
+// form.diplomas.push(...props.user?.application?.diplomas)
+// // form.cgiar_information.assign(...props.user?.application?.cgiarInformation)
+// form.experiences.push(...props.user?.application?.experiences)
+// form.identification.push(...props.user?.application?.identification)
+// form.origin.assign(...props.user?.application?.origin)
+// form.references.push(...props.user?.application?.references)
+// form.documents.push(...props.user?.application?.documents)
 
 </script>
 
 <template>
   <div class="w-full bg-gray-50">
-    <NavBar :user />
+    <NavBar :user="user.data" />
       <div class="max-w-xl mx-auto py-10">
-      
-       <!-- <pre>
-         {{ form }}
-       </pre> -->
+       <pre>
+        <!-- {{ documentPreview }} -->
+        <!-- {{ props.user.data }} -->
+         <!-- {{ user.application.diplomas }}
+         {{ user.application.cgiar_information }}
+         {{ user.application.experiences }}
+         {{ user.application.identification }}
+         {{ user.application.origin }}
+         {{ user.application.references }} -->
+         <!-- {{ user.data.application.documents }} -->
+       </pre>
     <!-- Récapitulatif publication -->
    <!-- <pre>
       {{ publication.job }}
@@ -79,7 +96,7 @@ const { fields, form, currentStep, handleFile,components, nextStep, prevStep, su
           </template>
       </div>
         <keep-alive>
-          <component :is="components[currentStep]"     :form="form" />
+          <component :is="components[currentStep]"  :documents="documentPreview" :form="form" />
         </keep-alive>  
         <div class="flex justify-between border-t border-t-gray-200 bg-white mt-6 sticky bottom-0  p-4">
         <button 

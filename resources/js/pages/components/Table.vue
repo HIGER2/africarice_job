@@ -27,7 +27,7 @@ const slots = useSlots();
         <th
           v-if="slots.actions"
           scope="col"
-          class="px-6 py-4 text-right text-[11px] font-bold text-primary uppercase tracking-wider"
+          class="px-6 sticky right-0 bg-slate-100 py-4 text-right text-[11px] font-bold text-primary uppercase tracking-wider"
         >
           Actions
         </th>
@@ -56,11 +56,10 @@ const slots = useSlots();
             {{ row[col.key] }}
           </slot>
         </td>
-
         <!-- Slot Actions -->
         <td
           v-if="slots.actions"
-          class="px-6 py-4 whitespace-nowrap text-right text-sm"
+          class="px-6 sticky right-0 bg-white border-r py-4 whitespace-nowrap text-right text-sm"
         >
           <slot name="actions" :row="row" />
         </td>

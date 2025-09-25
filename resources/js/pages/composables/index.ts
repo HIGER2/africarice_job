@@ -8,6 +8,7 @@ import ApplyStepEnd from "../components/ApplyStepEnd.vue";
 import ApplyStepCgiar from "../components/ApplyStepCgiar.vue";
 import { Inertia } from "@inertiajs/inertia";
 import country from '../../data/country.json'
+import * as XLSX from 'xlsx';
 
 export function useApplyForm(){
 
@@ -19,30 +20,56 @@ export function useApplyForm(){
         ApplyStepOrigin,
         ApplyStepEnd
     ]
+
+    // initial form values
     const initReference={
-        id:null,
+        uuid:null,
         full_name:'',
         function:'',
         phone:'',
         email:'',
     }
     const initDoc={
-            id:null,
+            uuid:null,
             file:null
     }
     const initDiploma ={
-            id:null,
+            uuid:null,
             diploma: "",
             option: "",
     }
     const initExperience  ={
-            id:null,
+            uuid:null,
             company_name: "",
             position: "",
             start_date: "",
             end_date: "",
             current: '',
     }
+    const initCgiarInformation={
+        uuid:null,
+        current: false,
+        cgiar_center: "",
+        cgiar_email: "",
+    }
+
+    const initIdentification={
+        uuid:null,
+        birth_date: "",
+        address: "",
+        gender: "",
+    }
+    const initOrigin={
+            uuid:null,
+            nationality: "",
+            country: "",
+            city: "",
+            experience_years: '',
+            french_level: "",
+            english_level: "",
+        }
+
+    // form fields 
 
     const fieldAddOffre= [
         [
@@ -166,32 +193,29 @@ export function useApplyForm(){
         ],
     ]
     
+    const initialPayload={
+        diplomas:{...initDiploma},
+        cgiar_information:{...initCgiarInformation},
+        experiences:{...initExperience},
+        identification:{...initIdentification},
+        origin:{...initOrigin},
+        reference:{...initReference},
+        documents:{...initDoc},
+    }
+    
+
+
+
     const form = reactive({
-        diplomas: [{...initDiploma}],
-        cgiar_information:{
-            current: true,
-            cgiar_center: "",
-            cgiar_email: "",
-        },
-        experience: [{...initExperience}],
-
-        identification: {
-            birth_date: "",
-            address: "",
-            gender: "",
-        },
-
-        origin: {
-            nationality: "",
-            country: "",
-            city: "",
-            experience_years: '',
-            french_level: "",
-            english_level: "",
-        },
-        reference: [{ ...initReference }],
+        diplomas: [],
+        cgiar_information:{},
+        experiences: [{...initExperience}],
+        identification: {},
+        origin: {},
+        references: [],
         documents:[{...initDoc},{...initDoc}],
     })
+    const documentPreview = ref([]);
 
     // const form = reactive({
     //     diplomas: [{...initDiploma}],
@@ -219,7 +243,6 @@ export function useApplyForm(){
     //     reference: [{ ...initReference }],
     //     documents:[{...initDoc},{...initDoc}],
     // })
-
 
     const newOffre=reactive({
         offre:{
@@ -286,27 +309,27 @@ export function useApplyForm(){
 
     let currentStep =ref(0)
 
-const nextStep = () => {
-    if (currentStep.value < components.length - 1) {
-      currentStep.value++
+    const nextStep = () => {
+        if (currentStep.value < components.length - 1) {
+        currentStep.value++
+        }
     }
-  }
 
-  
-const addReference = () => {
-    form.reference.push({ ...initReference }); // crée un nouvel objet
-    console.log(form.reference);
-  }
+    
+    const addReference = () => {
+        form.reference.push({ ...initReference }); // crée un nouvel objet
+        console.log(form.reference);
+    }
 
     const removeReference = (index) => {
-          form.reference.splice(index, 1)
+            form.reference.splice(index, 1)
     }
 
-  const prevStep = () => {
+    const prevStep = () => {
         if (currentStep.value > 0) {
         currentStep.value--
         }
-  }
+    }
 
    // file handler
     const handleFile = (event, sectionKey, fieldKey) => {
@@ -331,15 +354,15 @@ const addReference = () => {
     }
 
     // Vérification cgiar_information
-    // if (!data.cgiar_information || !data.cgiar_information.cgiar_center || !data.cgiar_information.cgiar_email) {
-    //     errors.push("Les informations CGIAR (center et email) sont obligatoires.");
-    // }
+    if ( data.cgiar_information.current && (!data.cgiar_information.cgiar_center || !data.cgiar_information.cgiar_email)) {
+        errors.push("Les informations CGIAR (center et email) sont obligatoires.");
+    }
 
     // Vérification experience
-    if (!data.experience || data.experience.length === 0) {
+    if (!data.experiences || data.experiences.length === 0) {
         errors.push("Au moins une expérience est requise.");
     } else {
-        data.experience.forEach((exp, i) => {
+        data.experiences.forEach((exp, i) => {
         if (!exp.company_name || !exp.position || !exp.start_date) {
             errors.push(`Expérience ${i + 1}: nom de l’entreprise, poste et date de début obligatoires.`);
         }
@@ -357,10 +380,10 @@ const addReference = () => {
     }
 
     // Vérification reference
-    if (!data.reference || data.reference.length === 0) {
+    if (!data.references || data.references.length === 0) {
         errors.push("Au moins une référence est requise.");
     } else {
-        data.reference.forEach((r, i) => {
+        data.references.forEach((r, i) => {
         if (!r.full_name || !r.email || !r.phone) {
             errors.push(`Référence ${i + 1}: nom, email et téléphone obligatoires.`);
         }
@@ -378,144 +401,228 @@ const addReference = () => {
     return errors;
     }
 
-const submitForm = async (uuid:string) => {
+    const submitForm = async (uuid:string) => {
 
-  try {
-        const errors = validateForm(form);
-        if (errors.length > 0) {
-        alert("Erreurs trouvées:\n- " + errors.join("\n- "));
-         return false
-        } 
-  
-    const formData = new FormData();
+    try {
+            const errors = validateForm(form);
+            if (errors.length > 0) {
+            alert("Erreurs trouvées:\n- " + errors.join("\n- "));
+            return false
+            } 
+            
+            if (!confirm("Confirmez-vous l'envoi de votre candidature ?")) {
+                return false; // Annule l'envoi si l'utilisateur clique sur "Annuler"
+            }
+        const formData = new FormData();
 
-    // Ajouter les données JSON
-    formData.append('uuid',uuid );
-    // formData.append('identification', JSON.stringify(form.identification));
-    // formData.append('origin', JSON.stringify(form.origin));
-    // formData.append('diplomas', JSON.stringify(form.diplomas));
-    // formData.append('experience', JSON.stringify(form.experience));
-    // formData.append('reference', JSON.stringify(form.reference));
-    // formData.append('cgiar_information', JSON.stringify(form.cgiar_information));
+        // Ajouter les données JSON
+        formData.append('uuid',uuid );
+        // formData.append('identification', JSON.stringify(form.identification));
+        // formData.append('origin', JSON.stringify(form.origin));
+        // formData.append('diplomas', JSON.stringify(form.diplomas));
+        // formData.append('experience', JSON.stringify(form.experience));
+        // formData.append('reference', JSON.stringify(form.reference));
+        // formData.append('cgiar_information', JSON.stringify(form.cgiar_information));
 
-    // // Ajouter les fichiers
-    // form.documents.forEach((doc, index) => {
-    //    if (doc.id) {
-    //         formData.append(`documents[${index}][id]`, doc.id);
-    //     }
-    //     // Ajouter le fichier seulement s'il est valide
-    //     if (doc.file instanceof File) {
-    //         formData.append(`documents[${index}][file]`, doc.file);
-    //     }
-    // });
+        // // Ajouter les fichiers
+        // form.documents.forEach((doc, index) => {
+        //    if (doc.id) {
+        //         formData.append(`documents[${index}][id]`, doc.id);
+        //     }
+        //     // Ajouter le fichier seulement s'il est valide
+        //     if (doc.file instanceof File) {
+        //         formData.append(`documents[${index}][file]`, doc.file);
+        //     }
+        // });
 
+                        
+        // Identification (objet simple)
+        Object.keys(form.identification).forEach(key => {
+        formData.append(`identification[${key}]`, form.identification[key]);
+        });
+
+        // Origin (objet simple)
+        Object.keys(form.origin).forEach(key => {
+        formData.append(`origin[${key}]`, form.origin[key]);
+        });
+
+        // Diplomas (tableau d’objets)
+        form.diplomas.forEach((item, index) => {
+        Object.keys(item).forEach(key => {
+            formData.append(`diplomas[${index}][${key}]`, item[key]);
+        });
+        });
+
+        // Experience (tableau d’objets)
+        form.experiences.forEach((item, index) => {
+        Object.keys(item).forEach(key => {
+            formData.append(`experiences[${index}][${key}]`, item[key]);
+        });
+        });
+
+        // Reference (tableau d’objets)
+        form.references.forEach((item, index) => {
+            Object.keys(item).forEach(key => {
+                formData.append(`references[${index}][${key}]`, item[key]);
+            });
+        });
+
+        // CGIAR Information (objet simple)
+        Object.keys(form.cgiar_information).forEach(key => {
+        formData.append(`cgiar_information[${key}]`, form.cgiar_information[key]);
+        });
+
+        // Documents (fichiers déjà bien gérés)
+        form.documents.forEach((doc, index) => {
+        if (doc.id) formData.append(`documents[${index}][id]`, doc.id);
+        if (doc.file) formData.append(`documents[${index}][file]`, doc.file);
+        });
+        // Ajouter l'UUID de la publication/job
+        // formData.append('publication_uuid', publicationUuid.value); // mettre la valeur réelle
+
+        // Envoi de la requête
+        const response = await window.axios.post('/apply-job/save', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+        });
+
+        console.log('Réponse du serveur :', response.data?.data?.message);
+
+        alert('Candidature envoyée avec succès ✅');
+
+    } catch (error) {
+        let message = error.response?.data?.message ? error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'
+
+        if (error.response && error.response.data && error.response.data.errors) {
+        // Récupère tous les messages d'erreur et les transforme en texte
+        const messages = Object.values(error.response.data.errors)
+            .flat() // aplatit les tableaux
+            .join('\n');
+        alert(messages);
+        } else {
+        alert(message);
+        }
+        console.error('Erreur lors de l\'envoi du formulaire :', error.response?.data?.errors || error);
+        // alert(message);
+    }
+    };
+
+    async function submitOffre(data: any) {
+    try {
+        // Convertir reactive en objet natif
+        const rawData = toRaw(data)
+
+        // Créer FormData
+        const formData = new FormData()
+
+        // Ajouter les champs texte
+        for (const key in rawData.offre) {
+        formData.append(`offre[${key}]`, rawData.offre[key])
+        }
+
+        // Ajouter les fichiers
+        rawData.document.forEach((file: File, index: number) => {
+        formData.append(`documents[${index}]`, file)
+        })
+
+        // Envoyer via Axios
+        const response = await axios.post('/manager/offre/add', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+        })
+
+        Inertia.reload()
+        console.log('Offre envoyée ✅', response.data)
+    } catch (error: any) {
+        let message = error.response?.data?.message ?error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'
+        console.error('Erreur lors de l\'envoi du formulaire :', error.response || error);
+        alert(message);
+        
+    }
+    }
+
+    const payLoad = (data) => {
+        Object.keys(data).forEach(key => {
+            if (Array.isArray(data[key])) {
+                if (key== 'documents') {
+                    console.log(data[key]);
                     
-                // Identification (objet simple)
-                Object.keys(form.identification).forEach(key => {
-                formData.append(`identification[${key}]`, form.identification[key]);
-                });
+                    documentPreview.value = data[key]
+                    return
+                }
+                data[key].length > 0 ?  form[key] =  data[key] : form[key].push({...initialPayload[key]})
+            }
+            if (typeof data[key] === 'object'  && !Array.isArray(data[key])) {
+                form[key] = Object.assign({}, initialPayload[key], data[key]);
+            }
+        });
 
-                // Origin (objet simple)
-                Object.keys(form.origin).forEach(key => {
-                formData.append(`origin[${key}]`, form.origin[key]);
-                });
-
-                // Diplomas (tableau d’objets)
-                form.diplomas.forEach((item, index) => {
-                Object.keys(item).forEach(key => {
-                    formData.append(`diplomas[${index}][${key}]`, item[key]);
-                });
-                });
-
-                // Experience (tableau d’objets)
-                form.experience.forEach((item, index) => {
-                Object.keys(item).forEach(key => {
-                    formData.append(`experience[${index}][${key}]`, item[key]);
-                });
-                });
-
-                // Reference (tableau d’objets)
-                form.reference.forEach((item, index) => {
-                Object.keys(item).forEach(key => {
-                    formData.append(`reference[${index}][${key}]`, item[key]);
-                });
-                });
-
-                // CGIAR Information (objet simple)
-                Object.keys(form.cgiar_information).forEach(key => {
-                formData.append(`cgiar_information[${key}]`, form.cgiar_information[key]);
-                });
-
-                // Documents (fichiers déjà bien gérés)
-                form.documents.forEach((doc, index) => {
-                if (doc.id) formData.append(`documents[${index}][id]`, doc.id);
-                if (doc.file) formData.append(`documents[${index}][file]`, doc.file);
-                });
-    // Ajouter l'UUID de la publication/job
-    // formData.append('publication_uuid', publicationUuid.value); // mettre la valeur réelle
-
-    // Envoi de la requête
-    const response = await window.axios.post('/apply-job/save', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
-
-    console.log('Réponse du serveur :', response.data?.data?.message);
-
-    alert('Candidature envoyée avec succès ✅');
-
-  } catch (error) {
-    let message = error.response?.data?.message ? error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'
-
-     if (error.response && error.response.data && error.response.data.errors) {
-      // Récupère tous les messages d'erreur et les transforme en texte
-      const messages = Object.values(error.response.data.errors)
-        .flat() // aplatit les tableaux
-        .join('\n');
-      alert(messages);
-    } else {
-      alert(message);
+        // console.log(form);
+        
+        // if (data.) {
+            
+        // }
+        console.log(documentPreview.value);
+        
     }
-    console.error('Erreur lors de l\'envoi du formulaire :', error.response?.data?.errors || error);
-    // alert(message);
-  }
-};
+    function exportToExcel(columns:Array<any>, data:Array<any>, fileName:string = 'export.xlsx') {
+    // Créer un tableau avec les labels comme première ligne
+    const headers = columns.map(col => col.label);
 
-  async function submitOffre(data: any) {
-  try {
-    // Convertir reactive en objet natif
-    const rawData = toRaw(data)
+    // Mapper les données en prenant les valeurs correspondantes aux keys
+    // const rows = data.map(row =>
+    //     columns.map(col => row[col.key] != null ? row[col.key] : '')
+    // );
 
-    // Créer FormData
-    const formData = new FormData()
+     const rows = data.map(row =>
+        columns.map(col => {
+        const value = row[col.key];
 
-    // Ajouter les champs texte
-    for (const key in rawData.offre) {
-      formData.append(`offre[${key}]`, rawData.offre[key])
+        if (Array.isArray(value)) {
+            // Si c'est un tableau, on le transforme en string séparée par des virgules
+                return value
+                .map(item => {
+                if (typeof item === 'object' && item !== null) {
+                    // On peut choisir quels champs afficher, par ex name et path
+                return Object.entries(item)
+                .map(([k, v]) => `${k}: ${v}`)
+                .join('; ');
+                }
+                return item;
+                })
+                .join(', ');
+        } else if (value && typeof value === 'object') {
+            // Si c'est un objet, on peut le transformer en JSON
+            return JSON.stringify(value);
+        } else if (value != null) {
+            return value;
+        } else {
+            return '';
+        }
+        })
+    );
+
+
+    // Créer la feuille Excel avec header + lignes
+    const worksheetData = [headers, ...rows];
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+
+    worksheet['!cols'] = headers.map((h, i) => ({
+    wch: Math.max(
+        h.length,
+        ...rows.map(r => (r[i] ? r[i].toString().length : 0))
+    ) + 2 // un peu de marge
+    }));
+
+    // Créer le classeur et ajouter la feuille
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+    // Exporter le fichier
+    XLSX.writeFile(workbook, fileName);
     }
-
-    // Ajouter les fichiers
-    rawData.document.forEach((file: File, index: number) => {
-      formData.append(`documents[${index}]`, file)
-    })
-
-    // Envoyer via Axios
-    const response = await axios.post('/manager/offre/add', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-
-    Inertia.reload()
-    console.log('Offre envoyée ✅', response.data)
-  } catch (error: any) {
-     let message = error.response?.data?.message ?error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'
-    console.error('Erreur lors de l\'envoi du formulaire :', error.response || error);
-    alert(message);
-    
-  }
-}
 
    return {
     form,
@@ -541,7 +648,10 @@ const submitForm = async (uuid:string) => {
     fieldAddOffre,
     newOffre,
     fieldAddDocument,
-    submitOffre
+    submitOffre,
+    exportToExcel,
+    payLoad,
+    documentPreview
   }
 
 }

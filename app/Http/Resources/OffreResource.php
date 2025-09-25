@@ -22,6 +22,7 @@ class OffreResource extends JsonResource
             'uuid' => $this->uuid,
             'reference' => $this->reference,
             'type' => $this->type,
+            'position_title'=> $this->whenLoaded('job')->position_title,
             'recrutement_id' => $this->recrutement_id,
             'is_published' => $this->is_published ? 'Publiée' : 'Non Publiée',
             'is_closed' => $this->is_closed ? 'Cloturée' : 'Ouverte',

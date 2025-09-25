@@ -1,32 +1,40 @@
 
 <script lang="ts" setup>
+import { useApplyForm } from '../composables';
 import AddOffre from './AddOffre.vue';
 import Table from './Table.vue';
 
 defineProps({
   data: Array,
 })
+const {exportToExcel}=useApplyForm()
+
 const columns = [
   { key: "reference", label: "# Réf" },
   { key: "type", label: "Type" },
-  { key: "job", label: "Poste" },
+  { key: "position_title", label: "Poste" },
   { key: "is_published", label: "Publication" },
   { key: "is_closed", label: "Statut" },
   { key: "published_at", label: "Publié le" },
   { key: "expires_at", label: "Expire le" },
   { key: "candidates_count", label: "Nombre de candidats" },
 ];
+
+
 </script>
 
 <template>
   <div>
         <div class="w-full">
             <div class="flex px-6 py-4  justify-between items-center w-full">
+                <!-- <pre>{{data.data }}</pre> -->
                 <!-- <h4 class="font-bold">Gerer les offres</h4> -->
                 <h2 class="text-2xl font-semibold mb-4">Gerer les offres</h2>
                 <div class="flex justify-between items-center">
                     <AddOffre />
-                    <button class="bg-primary p-2 px-3 rounded-lg text-white cursor-pointer">
+                    <button type="button"
+                    @click="exportToExcel(columns,data.data, 'Liste_des_offres.xlsx')"
+                    class="bg-primary p-2 px-3 rounded-lg text-white cursor-pointer">
                         <i class="uil uil-export"></i>
                         <span> Exporter</span>
                     </button>

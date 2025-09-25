@@ -68,11 +68,11 @@ class CandidatureRequest extends FormRequest
             'cgiar_information.cgiar_email' => 'nullable|email|max:255',
 
             // Expériences
-            'experience' => 'required|array|min:1',
-            'experience.*.company_name' => 'required|string|max:255',
-            'experience.*.position' => 'required|string|max:255',
-            'experience.*.start_date' => 'required|date',
-            'experience.*.end_date' => 'nullable|date|after_or_equal:experience.*.start_date',
+            'experiences' => 'required|array|min:1',
+            'experiences.*.company_name' => 'required|string|max:255',
+            'experiences.*.position' => 'required|string|max:255',
+            'experiences.*.start_date' => 'required|date',
+            'experiences.*.end_date' => 'nullable|date|after_or_equal:experience.*.start_date',
             // 'experience.*.current' => 'required|boolean',
 
             // Identification
@@ -89,11 +89,11 @@ class CandidatureRequest extends FormRequest
             'origin.english_level' => 'required|string|max:50',
 
             // References
-            'reference' => 'required|array|min:1',
-            'reference.*.full_name' => 'required|string|max:255',
-            'reference.*.function' => 'required|string|max:255',
-            'reference.*.phone' => 'required|string|max:20',
-            'reference.*.email' => 'nullable|email|max:255',
+            'references' => 'required|array|min:1',
+            'references.*.full_name' => 'required|string|max:255',
+            'references.*.function' => 'required|string|max:255',
+            'references.*.phone' => 'required|string|max:20',
+            'references.*.email' => 'nullable|email|max:255',
 
             // Documents
             'documents' => 'required|array|min:1',

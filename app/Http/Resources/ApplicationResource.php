@@ -21,16 +21,23 @@ class ApplicationResource extends JsonResource
             'user'=> optional($this->user)->name .' '.optional($this->user)->name,
             'phone'=> optional($this->user)->phone,
             'email'=> optional($this->user)->email,
-            'documents' => [
-                (object)[
-                'name'=> optional($this->documents[0])->name,
-                'path'=> optional($this->documents[0])->path,
-                ],
-                (object)[
-                'name'=> optional($this->documents[0])->name,
-                'path'=> optional($this->documents[0])->path,
-                ],
-                ]
+            'documents' =>  optional($this?->documents)->pluck(function($doc){ 
+                return (object)[
+                        'name'=> $doc->name,
+                        'path'=> $doc->path,
+                    ];
+                })
+            // => [
+               
+            //     // (object)[
+            //     //     'name'=>,
+            //     //     'path'=> optional($this?->documents)->pluck(function($doc){ return $doc->path; }),
+            //     // ],
+            //     // (object)[
+            //         // 'name'=> optional($this?->documents[0])->name,
+            //         // 'path'=> optional($this?->documents[0])->path,
+            //         // ],
+            //     ]
             // Champs de origin (aplaties)
             // 'origin_id'          => optional($this->origin)->id,
             // 'origin_uuid'        => optional($this->origin)->uuid,

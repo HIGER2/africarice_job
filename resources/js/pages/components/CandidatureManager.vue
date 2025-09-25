@@ -2,6 +2,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import Table from './Table.vue';
+import { useApplyForm } from '../composables';
 
 const props = defineProps({
   data: {
@@ -10,10 +11,11 @@ const props = defineProps({
   },
 });
 
+const {exportToExcel}=useApplyForm()
+
 const labelsMap = {
   candidature_id: "N° Candidature",
   publication_reference: "Référence Publication",
-
   //   user_id: "ID Utilisateur",
   candidat: "Candidat",
   user_email: "Email",
@@ -36,7 +38,6 @@ const labelsMap = {
 //   job_contract_to: "Fin Contrat",
 //   job_salary_post: "Salaire",
 
-
 //   application_id: "ID Application",
 //   application_uuid: "UUID Application",
   origin_nationality: "Nationalité",
@@ -50,13 +51,26 @@ const labelsMap = {
 //   document_path: "Chemin Document",
 };
 
-const columns = computed(() => {
-  if (!props.data?.data || props.data.data.length === 0) return [];
-    const firstRowKeys = Object.keys(props.data.data[0]);
-    return Object.keys(labelsMap)
-        .filter(key => firstRowKeys.includes(key))
-        .map(key => ({ key, label: labelsMap[key] }));;
+  const columns = computed(() => {
+   if (!props.data?.data || props.data.data.length === 0) return [];
+      const firstRowKeys = Object.keys(props.data.data[0]);
+
+      return firstRowKeys.map((key) => ({
+        key,
+        label: labelsMap[key] || key, // si pas trouvé dans labelsMap → utilise la clé
+      }));
+    // const firstRowKeys = Object.keys(props.data.data[0]);
+    // return Object.keys(labelsMap)
+    //     .filter(key => firstRowKeys.includes(key))
+    //     .map(key => ({ key, label: labelsMap[key] }));
     });
+
+    console.log(columns.value);
+    
+    const exporteData= (columns,data)=>{
+      delete columns[columns.findIndex(col => col.key === 'documents')];
+      exportToExcel(columns,data, 'Liste_des_candidatures.xlsx')
+    }
 </script>
 
 
@@ -71,7 +85,10 @@ const columns = computed(() => {
                         </h2>
                     <div class="flex justify-between items-center gap-2">
                         <!-- <button class="border-[0.1rem] border-gray-200 p-2 px-3 rounded-lg text-primary cursor-pointer">Ajouter une publication</button> -->
-                        <button class="bg-primary p-2 px-3 rounded-lg text-white cursor-pointer">
+                        <button
+                        type="button"
+                        @click="exporteData(columns,data?.data)"
+                        class="bg-primary p-2 px-3 rounded-lg text-white cursor-pointer">
                           <i class="uil uil-export"></i>
                           Exporter</button>
                     </div>
@@ -105,11 +122,11 @@ const columns = computed(() => {
                                 </template>
 
                                 <!-- Slot actions -->
-                                <template #actions="{ row }">
+                                <!-- <template #actions="{ row }">
                                     <button class="px-3 py-1 text-sm border rounded-md hover:bg-gray-50">
-                                    Voir
+                                    Voirds
                                     </button>
-                                </template>
+                                </template> -->
                             </Table>
 
                     </div>

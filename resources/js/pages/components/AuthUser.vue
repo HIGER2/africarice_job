@@ -24,8 +24,11 @@ function logout() {
         <span class="block w-8 h-8 bg-primary text-white leading-8 text-center rounded-full"><i class="uil uil-user"></i></span>
         <span class="uppercase font-black text-sm cursor">{{ user.name }}</span>
         <ul v-if="isOpen" class="absolute p-2 top-12 right-0 bg-white shadow-lg rounded-md w-40 py-2 z-10">
-              <li class="text-sm hover:bg-gray-300 w-full px-3 py-2 rounded-md cursor-pointer">
+            <li class="text-sm hover:bg-gray-300 w-full px-3 py-2 rounded-md cursor-pointer">
                 <a href="/" class="w-full block">Accueil</a>
+            </li>
+            <li class="text-sm hover:bg-gray-300 w-full px-3 py-2 rounded-md cursor-pointer">
+                <a href="/profile" class="w-full block">Mon Profile</a>
             </li>
             <li  class="text-sm hover:bg-gray-300 w-full px-3 py-2 rounded-md cursor-pointer">
                 <a href="/manager/offres" class="w-full block">

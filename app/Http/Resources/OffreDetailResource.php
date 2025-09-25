@@ -14,7 +14,7 @@ class OffreDetailResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-         return [
+        return [
             'id' => $this->id,
             'uuid' => $this->uuid,
             'reference' => $this->reference,
@@ -25,8 +25,8 @@ class OffreDetailResource extends JsonResource
             'is_closed' => $this->is_closed,
             'published_at' => $this->published_at,
             'expires_at' => $this->expires_at,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            // 'created_at' => $this->created_at,
+            // 'updated_at' => $this->updated_at,
 
             // Relation vers le job
             'job' => $this->whenLoaded('job', function () {
@@ -42,15 +42,11 @@ class OffreDetailResource extends JsonResource
                 ];
             }),
             // Relation vers les candidatures
+            // 'candidat' => $this->whenLoaded('candidatures'),
             'candidat' => $this->whenLoaded('candidatures', function () {
-                    return UserCandidature::collection(
-                        $this->candidatures->map(function ($candidature) {
-                            // Charger les relations nécessaires du user
-                            $candidature->user->load(['application.origin', 'application.documents']);
-                            return $candidature->user; // on retourne uniquement le user
-                        })->filter() // enlever les users null
-                    );
-                }),
+                // return$this->candidatures->pluck('user');
+                return CanditureUser::collection($this->candidatures->pluck('user'));
+            }),
         ];
     }
 }

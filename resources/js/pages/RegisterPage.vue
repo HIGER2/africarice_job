@@ -1,25 +1,29 @@
 <template>
     <div class="min-h-screen flex items-center justify-center ">
-        <div class="w-full max-w-md bg-white rounded-lg  p-8">
+        <div class="w-full max-w-md bg-white rounded-lg">
         <h2 class="text-2xl font-bold mb-6 text-center">Inscription</h2>
         <form @submit.prevent="handleRegister" class="flex flex-col gap-4">
-        <div class="flex flex-col">
-            <label for="">Nom</label>
-            <input v-model="formData.name" type="text" placeholder="Prénom" required class="p-3 border rounded-lg" />
-        </div>
-        <div class="flex flex-col">
-            <label for="">Prénoms</label>
-            <input v-model="formData.last_name" type="text" placeholder="Nom" required class="p-3 border rounded-lg" />
-        </div>
-        <div class="flex flex-col">
-            <label for="">Téléphone</label>
-            <input v-model="formData.phone" required type="tel" placeholder="Téléphone"  class="p-3 border rounded-lg" />
-        </div>
-        <div class="flex flex-col">
-            <label for="">Email</label>
-            <input v-model="formData.email" type="email" placeholder="Email" required class="p-3 border rounded-lg" />
-        </div>
-        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mt-4" role="alert">
+            <div class="flex gap-2 items-end w-full">
+                <div class="flex flex-col w-full">
+                    <label for="">Nom</label>
+                    <input v-model="formData.name" type="text" placeholder="Prénom" required class="p-3 border rounded-lg" />
+                </div>
+                <div class="flex flex-col w-full">
+                    <label for="">Prénoms</label>
+                    <input v-model="formData.last_name" type="text" placeholder="Nom" required class="p-3 border rounded-lg" />
+                </div>
+            </div>
+            <div class="flex items-end gap-2 w-full">
+                    <div class="flex flex-col w-full">
+                        <label for="">Téléphone</label>
+                        <input v-model="formData.phone" required type="tel" placeholder="Téléphone"  class="p-3 border rounded-lg" />
+                    </div>
+                    <div class="flex flex-col w-full">
+                        <label for="">Email</label>
+                        <input v-model="formData.email" type="email" placeholder="Email" required class="p-3 border rounded-lg" />
+                    </div>
+            </div>
+        <div class="bg-blue-100 border-l-4 text-sm border-blue-500 text-blue-700 p-4 mt-4" role="alert">
         <p class="font-bold">Information personnelle</p>
         <p>Les informations que vous saisissez seront considérées comme personnelles.</p>
         </div>
@@ -80,13 +84,14 @@ async function handleRegister() {
     // alert('Inscription réussie ! Vérifiez votre email pour le code PIN.')
     // goLogin()
     } catch (err) {
-        const errors = Object.values(err.response?.data?.errors).flat()
-      if (errors.length > 0) {
-        alert(errors.join('\n')) // affiche toutes les erreurs dans un alert
-      }
-        // console.log(err.response?.data?.errors/);
-        
-    // alert(err.response?.data?.errors+'' || 'Erreur lors de l\'inscription')
+        let message = 'Erreur lors de la vérification de l\'email.'
+                
+        if (err?.response?.data?.errors?.length > 0) {
+            message  =  Object.values(err?.response?.data?.errors).flat().flat().join('\n')
+        }else if (err?.response?.data?.message) {
+            message = err?.response?.data?.message
+        }
+        alert(message)
     }finally{
         loading.value = false
     }

@@ -40,25 +40,33 @@ class UserCandidature extends JsonResource
                             ? $this->application->origin->experience_years.' ans'
                             : null;
                     }),
-                'documents' => [
-                    (object)[
-                        'name'=> $this->whenLoaded('application',function(){
-                            return optional($this->application->documents[0])->name;
-                        }),
-                        'path'=>  $this->whenLoaded('application',function(){
-                            return optional($this->application->documents[0])->path;
-                        })
-                        ]
-                        ,
-                    (object)[
-                        'name'=> $this->whenLoaded('application',function(){
-                            return optional($this->application->documents[0])->name;
-                        }),
-                        'path'=>  $this->whenLoaded('application',function(){
-                            return optional($this->application->documents[0])->path;
-                        })
-                    ],
-                ],
+                    'documents' => $this->application->documents->map(function($doc){
+                    return [
+                        // 'id'   => $doc->id,
+                        'uuid' => $doc->uuid,
+                        'name' => $doc->name,
+                        'path' => $doc->path,
+                    ];
+                }),
+                // 'documents' => [
+                //     // (object)[
+                //     //     'name'=> $this->whenLoaded('application',function(){
+                //     //         return optional($this->application->documents[0])->name;
+                //     //     }),
+                //     //     'path'=>  $this->whenLoaded('application',function(){
+                //     //         return optional($this->application->documents[0])->path;
+                //     //     })
+                //     //     ]
+                //     //     ,
+                //     // (object)[
+                //     //     'name'=> $this->whenLoaded('application',function(){
+                //     //         return optional($this->application->documents[0])->name;
+                //     //     }),
+                //     //     'path'=>  $this->whenLoaded('application',function(){
+                //     //         return optional($this->application->documents[0])->path;
+                //     //     })
+                //     // ],
+                // ],
                 // 'french_level'       => optional($this->application->origin)->french_level,
                 // 'english_level'      => optional($this->application->origin)->english_level,
 

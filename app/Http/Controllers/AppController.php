@@ -47,7 +47,23 @@ class AppController extends Controller
         ]);
     }
 
+    public function profile(){
+        $user = Auth::user();
+        return Inertia::render('ProfilePage',[
+            'user'=> new UserResource($user->load(
+                'application.diplomas',
+                'application.cgiarInformation',
+                'application.experiences',
+                'application.identification',
+                'application.origin',
+                'application.references',
+                'application.documents'
+            )),
+        ]);
+    }
+
     public function applyJob($uuid){
+        $user = Auth::user();
         $publication = Publication::with('job')
             ->where('uuid', $uuid)
             ->where('is_closed', false)
@@ -57,7 +73,17 @@ class AppController extends Controller
         return Inertia::render('ApplyPage', [
             'publication' => $publication,
             'uuid' => $publication ? $publication->uuid : null,
-            'user'=>Auth::user(),
+            'user' => new UserResource(
+                    $user->load(
+                        'application.diplomas',
+                        'application.cgiarInformation',
+                        'application.experiences',
+                        'application.identification',
+                        'application.origin',
+                        'application.references',
+                        'application.documents'
+                    )
+                ),
         ]);
     }
 
@@ -70,6 +96,15 @@ class AppController extends Controller
             'last_name'=>'required',
             'phone'=>'required|numeric',
             'email'=>'required|email|unique:users,email',
+        ],
+        [
+            'name.required'=>'Le nom est requis',
+            'last_name.required'=>'Le prénom est requis',
+            'phone.required'=>'Le téléphone est requis',
+            'phone.numeric'=>'Le téléphone doit être numérique',
+            'email.required'=>'L\'email est requis',
+            'email.email'=>'Format d\'email invalide',
+            'email.unique'=>'Cet email est déjà utilisé',
         ]);
 
         $user = User::create($request->all());
@@ -94,6 +129,10 @@ class AppController extends Controller
     {
         $request->validate([
             'email'=>'required|email',
+        ],
+        [
+            'email.required'=>'L\'email est requis',
+            'email.email'=>'Format d\'email invalide',
         ]);
 
         $user = User::where('email', $request->email)->first();
@@ -168,12 +207,12 @@ class AppController extends Controller
         ->where('publication_id', $publication->id)
         ->first();
 
-        if ($existingApplication) {
-            return response()->json([
-                'message' => 'Vous avez déjà postulé à cette offre.',
-                'application' => $existingApplication,
-            ], 409); // 409 Conflict
-        }
+        // if ($existingApplication) {
+        //     return response()->json([
+        //         'message' => 'Vous avez déjà postulé à cette offre.',
+        //         'application' => $existingApplication,
+        //     ], 409); // 409 Conflict
+        // }
 
         //2 Créer une nouvelle application
         $applicationApplication = PublicationApplication::create([
@@ -181,104 +220,104 @@ class AppController extends Controller
             'publication_id'=>$publication->id
         ]);
                                         // 3. Diplomas
-                        if (!empty($data['diplomas'])) {
-                            foreach ($data['diplomas'] ?? [] as $d) {
-                                $application->diplomas()->updateOrCreate(
-                                    [
-                                        'application_id' => $application->id,
-                                        'id'             => $d['id'] ?? null, // sécurité si pas d'id
-                                    ],
-                                    $d
-                                );
-                            }
-                        }
+        if (!empty($data['diplomas'])) {
+            foreach ($data['diplomas'] ?? [] as $d) {
+                $application->diplomas()->updateOrCreate(
+                    [
+                        'application_id' => $application->id,
+                        'uuid'             => $d['uuid'] ?? null, // sécurité si pas d'id
+                    ],
+                    $d
+                );
+            }
+        }
 
-                        // 4. Experiences
-                        if (!empty($data['experience'])) {
-                            foreach ($data['experience'] ?? [] as $e) {
-                                $current = filter_var($e['current'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+        // 4. Experiences
+        if (!empty($data['experiences'])) {
+            foreach ($data['experiences'] ?? [] as $e) {
+                $current = filter_var($e['current'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
 
-                                $application->experiences()->updateOrCreate(
-                                    [
-                                        'application_id' => $application->id,
-                                        'id'             => $e['id'] ?? null,
-                                    ],
-                                    [
-                                        'company_name' => $e['company_name'] ?? null,
-                                        'position'     => $e['position'] ?? null,
-                                        'start_date'   => $e['start_date'] ?? null,
-                                        'end_date'     => $e['end_date'] ?? null,
-                                        'current'      => $current,
-                                    ]
-                                );
-                            }
-                        }
+                $application->experiences()->updateOrCreate(
+                    [
+                        'application_id' => $application->id,
+                        'uuid'             => $e['uuid'] ?? null,
+                    ],
+                    [
+                        'company_name' => $e['company_name'] ?? null,
+                        'position'     => $e['position'] ?? null,
+                        'start_date'   => $e['start_date'] ?? null,
+                        'end_date'     => $e['end_date'] ?? null,
+                        'current'      => $current,
+                    ]
+                );
+            }
+        }
 
-                        // 5. References
-                        if (!empty($data['reference'])) {
-                            foreach ($data['reference'] ?? [] as $r) {
-                                $application->references()->updateOrCreate(
-                                    [
-                                        'application_id' => $application->id,
-                                        'id'             => $r['id'] ?? null,
-                                    ],
-                                    $r
-                                );
-                            }
-                        }
+        // 5. References
+        if (!empty($data['references'])) {
+            foreach ($data['references'] ?? [] as $r) {
+                $application->references()->updateOrCreate(
+                    [
+                        'application_id' => $application->id,
+                        'uuid'             => $r['uuid'] ?? null,
+                    ],
+                    $r
+                );
+            }
+        }
 
-                        // 6. CGIAR Information
-                        if (!empty($data['cgiar_information'])) {
-                            $cgiarData = $data['cgiar_information'] ?? [];
+        // 6. CGIAR Information
+        if (!empty($data['cgiar_information'])) {
+            $cgiarData = $data['cgiar_information'] ?? [];
 
-                            // sécuriser les booléens
-                            if (isset($cgiarData['current'])) {
-                                $cgiarData['current'] = filter_var($cgiarData['current'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
-                            }
+            // sécuriser les booléens
+            if (isset($cgiarData['current'])) {
+                $cgiarData['current'] = filter_var($cgiarData['current'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+            }
 
-                            $application->cgiarInformation()->updateOrCreate(
-                                ['application_id' => $application->id],
-                                $cgiarData
-                            );
-                        }
+            $application->cgiarInformation()->updateOrCreate(
+                ['application_id' => $application->id],
+                $cgiarData
+            );
+        }
 
-                        // 7. Identification
-                        if (!empty($data['identification'])) {
-                            $application->identification()->updateOrCreate(
-                                ['application_id' => $application->id],
-                                $data['identification'] ?? []
-                            );
-                        }
+        // 7. Identification
+        if (!empty($data['identification'])) {
+            $application->identification()->updateOrCreate(
+                ['application_id' => $application->id],
+                $data['identification'] ?? []
+            );
+        }
 
-                        // 8. Origin
-                        if (!empty($data['origin'])) {
-                            $application->origin()->updateOrCreate(
-                                ['application_id' => $application->id],
-                                $data['origin'] ?? []
-                            );
-                        }
+        // 8. Origin
+        if (!empty($data['origin'])) {
+            $application->origin()->updateOrCreate(
+                ['application_id' => $application->id],
+                $data['origin'] ?? []
+            );
+        }
 
-                        // 9. Documents
-                        if ($request->has('documents')) {
-                            foreach ($request->input('documents', []) as $index => $doc) {
-                                $uploadedFile = $request->file("documents.$index.file");
+        // 9. Documents
+        if ($request->has('documents')) {
+            foreach ($request['documents'] as $index => $doc) {
+                $uploadedFile = $request->file("documents.$index.file");
 
-                                if ($uploadedFile && $uploadedFile->isValid()) {
-                                    $path = $uploadedFile->store('applications', 'public');
+                if ($uploadedFile && $uploadedFile->isValid()) {
+                    $path = '/storage/' . $uploadedFile->store('applications', 'public');
 
-                                    $application->documents()->updateOrCreate(
-                                        [
-                                            'id'             => $doc['id'] ?? null,
-                                            'application_id' => $application->id,
-                                        ],
-                                        [
-                                            'path' => $path,
-                                            'name' => $uploadedFile->getClientOriginalName(),
-                                        ]
-                                    );
-                                }
-                            }
-                        }
+                    $application->documents()->updateOrCreate(
+                        [
+                            'id'             => $doc['id'] ?? null,
+                            'application_id' => $application->id,
+                        ],
+                        [
+                            'path' => $path,
+                            'name' => $uploadedFile->getClientOriginalName(),
+                        ]
+                    );
+                }
+            }
+        }
 
 
             DB::commit();
@@ -304,7 +343,7 @@ class AppController extends Controller
                 $data = OffreResource::collection(Publication::with(['job','files', 'candidatures.user'])->orderBy('created_at','desc')->get()) ;
                 break;
             case 'candidatures':
-                    $data = CandidatureResource::collection(PublicationApplication::with(['publication.job','user.application.origin','user.application.documents'])->orderBy('created_at','desc')->get()) ;
+                    $data = CandidatureResource::collection(PublicationApplication::with(['publication.job','user.application.origin','user.application.diplomas','user.application.documents'])->orderBy('created_at','desc')->get()) ;
                 break;
             case 'candidat':
                     $data = UserCandidature::collection(user::with(['application.origin','application.documents'])->orderBy('created_at','desc')->get()) ;
@@ -332,24 +371,28 @@ class AppController extends Controller
                 $data = OffreDetailResource::collection(
                     Publication::with([
                     'job',
-                    'candidatures.user' // toutes les candidatures avec leurs candidats
+                    'candidatures' ,// toutes les candidatures avec leurs candidats
                 ])
                 ->where('uuid', $uuid)
                 ->get()
                 );
                 break;
             case 'candidatures':
-                    $data = CandidatureResource::collection(PublicationApplication::with(['publication.job','user.application.origin','user.application.documents'])->get()) ;
+                    $data = CandidatureResource::collection(PublicationApplication::with(['publication.job','user.application.origin','user.application.documents'])
+                    ->where('uuid', $uuid)
+                    ->get()) ;
                 break;
             case 'candidat':
-                    $data =UserResource::collection(user::with([
+                    $data = new UserResource(
+                        user::with([
                         'application.origin' ,
                         'application.documents',
                         'application.diplomas',
                         'application.cgiarInformation',
                         'application.experiences',
                         'application.identification',
-                        ])->where('uuid', $uuid)->get())  ;
+                        ])->where('uuid', $uuid)->first()
+                    )  ;
                 break;
             case 'documents':
                 $data = ApplicationResource::collection(Application::get());
@@ -410,7 +453,7 @@ class AppController extends Controller
                 // $paths[] = $file->store('documents', 'public'); // en storage/app/public/documents
                 PublicationFile::create([
                     'publication_id'=> $publication->id,
-                    'path'=> $file->store('documents', 'public'),
+                    'path'=>'storage/'. $file->store('documents', 'public'),
                     'name'=> $file->getClientOriginalName()
                 ]);
             }

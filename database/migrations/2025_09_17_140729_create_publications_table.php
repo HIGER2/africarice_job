@@ -28,8 +28,8 @@ return new class extends Migration
             $table->boolean('is_published')->default(false);
             $table->boolean('is_closed')->default(false);
 
-            $table->timestamp('published_at')->nullable();
-            $table->timestamp('expires_at')->nullable();
+            $table->date('published_at')->nullable();
+            $table->date('expires_at')->nullable();
 
             $table->timestamps();
         });
