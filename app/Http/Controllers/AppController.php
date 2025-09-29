@@ -173,7 +173,6 @@ class AppController extends Controller
         $hash = Hash::make($pin);
         $user->pin = $pin;
         $user->save();
-
         Mail::raw("Votre code PIN pour se connecter : $pin", function ($message) use ($user) {
             $message->to($user->email)
                 ->subject('Code PIN de connexion');

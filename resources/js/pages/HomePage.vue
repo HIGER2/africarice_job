@@ -23,6 +23,11 @@ function toggleDetails(uuid: string) {
 
 function initials(name: string) {
   if (!name) return "?"   // sécurité si jamais la donnée est vide
+ 
+  return name
+    .split(" ")[0][0]
+    .toUpperCase()
+  
   return name
     .split(" ")
     .map(n => n[0])
