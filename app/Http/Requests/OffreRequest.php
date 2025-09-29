@@ -19,7 +19,7 @@ class OffreRequest extends FormRequest
             'offre.country_duty_station' => 'required|string|max:255',
             'offre.published_at' => 'required|date',
             'offre.expires_at' => 'required|date|after_or_equal:offre.published_at',
-            'offre.is_published' => 'required|boolean',
+            'offre.is_published' => 'required|in:true,false,1,0',
         ];
     }
 

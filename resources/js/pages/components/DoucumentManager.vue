@@ -46,8 +46,8 @@ const columns = [
                                <div class="flex flex-col gap-2">
                                     <a
                                     v-for="(value,index) in row.documents"
-                                    :href="`/storage/${value.path}`"
-                                    target="_blank"
+                                    :href="`${value.path}`"
+                                    download
                                     class="text-blue-600 hover:underline"
                                     >
                                     {{ value.name }}

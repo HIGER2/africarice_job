@@ -20,7 +20,6 @@ const initReference={
 const {fieldDocument,fieldReference,handleFile,documentPreview}=useApplyForm()
 
 const addReference = () => {
-
  if (props.form.references.length >= 3) {
   alert('Vous avez atteint la limite de références.')
   return false

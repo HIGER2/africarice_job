@@ -7,6 +7,7 @@ import OffreManager from './components/OffreManager.vue';
 import CandidatManager from './components/CandidatManager.vue';
 import DoucumentManager from './components/DoucumentManager.vue';
 import DefaultLayout from './layouts/DefaultLayout.vue';
+import ParametreManager from './components/ParametreManager.vue';
 
 const props = defineProps({
   step: String,
@@ -26,6 +27,7 @@ const components={
     candidatures:CandidatureManager,
     candidat:CandidatManager,
     documents: DoucumentManager,
+    parametres:ParametreManager
 }
 
 </script>

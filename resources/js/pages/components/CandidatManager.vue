@@ -49,8 +49,8 @@ const columns = [
                                <div class="flex flex-col gap-2">
                                     <a
                                     v-for="(value,index) in row.documents"
-                                    :href="`/storage/${value.path}`"
-                                    target="_blank"
+                                    :href="`${value.path}`"
+                                    download
                                     class="text-blue-600 hover:underline"
                                     >
                                     {{ value.name }}
@@ -67,14 +67,16 @@ const columns = [
 
                     </div>
 
-                    <!-- Pagination (optionnel) -->
-                    <div class="mt-4 flex items-center justify-between p-3">
-                        <div class="text-sm text-gray-600">Affichage <span class="font-medium">1-3</span> sur <span class="font-medium">120</span></div>
+                        <!-- Pagination (optionnel)
+                        <div class="mt-4 flex items-center justify-between p-3">
+                            <div class="text-sm text-gray-600">
+                                Affichage <span class="font-medium">1-3</span> sur <span class="font-medium">120</span>
+                            </div>
                             <div class="inline-flex items-center space-x-2">
                                 <button class="px-3 py-1 border rounded-md text-sm">Préc</button>
                                 <button class="px-3 py-1 border rounded-md text-sm">Suiv</button>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
             </div>
   </div>

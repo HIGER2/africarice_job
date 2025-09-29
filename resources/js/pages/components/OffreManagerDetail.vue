@@ -5,10 +5,17 @@ import AddOffre from './AddOffre.vue';
 import Table from './Table.vue';
 import { useApplyForm } from '../composables';
 import ButtonBack from './ui/ButtonBack.vue';
+
+// import { usePage } from '@inertiajs/vue3'
+
+
+// const page = usePage()
+// const flash = page.props.flash
+
 const props= defineProps({
   data: Array,
 })
-const {exportToExcel}=useApplyForm()
+const {exportToExcel,updateOffres}=useApplyForm()
 
 const labelsMap ={
     candidat: "Candidat",
@@ -22,10 +29,9 @@ const labelsMap ={
     origin_english_level: "Niveau Anglais",
 }
 
+const dataValue = computed(()=>props.data.data[0])
 
 const labelsExclu =['uuid']
-
-
 
   const columns = computed(() => {
    if (!props.data?.data || props.data.data.length === 0) return [];
@@ -61,23 +67,49 @@ const labelsExclu =['uuid']
 <template>
   <div>
      <div class="w-full">
+        <!-- <pre>{{ data }}</pre> -->
+        <!-- <div v-if="$page.props.flash.message" class="alert">
+            {{ $page.props.flash.message }}
+        </div> -->
             <div class="w-full mx-auto bg-white rounded-2xl  px-6">
                 <div class="flex justify-between items-center py-4 ">
                     <ButtonBack path="/manager/offres" />
-                    <Button type="button" class="
-                    max-w-xs px-4 py-2  cursor-pointer  font-medium rounded-xl hover:shadow  inline-flex items-center gap-2 mb-3
-                    "
-                    :class="!data?.data[0]?.is_closed ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'"
-                    > 
-                    <span v-if="!data?.data[0]?.is_closed">
-                        <i class="uil uil-times-circle"></i>
-                        Cloturé
-                    </span>
-                    <span v-if="data?.data[0]?.is_closed">
-                        <i class="uil uil-check-circle"></i>
-                        Ouvert
-                    </span>
-                </Button>
+                    <div class="flex items-center gap-2">
+                        <!-- Bouton Publication -->
+                        <Button 
+                            @click="() => updateOffres(data?.data[0]?.is_published ? 0 : 1, data?.data[0]?.uuid, 'is_published')"
+                            type="button"
+                            class="max-w-xs text-[12px] px-4 py-2 cursor-pointer font-medium rounded-lg hover:shadow inline-flex items-center gap-2 mb-3"
+                            :class="data?.data[0]?.is_published ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'"
+                        >
+                            <span v-if="data?.data[0]?.is_published">
+                                <i class="uil uil-eye"></i>
+                                Dépublier l’offre
+                            </span>
+                            <span v-else>
+                                <i class="uil uil-eye-slash"></i>
+                                Publier l’offre
+                            </span>
+                        </Button>
+
+                            <!-- Bouton Clôture -->
+                            <Button 
+                                @click="() => updateOffres(data?.data[0]?.is_closed ? 0 : 1, data?.data[0]?.uuid, 'is_closed')"
+                                type="button"
+                                class="max-w-xs text-[12px] px-4 py-2 cursor-pointer font-medium rounded-lg  hover:shadow inline-flex items-center gap-2 mb-3"
+                                :class="data?.data[0]?.is_closed ? 'bg-gray-100 text-gray-700' : 'bg-red-100 text-red-700'"
+                            >
+                                <span v-if="data?.data[0]?.is_closed">
+                                    <i class="uil uil-check-circle"></i>
+                                    Réouvrir l’offre
+                                </span>
+                                <span v-else>
+                                    <i class="uil uil-times-circle"></i>
+                                    Fermer l’offre
+                                </span>
+                            </Button>
+
+                    </div>
                 </div>
                 <!-- <pre>  {{ data?.data[0] }}</pre> -->
                 <h1 class="text-2xl font-bold text-gray-800 mb-4">
@@ -139,6 +171,8 @@ const labelsExclu =['uuid']
                     </div> -->
                 </div>
 
+               
+
                 <!-- Job details -->
                 <h2 class="text-xl font-semibold text-gray-800 mt-8 mb-4">Détails du poste</h2>
                 <div class="grid grid-cols-2 gap-6 text-sm">
@@ -165,9 +199,31 @@ const labelsExclu =['uuid']
                 </div>
 
                 <!-- Bouton retour -->
-                
-            </div>
+                 <div class=" max-w-max mt-5">
+                    <h2 class="text-lg font-semibold mb-4">Documents</h2>
 
+                    <div v-if="dataValue.files.length > 0" class="space-y-2">
+                    <div 
+                        v-for="(file, index) in dataValue.files" 
+                        :key="index" 
+                        class="flex items-center justify-between p-3 border rounded hover:bg-gray-50"
+                    >
+                        <span class="truncate max-w-xs">{{ file.name }}</span>
+                        <a 
+                        :href="file.url" 
+                        download
+                        class="text-blue-600 hover:underline flex items-center space-x-1"
+                        >
+                        <i class="uil uil-export"></i>
+                        <span>Télécharger </span>
+                        </a>
+                    </div>
+                    </div>
+
+                    <div v-else class="text-gray-500">Aucun document disponible.</div>
+                </div>
+            </div>
+                
                 <div class="w-full mt-6">
                     <!-- <pre>{{ data?.data[0] }}</pre> -->
                     <div class="flex px-6 py-4  justify-between items-center w-full">

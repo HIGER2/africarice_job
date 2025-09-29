@@ -1,5 +1,7 @@
 <script setup>
+import { ref } from 'vue';
 import NavBar from './components/NavBar.vue';
+import OverlayLoader from './components/OverlayLoader.vue';
 import { useApplyForm } from './composables';
 import { usePage } from '@inertiajs/vue3'
 
@@ -22,8 +24,16 @@ const formatDate = (date) => {
 
 const { fields, form, payLoad,documentPreview, currentStep, handleFile, components, nextStep, prevStep, submitForm } = useApplyForm()
 
+const isLoading =ref(false)
 
 payLoad(props?.user?.data?.application)
+
+
+const handleSubmit=async(uuid)=>{
+  isLoading.value =true
+  await submitForm(uuid)
+  isLoading.value = false
+}
 // form.diplomas.push(...props.user?.application?.diplomas)
 // // form.cgiar_information.assign(...props.user?.application?.cgiarInformation)
 // form.experiences.push(...props.user?.application?.experiences)
@@ -37,7 +47,9 @@ payLoad(props?.user?.data?.application)
 <template>
   <div class="w-full bg-gray-50">
     <NavBar :user="user.data" />
-      <div class="max-w-xl mx-auto py-10">
+            <OverlayLoader v-model="isLoading" text="Traitement..."/>
+
+      <div class="max-w-xl mx-auto">
        <pre>
         <!-- {{ documentPreview }} -->
         <!-- {{ props.user.data }} -->
@@ -98,6 +110,7 @@ payLoad(props?.user?.data?.application)
         <keep-alive>
           <component :is="components[currentStep]"  :documents="documentPreview" :form="form" />
         </keep-alive>  
+
         <div class="flex justify-between border-t border-t-gray-200 bg-white mt-6 sticky bottom-0  p-4">
         <button 
           @click="prevStep" 
@@ -117,7 +130,7 @@ payLoad(props?.user?.data?.application)
 
         <button 
           v-else 
-          @click="()=>submitForm(uuid)" 
+          @click="handleSubmit(uuid)" 
           class="px-4 py-2 cursor-pointer bg-green-600 text-white rounded"
         >
           Envoyer

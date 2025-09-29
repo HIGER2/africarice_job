@@ -64,7 +64,7 @@ const handleSubmit = async() => {
               </div>
 
             <!-- Contenu -->
-              <!-- {{ newOffre.document }} -->
+              <!-- {{ newOffre }} -->
             <div class="mt-7 flex-1  overflow-y-auto p-2">
                 <template 
                 v-for="(groupe,index) in fieldAddOffre"

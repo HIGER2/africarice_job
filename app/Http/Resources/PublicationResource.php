@@ -15,7 +15,7 @@ class PublicationResource extends JsonResource
      * @return array<string, mixed>
      */
 
-    
+
     public function toArray(Request $request): array
     {
         return [
@@ -25,11 +25,11 @@ class PublicationResource extends JsonResource
             'type' => $this->type,
             'is_published' => $this->is_published,
             'is_closed' => $this->is_closed,
-            'published_at' => $this->published_at 
-                ? Carbon::parse($this->published_at)->format('Y-m-d H:i:s') 
+            'published_at' => $this->published_at
+                ? Carbon::parse($this->published_at)->format('Y-m-d H:i:s')
                 : null,
-            'expires_at'   => $this->expires_at 
-                ? Carbon::parse($this->expires_at)->format('Y-m-d H:i:s') 
+            'expires_at'   => $this->expires_at
+                ? Carbon::parse($this->expires_at)->format('Y-m-d H:i:s')
                 : null,
             'job' => [
                 // 'id' => $this->job->id,
@@ -43,7 +43,7 @@ class PublicationResource extends JsonResource
             'files' => collect($this->files)->map(function ($file) {
                 return [
                     'name' => $file['name'] ?? null,
-                    'url'  => isset($file['path']) ? Storage::url($file['path']) : null,
+                    'url'  => isset($file['path']) ? $file['path'] : null,
                 ];
             }),
         ];

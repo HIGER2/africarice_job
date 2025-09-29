@@ -13,25 +13,25 @@ class CandidatureResource extends JsonResource
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
-    {   
+    {
 
-            $this->user->application->diplomas->map(function ($diploma, $index) use (&$flattened) {
-                $num = $index + 1;
-                $flattened["diploma{$num}"] = $diploma->diploma;
-                // $flattened["option{$num}"] = $diploma->option;
-            });
-            $this->user->application->experiences->map(function ($experience, $index) use (&$flattened) {
-                $num = $index + 1;
-                $flattened["experience{$num}"] ="Entreprise{$num} : ".$experience->company_name.'; Poste: '.$experience->position.'; De: '.$experience->start_date.'; A: '.$experience->end_date;
-                // $flattened["option{$num}"] = $diploma->option;
-            });
-             $this->user->application->references->map(function ($reference, $index) use (&$flattened) {
-                $num = $index + 1;
-                $flattened["reference{$num}"] ="Nom : ".$reference->full_name.'; function: '.$reference->function.'; phone: '.$reference->phone.'; email: '.$reference->email;
-                // $flattened["option{$num}"] = $diploma->option;
-            });
-            
-            return [
+        $this->user->application->diplomas->map(function ($diploma, $index) use (&$flattened) {
+            $num = $index + 1;
+            $flattened["diploma{$num}"] = $diploma->diploma;
+            // $flattened["option{$num}"] = $diploma->option;
+        });
+        $this->user->application->experiences->map(function ($experience, $index) use (&$flattened) {
+            $num = $index + 1;
+            $flattened["experience{$num}"] = "Entreprise{$num} : " . $experience->company_name . '; Poste: ' . $experience->position . '; De: ' . $experience->start_date . '; A: ' . $experience->end_date;
+            // $flattened["option{$num}"] = $diploma->option;
+        });
+        $this->user->application->references->map(function ($reference, $index) use (&$flattened) {
+            $num = $index + 1;
+            $flattened["reference{$num}"] = "Nom : " . $reference->full_name . '; function: ' . $reference->function . '; phone: ' . $reference->phone . '; email: ' . $reference->email;
+            // $flattened["option{$num}"] = $diploma->option;
+        });
+
+        return [
             // 'candidature_id' => $this->id,
             // 'candidature_uuid' => $this->uuid,
             // 'status' => $this->status,
@@ -55,7 +55,7 @@ class CandidatureResource extends JsonResource
 
             // User
             // 'user_id' => $this->user->id,
-            'candidat' => $this->user->name.' '.$this->user->last_name,
+            'candidat' => $this->user->name . ' ' . $this->user->last_name,
             'user_email' => $this->user->email,
             'user_phone' => $this->user->phone,
 
@@ -73,8 +73,8 @@ class CandidatureResource extends JsonResource
             'origin_english_level' => $this->user->application->origin->english_level,
 
             // Diplomas
-             // Diplomas aplatis
-               
+            // Diplomas aplatis
+
             // 'diplomas' => $this->user->application->diplomas ? $this->user->application->diplomas->map(function($diploma){
             //     return [
             //         'diploma' => $diploma->diploma,
@@ -83,17 +83,15 @@ class CandidatureResource extends JsonResource
             // }) : null,
             // Documents
             // 'document_id' => $this->user->application->documents->id,
-            // 'documents' => [
-            //     // (object)[
-            //     // 'name'=> $this->user->application->documents[0]['name'],
-            //     // 'path'=> $this->user->application->documents[0]['path'],
-            //     // ],
-            //     // (object)[
-            //     // 'name'=> $this->user->application->documents[1]['name'],
-            //     // 'path'=> $this->user->application->documents[1]['path'],
-            //     // ],
-            // ],
+            'documents' => $this->user->application->documents->map(function ($doc) {
+                return [
+                    // 'id'   => $doc->id,
+                    'uuid' => $doc->uuid,
+                    'name' => $doc->name,
+                    'path' => $doc->path,
+                ];
+            }),
             // 'document_path' => $this->user->application->documents->path,
-        ] + ($flattened ?? [] );
+        ] + ($flattened ?? []);
     }
 }

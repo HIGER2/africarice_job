@@ -29,15 +29,16 @@ class Publication extends Model
 
     public function candidatures()
     {
-        return $this->hasMany(PublicationApplication::class,'publication_id');
+        return $this->hasMany(PublicationApplication::class, 'publication_id');
     }
 
     public function job()
     {
-        return $this->belongsTo(Recrutement::class,'recrutement_id');
+        return $this->belongsTo(Recrutement::class, 'recrutement_id');
     }
 
-    public function ca() {
+    public function ca()
+    {
         return $this->belongsTo(Publication::class, 'publication_id');
     }
 
@@ -46,41 +47,45 @@ class Publication extends Model
         return $this->belongsTo(User::class, 'published_by');
     }
 
-    public function files() {
+    public function files()
+    {
         return $this->hasMany(PublicationFile::class);
     }
-    
+
     // Scopes utiles
-    public function scopePublished($query) {
-        return $query->where('is_published', true)->where('is_closed', false);
+    public function scopePublished($query)
+    {
+        return $query->where('is_published', true)
+            ->where('is_closed', false);
     }
 
-    public function scopeInternal($query) {
+    public function scopeInternal($query)
+    {
         return $query->where('type', 'internal');
     }
 
-    public function scopePublic($query) {
+    public function scopePublic($query)
+    {
         return $query->where('type', 'public');
     }
 
-       public static function generateReference($model, $attribute = 'reference', $prefix = 'REF')
-        {
-            do {
-                // Génère une référence aléatoire de type REF-XXXXX (5 caractères alphanumériques)
-                $reference = $prefix . '-' . strtoupper(Str::random(6));
-            } while ($model::where($attribute, $reference)->exists()); // vérifie l'unicité en base
+    public static function generateReference($model, $attribute = 'reference', $prefix = 'REF')
+    {
+        do {
+            // Génère une référence aléatoire de type REF-XXXXX (5 caractères alphanumériques)
+            $reference = $prefix . '-' . strtoupper(Str::random(6));
+        } while ($model::where($attribute, $reference)->exists()); // vérifie l'unicité en base
 
-            $model->{$attribute} = $reference;
+        $model->{$attribute} = $reference;
 
-            return $reference;
-        }
+        return $reference;
+    }
 
     protected static function booted()
     {
         static::creating(function ($model) {
             $model->uuid = Str::uuid()->toString();
             $model->reference = self::generateReference($model, 'reference');
-            
         });
     }
 }

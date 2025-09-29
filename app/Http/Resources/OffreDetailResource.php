@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class OffreDetailResource extends JsonResource
 {
@@ -39,6 +40,12 @@ class OffreDetailResource extends JsonResource
                     'city_duty_station'    => $this->job->city_duty_station,
                     'grade'          => $this->job->grade,
                     'salary_post'    => $this->job->salary_post,
+                ];
+            }),
+            'files' => collect($this->files)->map(function ($file) {
+                return [
+                    'name' => $file['name'] ?? null,
+                    'url'  => isset($file['path']) ? $file['path'] : null,
                 ];
             }),
             // Relation vers les candidatures

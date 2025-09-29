@@ -6,7 +6,7 @@ import { ref, onMounted } from 'vue'
 import Spinnercomponent from './components/Spinnercomponent.vue'
 import { Inertia } from '@inertiajs/inertia'
 
-const email = ref('douma@gmail.com')
+const email = ref('')
 const message = ref('')
 const loading =ref(false)
 
@@ -37,8 +37,6 @@ const loading =ref(false)
                 loading.value = false
         }
     }
-
-
 
 function goRegister() {
 window.location.href = '/register.html'

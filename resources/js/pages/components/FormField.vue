@@ -1,8 +1,8 @@
 <template>
-  <div class="mb-3 w-full"
-    :class="field.type =='checkbox' ? 'flex items-center gap-1': ''"
+  <div class="mb-3 w-full flex gap-2"
+    :class="field.type =='checkbox' ? ' items-center gap-1': ' flex-col '"
   >
-    <label :for="field.key" class="font-medium mb-3">{{ field.label }}</label>
+    <label :for="field.key" class="font-medium ">{{ field.label }}</label>
     <input
     v-bind="$attrs"
       v-if="field.type !== 'select' && field.type !== 'file' && field.type !== 'textarea' && field.type !== 'checkbox'"
@@ -46,7 +46,7 @@
       :id="field.key"
       :value="modelValue"
       :checked="modelValue"
-     @change="$emit('update:modelValue', $event.target.value)"
+       @change="$emit('update:modelValue', !modelValue)"
     />
     <!-- <label v-if="field.type === 'file'" :for="field.key">
       {{ modelValue ? modelValue.name : 'Choisir un fichier' }}

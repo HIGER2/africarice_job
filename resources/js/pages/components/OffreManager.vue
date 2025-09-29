@@ -69,9 +69,14 @@ const columns = [
 
                     <!-- Actions -->
                         <template #actions="{ row }">
+                          <div class="flex items-center gap-2">
+                              <!-- <button type="button" class="px-3 py-1 text-sm border rounded-md hover:bg-gray-50">
+                             Modifier
+                            </button> -->
                             <a :href="`/manager/offres/${row.uuid}`" class="px-3 py-1 text-sm border rounded-md hover:bg-gray-50">
-                            Voir
+                                Voir
                             </a>
+                          </div>
                         </template>
                     </Table>
                 </div>

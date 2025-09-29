@@ -12,8 +12,7 @@ class CandidatureRequest extends FormRequest
      */
     public function authorize(): bool
     {
-               return Auth::check();
-
+        return Auth::check();
     }
 
     /**
@@ -21,7 +20,7 @@ class CandidatureRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    
+
     //     protected function prepareForValidation()
     //         {
     //             // if ($this->has('identification') && is_string($this->identification)) {
@@ -56,7 +55,8 @@ class CandidatureRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
+        $user = auth()->user(); // ou récupère le user selon ton cas
+        $role = [
             // Diplômes
             'diplomas' => 'required|array|min:1',
             'diplomas.*.diploma' => 'required|string|max:255',
@@ -95,13 +95,20 @@ class CandidatureRequest extends FormRequest
             'references.*.phone' => 'required|string|max:20',
             'references.*.email' => 'nullable|email|max:255',
 
-            // Documents
-            'documents' => 'required|array|min:1',
-            'documents.*.file' => 'required|file|mimes:pdf,doc,docx,jpg,png|max:10240', // 10MB max
         ];
+
+        if (!$user->application || $user->application->documents()->count() === 0) {
+            $rules['documents'] = 'required|array|min:1';
+            $rules['documents.*.file'] = 'required|file|mimes:pdf,doc,docx,jpg,png|max:10240';
+        } else {
+            $rules['documents'] = 'nullable|array';
+            $rules['documents.*.file'] = 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:10240';
+        }
+
+        return $role;
     }
 
-     public function messages(): array
+    public function messages(): array
     {
         return [
             'diplomas.required' => 'Vous devez ajouter au moins un diplôme.',

@@ -23,6 +23,7 @@ class User extends Authenticatable
         'uuid',
         'last_name',
         'phone',
+        'role',
         'pin',
         'email',
         'candidat',
@@ -40,7 +41,8 @@ class User extends Authenticatable
         'pin',
     ];
 
-    public function application() {
+    public function application()
+    {
         return $this->hasOne(Application::class);
     }
 

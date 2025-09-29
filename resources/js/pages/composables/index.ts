@@ -9,9 +9,12 @@ import ApplyStepCgiar from "../components/ApplyStepCgiar.vue";
 import { Inertia } from "@inertiajs/inertia";
 import country from '../../data/country.json'
 import * as XLSX from 'xlsx';
+import { usePage } from '@inertiajs/vue3'
+
 
 export function useApplyForm(){
 
+    
     const components=[
         ApplyStepDiplomas,
         ApplyStepCgiar,
@@ -207,16 +210,24 @@ export function useApplyForm(){
 
 
     const form = reactive({
-        diplomas: [],
+        diplomas: [{...initDiploma}],
         cgiar_information:{},
         experiences: [{...initExperience}],
         identification: {},
         origin: {},
-        references: [],
+        references: [{...fieldExperience}],
         documents:[{...initDoc},{...initDoc}],
     })
     const documentPreview = ref([]);
-
+    const newEmail=reactive({
+        email:'',
+        is_primary: false
+    })
+    const newUser=reactive({
+        email:'',
+        last_name:"",
+        name:""
+    })
     // const form = reactive({
     //     diplomas: [{...initDiploma}],
     //     cgiar_information:{
@@ -394,6 +405,7 @@ export function useApplyForm(){
     if (
         !data.documents ||
         data.documents.filter(doc => doc.file !== null && doc.file !== "").length < 2
+        && documentPreview.value.length == 0
         ) {
         errors.push("Veuillez télécharger au moins deux documents.");
         }
@@ -402,7 +414,6 @@ export function useApplyForm(){
     }
 
     const submitForm = async (uuid:string) => {
-
     try {
             const errors = validateForm(form);
             if (errors.length > 0) {
@@ -468,9 +479,12 @@ export function useApplyForm(){
         });
 
         // CGIAR Information (objet simple)
-        Object.keys(form.cgiar_information).forEach(key => {
-        formData.append(`cgiar_information[${key}]`, form.cgiar_information[key]);
-        });
+        if (form.cgiar_information.current) {
+             Object.keys(form.cgiar_information).forEach(key => {
+            formData.append(`cgiar_information[${key}]`, form.cgiar_information[key] || '');
+            });
+        }
+       
 
         // Documents (fichiers déjà bien gérés)
         form.documents.forEach((doc, index) => {
@@ -532,41 +546,62 @@ export function useApplyForm(){
             'Content-Type': 'multipart/form-data',
         },
         })
-
         Inertia.reload()
-        console.log('Offre envoyée ✅', response.data)
     } catch (error: any) {
-        let message = error.response?.data?.message ?error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'
+        let message = error.response?.data?.message ? error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'
         console.error('Erreur lors de l\'envoi du formulaire :', error.response || error);
         alert(message);
         
     }
-    }
+    }   
 
-    const payLoad = (data) => {
+    const payLoad = (data: any) => {
+        if (!data || typeof data !== 'object') {
+            console.warn("payLoad appelé avec une donnée invalide :", data)
+            return
+        }
+
         Object.keys(data).forEach(key => {
             if (Array.isArray(data[key])) {
-                if (key== 'documents') {
-                    console.log(data[key]);
-                    
-                    documentPreview.value = data[key]
-                    return
-                }
-                data[key].length > 0 ?  form[key] =  data[key] : form[key].push({...initialPayload[key]})
+            if (key === 'documents') {
+                documentPreview.value = data[key]
+                return
             }
-            if (typeof data[key] === 'object'  && !Array.isArray(data[key])) {
-                form[key] = Object.assign({}, initialPayload[key], data[key]);
+            data[key].length > 0
+                ? form[key] = data[key]
+                : form[key].push({ ...initialPayload[key] })
             }
-        });
 
-        // console.log(form);
-        
-        // if (data.) {
-            
-        // }
-        console.log(documentPreview.value);
-        
+            if (typeof data[key] === 'object' && !Array.isArray(data[key])) {
+            form[key] = Object.assign({}, initialPayload[key], data[key])
+            }
+        })
+
+        console.log(documentPreview.value)
     }
+    // const payLoad = (data) => {
+        
+    //     Object.keys(data).forEach(key => {
+    //         if (Array.isArray(data[key])) {
+    //             if (key== 'documents') {
+    //                 documentPreview.value = data[key]
+    //                 return
+    //             }
+    //             data[key].length > 0 ?  form[key] =  data[key] : form[key].push({...initialPayload[key]})
+    //         }
+    //         if (typeof data[key] === 'object'  && !Array.isArray(data[key])) {
+    //             form[key] = Object.assign({}, initialPayload[key], data[key]);
+    //         }
+    //     });
+
+    //     // console.log(form);
+        
+    //     // if (data.) {
+            
+    //     // }
+    //     console.log(documentPreview.value);
+        
+    // }
     function exportToExcel(columns:Array<any>, data:Array<any>, fileName:string = 'export.xlsx') {
     // Créer un tableau avec les labels comme première ligne
     const headers = columns.map(col => col.label);
@@ -624,6 +659,66 @@ export function useApplyForm(){
     XLSX.writeFile(workbook, fileName);
     }
 
+    function updateOffres(status, uuid, type){
+        Inertia.post('/manager/offre/update-status', {status, uuid, type}, {
+            onSuccess: (data) => {
+                console.log(data);
+                
+                Inertia.reload()
+            },
+            onError: (errors) => {
+                console.error("Erreur :", errors);
+            },
+            onFinish: () => {
+
+                console.log("Requête terminée");
+            }
+        });
+    }
+
+
+    async function AddEmail(){
+        console.log(newEmail);
+         try {
+                const response = await axios.post("/manager/parametre/email", { ...newEmail });
+                Inertia.reload();
+            } catch (error) {
+                    let message = error.response?.data?.message ? error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'
+                    if (error.response && error.response.data && error.response.data.errors) {
+                    // Récupère tous les messages d'erreur et les transforme en texte
+                         message = Object.values(error.response.data.errors)
+                        .flat() // aplatit les tableaux
+                        .join('\n');
+                    alert(message);
+                    } else {
+                    alert(message);
+                    }
+            } finally {
+                console.log("Requête terminée");
+            }
+
+    }
+
+    async function AddUser() {
+            try {
+                const response = await axios.post("/manager/parametre/user", { ...newUser });
+                Inertia.reload();
+            } catch (error) {
+                    let message = error.response?.data?.message ? error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'
+                    if (error.response && error.response.data && error.response.data.errors) {
+                    // Récupère tous les messages d'erreur et les transforme en texte
+                         message = Object.values(error.response.data.errors)
+                        .flat() // aplatit les tableaux
+                        .join('\n');
+                    alert(message);
+                    } else {
+                    alert(message);
+                    }
+            } finally {
+                console.log("Requête terminée");
+            }
+            }
+
    return {
     form,
     currentStep,
@@ -651,7 +746,12 @@ export function useApplyForm(){
     submitOffre,
     exportToExcel,
     payLoad,
-    documentPreview
+    documentPreview,
+    updateOffres,
+    newEmail,
+    AddEmail,
+    newUser,
+    AddUser
   }
 
 }

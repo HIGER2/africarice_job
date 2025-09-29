@@ -31,7 +31,7 @@ defineProps({
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
                     <!-- Origin -->
-                    <div v-if="user.application.origin" class="bg-gray-50 rounded-xl p-6">
+                    <div v-if="user?.application?.origin" class="bg-gray-50 rounded-xl p-6">
                     <h2 class="text-xl font-semibold mb-2 text-gray-800">Origine & Compétences</h2>
                     <ul class="text-gray-700 space-y-1 text-sm">
                         <li><strong>Nationalité:</strong> {{ user.application.origin.nationality }}</li>
@@ -44,7 +44,7 @@ defineProps({
                     </div>
 
                     <!-- Identification -->
-                    <div v-if="user.application.identification" class="bg-gray-50 rounded-xl p-6">
+                    <div v-if="user?.application?.identification" class="bg-gray-50 rounded-xl p-6">
                     <h2 class="text-xl font-semibold mb-2 text-gray-800">Identification</h2>
                     <ul class="text-gray-700 space-y-1 text-sm">
                         <li><strong>Date de naissance:</strong> {{ user.application.identification.birth_date }}</li>
@@ -54,7 +54,7 @@ defineProps({
                     </div>
 
                     <!-- CGIAR -->
-                    <div v-if="user.application.cgiar_information" class="bg-gray-50 rounded-xl p-6">
+                    <div v-if="user?.application?.cgiar_information" class="bg-gray-50 rounded-xl p-6">
                     <h2 class="text-xl font-semibold mb-2 text-gray-800">CGIAR</h2>
                     <ul class="text-gray-700 space-y-1 text-sm">
                         <li><strong>Actif:</strong> {{ user.application.cgiar_information.current ? 'Oui' : 'Non' }}</li>
@@ -91,7 +91,7 @@ defineProps({
             <div class="bg-white rounded-2xl p-6 border border-gray-200 ">
             <h2 class="text-lg font-semibold mb-4 border-b pb-2">🎓 Diplômes</h2>
             <ul class="list-disc pl-6 text-gray-700 space-y-1">
-                <li v-for="d in user?.application.diplomas" :key="d.uuid">
+                <li v-for="d in user?.application?.diplomas" :key="d.uuid">
                 {{ d.diploma }} <span class="text-sm text-gray-500">(Option : {{ d.option }})</span>
                 </li>
             </ul>
@@ -101,7 +101,7 @@ defineProps({
             <div class="bg-white rounded-2xl p-6 border border-gray-200 ">
             <h2 class="text-lg font-semibold mb-4 border-b pb-2">💼 Expériences professionnelles</h2>
             <ul class="divide-y divide-gray-200">
-                <li v-for="exp in user?.application.experiences" :key="exp.uuid" class="py-3">
+                <li v-for="exp in user?.application?.experiences" :key="exp.uuid" class="py-3">
                 <p class="font-medium">{{ exp.position }} chez {{ exp.company_name }}</p>
                 <p class="text-sm text-gray-500">{{ exp.start_date }} → {{ exp.current ? "Actuel" : exp.end_date }}</p>
                 </li>
@@ -112,7 +112,7 @@ defineProps({
             <div class="bg-white rounded-2xl p-6 border border-gray-200 ">
             <h2 class="text-lg font-semibold mb-4 border-b pb-2">📇 Références</h2>
             <div class="grid md:grid-cols-2 gap-4">
-                <div v-for="ref in user?.application.references" :key="ref.uuid" class="border p-4 rounded-xl bg-gray-50 border border-gray-200 -sm">
+                <div v-for="ref in user?.application?.references" :key="ref.uuid" class="border p-4 rounded-xl bg-gray-50 border border-gray-200 -sm">
                 <p class="font-semibold text-gray-800">{{ ref.full_name }}</p>
                 <p class="text-sm text-gray-500">{{ ref.function }}</p>
                 <p class="text-sm">📱 {{ ref.phone }}</p>
@@ -123,13 +123,12 @@ defineProps({
 
             <!-- Documents -->
             <!-- <pre>{{ user?.application.documents }}</pre> -->
-            <div class="bg-white rounded-2xl p-6 border border-gray-200 " v-if="user?.application.documents?.length">
+            <div class="bg-white rounded-2xl p-6 border border-gray-200 " v-if="user?.application?.documents?.length">
             <h2 class="text-lg font-semibold mb-4 border-b pb-2">📂 Documents</h2>
             <ul class="list-disc pl-6 text-gray-700">
-                <li v-for="doc in user?.application.documents" :key="doc.uuid">
+                <li v-for="doc in user?.application?.documents" :key="doc.uuid">
             <a 
-                :href="`/${doc.path}`" 
-                target="_blank" 
+                :href="doc.path" 
                 download
                 class="flex cursor-pointer items-center gap-2 text-indigo-600 hover:text-indigo-800 hover:underline"
             >

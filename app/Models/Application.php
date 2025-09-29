@@ -10,37 +10,45 @@ class Application extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id','uuid',];
+    protected $fillable = ['user_id', 'uuid',];
 
-    public function diplomas() {
+    public function diplomas()
+    {
         return $this->hasMany(Diploma::class);
     }
 
-    public function cgiarInformation() {
+    public function cgiarInformation()
+    {
         return $this->hasOne(CgiarInformation::class);
     }
 
-    public function experiences() {
+    public function experiences()
+    {
         return $this->hasMany(Experience::class);
     }
 
-    public function identification() {
+    public function identification()
+    {
         return $this->hasOne(Identification::class);
     }
 
-    public function origin() {
+    public function origin()
+    {
         return $this->hasOne(Origin::class);
     }
 
-    public function references() {
+    public function references()
+    {
         return $this->hasMany(Reference::class);
     }
 
-    public function documents() {
-        return $this->hasMany(Document::class);
+    public function documents()
+    {
+        return $this->hasMany(Document::class, 'application_id');
     }
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
