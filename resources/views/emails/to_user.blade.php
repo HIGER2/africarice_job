@@ -2,19 +2,29 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Votre candidature a été soumise</title>
+    <title>Candidature envoyée avec succès | Application successfully submitted</title>
 </head>
 <body>
-    <h2>✅ Candidature soumise avec succès</h2>
+    <h4>✅ Application successfully submitted</h4>
+    <p>
+        This is an automated reply that confirms your online application was completed for the role of <strong>{{ $candidature->publication->job->position_title }}</strong>.
+        Please note that only short-listed candidates will be contacted.
+        If you have any questions, please contact us via email at 
+    </p>
 
-    <p>Bonjour {{ $candidature->user->name }},</p>
+    <p>Kind regards.</p>
+    <p>AfricaRice HR</p>
+    
+    <h4>✅ Candidature envoyée avec succès</h4>
 
-    <p>Votre candidature pour le poste <strong>{{ $candidature->publication->job->position_title }}</strong> a bien été soumise.</p>
+    <p>
+        Candidature envoyée avec succès
+        Ceci est une réponse automatique confirmant que votre candidature en ligne a été validée pour le poste de of <strong>{{ $candidature->publication->job->position_title }}</strong>.
+        Veuillez noter que seuls les candidats présélectionnés seront contactés.
+        Pour toute question, veuillez nous contacter par courriel à l'adresse <a href="mailto:africaricehr@cgiar.org">africaricehr@cgiar.org.</a>
+    </p>
 
-    <p>Notre équipe examinera votre candidature et vous contactera si votre profil correspond au poste.</p>
-
-    <p>Merci de votre intérêt pour notre entreprise.</p>
-
-    <p>💼 L’équipe RH</p>
+    <p>Cordialement</p>
+    <p>AfricaRice HR</p>
 </body>
 </html>

@@ -21,7 +21,7 @@ class CandidateSubmittedToUser extends Mailable
 
     public function build()
     {
-        return $this->subject("Votre candidature a été soumise")
+        return $this->subject("AFRICARICE: {$this->candidature->publication->job->position_title}")
             ->view('emails.to_user')
             ->with([
                 'candidature' => $this->candidature,
