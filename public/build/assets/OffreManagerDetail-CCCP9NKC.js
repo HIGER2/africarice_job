@@ -1,0 +1,1 @@
+import{_ as o}from"./OffreManagerDetail.vue_vue_type_script_setup_true_lang-UQfMG_In.js";import"./Table.vue_vue_type_script_setup_true_lang-8CfFSt6s.js";import"./app-BC_t0sV5.js";import"./index-BY5LR8Rs.js";import"./FormField-DR1kfQVm.js";import"./index-BgSNkFP4.js";import"./ButtonBack.vue_vue_type_script_setup_true_lang-DubK09a3.js";export{o as default};
