@@ -16,21 +16,24 @@ class CanditureUser extends JsonResource
     {
 
         $this->application->diplomas->map(function ($diploma, $index) use (&$flattened) {
-                $num = $index + 1;
-                $flattened["diploma{$num}"] = $diploma->diploma ?? 'n/a';
-                // $flattened["option{$num}"] = $diploma->option;
-            });
-            $this->application->references->map(function ($reference, $index) use (&$flattened) {
-                $num = $index + 1;
-                $flattened["reference{$num}"] ="Nom : ".$reference->full_name.'; function: '.$reference->function.'; phone: '.$reference->phone.'; email: '.$reference->email;
-                // $flattened["option{$num}"] = $diploma->option;
-            });
-            $this->application->experiences->map(function ($experience, $index) use (&$flattened) {
-                $num = $index + 1;
-                $flattened["experience{$num}"] ="Entreprise{$num} : ".$experience->company_name.'; Poste: '.$experience->position.'; De: '.$experience->start_date.'; A: '.$experience->end_date;
-                // $flattened["option{$num}"] = $diploma->option;
-            });
-            return [
+            $num = $index + 1;
+            $flattened["diploma{$num}"] = $diploma->diploma ?? 'n/a';
+            // $flattened["option{$num}"] = $diploma->option;
+        });
+        $this->application->references->map(function ($reference, $index) use (&$flattened) {
+            $num = $index + 1;
+            $flattened["reference{$num}"] = "Nom : " . $reference->full_name . '; function: ' . $reference->function . '; phone: ' . $reference->phone . '; email: ' . $reference->email;
+            // $flattened["option{$num}"] = $diploma->option;
+        });
+
+        $this->application->experiences->map(function ($experience, $index) use (&$flattened) {
+            $num = $index + 1;
+            $flattened["experience{$num}"] = "Entreprise{$num} : " . $experience->company_name . '; Poste: ' . $experience->position . '; De: ' . $experience->start_date . '; A: ' . $experience->end_date;
+            // $flattened["option{$num}"] = $diploma->option;
+        });
+
+
+        return [
             // 'candidature_id' => $this->id,
             'uuid' => $this->uuid,
             // 'status' => $this->status,
@@ -54,7 +57,7 @@ class CanditureUser extends JsonResource
 
             // User
             // 'user_id' => $this->id,
-            'candidat' => $this->name.' '.$this->last_name,
+            'candidat' => $this->name . ' ' . $this->last_name,
             'user_email' => $this->email,
             'user_phone' => $this->phone,
 
@@ -71,8 +74,8 @@ class CanditureUser extends JsonResource
             'origin_french_level' => $this->application->origin->french_level,
             'origin_english_level' => $this->application->origin->english_level,
             // Diplomas
-             // Diplomas aplatis
-               
+            // Diplomas aplatis
+
             // 'diplomas' => $this->user->application->diplomas ? $this->user->application->diplomas->map(function($diploma){
             //     return [
             //         'diploma' => $diploma->diploma,
@@ -81,18 +84,15 @@ class CanditureUser extends JsonResource
             // }) : null,
             // Documents
             // 'document_id' => $this->user->application->documents->id,
-            'documents' => [
-                // (object)[
-                // 'name'=> $this->application->documents[0]['name'],
-                // 'path'=> $this->application->documents[0]['path'],
-                // ],
-                // (object)[
-                // 'name'=> $this->application->documents[1]['name'],
-                // 'path'=> $this->application->documents[1]['path'],
-                // ],
-            ],
+            'documents' => $this->application->documents->map(function ($document, $index) use (&$flattened) {
+                return (object)[
+                    'name' => $document['name'],
+                    'path' => $document['path'],
+                ];
+            }),
+
             // 'document_path' => $this->user->application->documents->path,
-        ] + ($flattened ?? [] );
+        ] + ($flattened ?? []);
         // $this->application->diplomas->map(function ($diploma, $index) use (&$flattened) {
         //         $num = $index + 1;
         //         $flattened["diploma{$num}"] = $diploma->diploma;
@@ -105,7 +105,7 @@ class CanditureUser extends JsonResource
         //     });
 
         //     return [
-                
+
         //         // "data"=>$this->resource,
         //     // 'candidature_id' => $this->id,
         //     // // 'candidature_uuid' => $this->uuid,

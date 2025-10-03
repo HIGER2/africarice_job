@@ -10,6 +10,8 @@ import { Inertia } from "@inertiajs/inertia";
 import country from '../../data/country.json'
 import * as XLSX from 'xlsx';
 import { usePage } from '@inertiajs/vue3'
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 
 
 export function useApplyForm(){
@@ -75,6 +77,9 @@ export function useApplyForm(){
     // form fields 
 
     const fieldAddOffre= [
+        [
+            { type: "text", key: "reference", label: "Reference du post" },
+        ],
         [
             { type: "text", key: "position_title", label: "Titre du post" },
             { type: "select",options:[...country], key: "country_duty_station", label: "Pays" },
@@ -257,6 +262,8 @@ export function useApplyForm(){
 
     const newOffre=reactive({
         offre:{
+            uuid:null,
+            reference:null,
             position_title:"",
             country_duty_station:"france",
             published_at:"",
@@ -550,7 +557,7 @@ export function useApplyForm(){
     } catch (error: any) {
         let message = error.response?.data?.message ? error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'
         console.error('Erreur lors de l\'envoi du formulaire :', error.response || error);
-        alert(message);
+         alert("❌ " + message);
         
     }
     }   
@@ -579,6 +586,28 @@ export function useApplyForm(){
 
         console.log(documentPreview.value)
     }
+
+    const downloadZip = async (data) => {
+        const zip = new JSZip();
+        
+        for (const file of data) {
+            
+         try {
+                const fileUrl = `http://127.0.0.1:8001${file.path}`;
+                const response = await fetch(file.path);
+                console.log(response);
+                if (!response.ok) throw new Error("Fichier introuvable");
+                const blob = await response.blob();
+                zip.file(file.name, blob);
+            } catch (err) {
+                console.error(`Impossible de récupérer le fichier ${file.name}:`, err);
+            }
+        }
+
+        zip.generateAsync({ type: "blob" }).then(content => {
+            saveAs(content, "job_cv.zip");
+        });
+    };
     // const payLoad = (data) => {
         
     //     Object.keys(data).forEach(key => {
@@ -751,7 +780,8 @@ export function useApplyForm(){
     newEmail,
     AddEmail,
     newUser,
-    AddUser
+    AddUser,
+    downloadZip
   }
 
 }

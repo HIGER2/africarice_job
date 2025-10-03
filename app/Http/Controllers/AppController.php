@@ -36,7 +36,7 @@ class AppController extends Controller
     public function index()
     {
 
-        $publications = Publication::published()
+        $publications = Publication::Date()
             ->orderBy('created_at', 'desc')
             ->with('job', 'files')
             ->get();
@@ -381,9 +381,11 @@ class AppController extends Controller
         }
     }
 
-    public function manager($step = 'offres')
+    public function manager(Request $request, $step = 'offres')
     {
         $data = [];
+        $search = $request->search ?? null;
+
         switch ($step) {
             case 'offres':
                 $data = OffreResource::collection(Publication::with(['job', 'files', 'candidatures.user'])->orderBy('created_at', 'desc')->get());
@@ -392,7 +394,20 @@ class AppController extends Controller
                 $data = CandidatureResource::collection(PublicationApplication::with(['publication.job', 'user.application.origin', 'user.application.diplomas', 'user.application.documents'])->orderBy('created_at', 'desc')->get());
                 break;
             case 'candidat':
-                $data = UserCandidature::collection(user::with(['application.origin', 'application.documents'])->orderBy('created_at', 'desc')->get());
+                $data = UserCandidature::collection(
+                    User::with(['application.origin', 'application.documents'])
+                        ->when($search, function ($query, $search) {
+                            $terms = explode(' ', $search);
+                            $query->where(function ($q) use ($terms) {
+                                foreach ($terms as $term) {
+                                    $q->orWhere('name', 'like', "%{$term}%")
+                                        ->orWhere('last_name', 'like', "%{$term}%");
+                                }
+                            });
+                        })
+                        ->orderBy('created_at', 'desc')
+                        ->get()
+                );
                 break;
             case 'documents':
                 $data = ApplicationResource::collection(Application::orderBy('created_at', 'desc')->get());
@@ -413,7 +428,8 @@ class AppController extends Controller
         return Inertia::render('ManagerPage', [
             'step' => $step,
             'user' => Auth::user(),
-            'data' => $data
+            'data' => $data,
+            'search' => $search ?? null
         ]);
     }
 
@@ -473,50 +489,64 @@ class AppController extends Controller
 
             DB::beginTransaction();
 
+            $dataPublication = [
+                'type'          => 'public',
+                'published_by'  => Auth::id(),
+                'published_at'  => $request->offre['published_at'],
+                'expires_at'    => $request->offre['expires_at'],
+                'is_published'  => filter_var($request->offre['is_published'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
+            ];
 
-            $recuretement = Recrutement::create([
-                'position_title' => $request->offre['position_title'],
-                'country_duty_station' => $request->offre['country_duty_station'],
-            ]);
+            if (!empty($request->offre['uuid'])) {
+                // 🔹 Mise à jour
+                $publication = Publication::where("uuid", $request->offre["uuid"])->firstOrFail();
 
-            // creer une publication
-            $publication = Publication::create([
-                'type' => 'public',
-                'recrutement_id' => $recuretement->id,
-                'published_by' => Auth::user()->id,
-                'published_at' => $request->offre['published_at'],
-                'expires_at' => $request->offre['expires_at'],
-                'is_published'   => filter_var($request->offre['is_published'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
-            ]);
+                $publication->update($dataPublication);
 
-            // Exemple : sauvegarde des documents
-            $paths = [];
+                $publication->job()->update([
+                    'position_title'       => $request->offre['position_title'],
+                    'country_duty_station' => $request->offre['country_duty_station'],
+                ]);
+            } else {
+                // 🔹 Création recrutement
+                $recrutement = Recrutement::create([
+                    'position_title'       => $request->offre['position_title'],
+                    'country_duty_station' => $request->offre['country_duty_station'],
+                ]);
+
+                // 🔹 Création publication
+                $publication = Publication::create(array_merge($dataPublication, [
+                    'recrutement_id' => $recrutement->id,
+                ]));
+            }
+
+            // 🔹 Sauvegarde des documents
             if ($request->hasFile('documents')) {
                 foreach ($request->file('documents') as $file) {
-                    // $paths[] = $file->store('documents', 'public'); // en storage/app/public/documents
                     PublicationFile::create([
                         'publication_id' => $publication->id,
-                        'path' => 'storage/' . $file->store('documents', 'public'),
-                        'name' => $file->getClientOriginalName()
+                        'path'           => 'storage/' . $file->store('documents', 'public'),
+                        'name'           => $file->getClientOriginalName(),
                     ]);
                 }
             }
 
-
             DB::commit();
+
             return response()->json([
-                'success' => true,
-                'application_id' => 'kj',
+                'success'        => true,
+                'publication_id' => $publication->id,
             ]);
         } catch (\Throwable $th) {
-
             DB::rollBack();
+
             return response()->json([
-                'message' => 'erreur interne',
-                'erreur' => $th->getMessage(),
+                'message' => 'Erreur interne',
+                'erreur'  => $th->getMessage(),
             ], 500);
         }
     }
+
 
     public function storeEmail(Request $request)
     {

@@ -1,11 +1,17 @@
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import Table from './Table.vue';
+import { Inertia } from '@inertiajs/inertia';
 
-
-defineProps({
+const props = defineProps({
   data: Array,
+  search: String,
+  user: Object,
+  step: Number
 })
+const search = ref(props.search || null)
+let timer = null
 
 const columns = [
 //   { key: "uuid", label: "# UUID" },
@@ -21,6 +27,19 @@ const columns = [
 //   { key: "actions", label: "Actions" }, // colonne pour slot
 ];
 
+function fetchData() {
+   // Annuler le précédent timer
+        if (timer) clearTimeout(timer)
+        // Lancer un nouveau timer
+        timer = setTimeout(() => {
+            Inertia.get(
+            '/manager/candidat',
+            { search: search.value },
+            { preserveState: true, replace: true }
+            )
+        }, 400) 
+}
+
 </script>
 
 
@@ -34,6 +53,15 @@ const columns = [
                             Gerer les candidats
                         </h2>
                     <div class="flex justify-between items-center gap-2">
+                        <div class="w-2xs">
+                            <input
+                            v-model="search"
+                            placeholder="Rechercher..."
+                            class="w-full border outline-0 border-gray-200 p-2 rounded-lg "
+                            type="search" name="" id=""
+                            @input="fetchData"
+                            >
+                        </div>
                         <!-- <button class="border-[0.1rem] border-gray-200 p-2 px-3 rounded-lg text-primary cursor-pointer">Ajouter une publication</button> -->
                         <button class="bg-primary p-2 px-3 rounded-lg text-white cursor-pointer">
                             <i class="uil uil-export"></i>

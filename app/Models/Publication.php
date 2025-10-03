@@ -13,6 +13,7 @@ class Publication extends Model
     protected $fillable = [
         'recrutement_id',
         'uuid',
+        'reference',
         'type',
         'is_published',
         'is_closed',
@@ -59,6 +60,14 @@ class Publication extends Model
             ->where('is_closed', false);
     }
 
+
+    public function scopeDate($query)
+    {
+        return $query->where('is_published', true)
+            ->whereDate('published_at', '<=', now())
+            ->whereDate('expires_at', '>=', now());
+    }
+
     public function scopeInternal($query)
     {
         return $query->where('type', 'internal');
@@ -85,7 +94,9 @@ class Publication extends Model
     {
         static::creating(function ($model) {
             $model->uuid = Str::uuid()->toString();
-            $model->reference = self::generateReference($model, 'reference');
+            if (empty($model->reference)) {
+                $model->reference = self::generateReference($model, 'reference');
+            }
         });
     }
 }

@@ -5,6 +5,8 @@ import AddOffre from './AddOffre.vue';
 import Table from './Table.vue';
 import { useApplyForm } from '../composables';
 import ButtonBack from './ui/ButtonBack.vue';
+import JSZip from 'jszip';
+import { reactive } from 'vue';
 
 // import { usePage } from '@inertiajs/vue3'
 
@@ -15,7 +17,7 @@ import ButtonBack from './ui/ButtonBack.vue';
 const props= defineProps({
   data: Array,
 })
-const {exportToExcel,updateOffres}=useApplyForm()
+const {exportToExcel,updateOffres,downloadZip}=useApplyForm()
 
 const labelsMap ={
     candidat: "Candidat",
@@ -32,6 +34,10 @@ const labelsMap ={
 const dataValue = computed(()=>props.data.data[0])
 
 const labelsExclu =['uuid']
+const exportCv = reactive({
+    loading: false,
+    label:' Export CV'
+})
 
   const columns = computed(() => {
    if (!props.data?.data || props.data.data.length === 0) return [];
@@ -47,6 +53,28 @@ const labelsExclu =['uuid']
       delete columns[columns.findIndex(col => col.key === 'documents')];
       exportToExcel(columns,data, 'Liste_des_candidatures.xlsx')
     }
+
+    const exporteCvs= async(data)=>{
+        let files=[]
+        data.forEach(candidat => {
+        const firstDoc = candidat.documents[0]; // index 0
+        if (firstDoc) {
+          files.push(firstDoc)
+        }
+        });
+        if (files.length > 0) {
+            exportCv.loading = true
+            exportCv.label = 'Chargement...'
+            await downloadZip(files)
+            exportCv.loading = false
+            exportCv.label = 'Export CV'
+
+        }else{
+            alert('Aucun document trouvé')
+        }
+    }
+
+      
 
 // const columns = [
 // //   { key: "uuid", label: "# UUID" },
@@ -67,7 +95,7 @@ const labelsExclu =['uuid']
 <template>
   <div>
      <div class="w-full">
-        <!-- <pre>{{ data }}</pre> -->
+       
         <!-- <div v-if="$page.props.flash.message" class="alert">
             {{ $page.props.flash.message }}
         </div> -->
@@ -111,7 +139,6 @@ const labelsExclu =['uuid']
 
                     </div>
                 </div>
-                <!-- <pre>  {{ data?.data[0] }}</pre> -->
                 <h1 class="text-2xl font-bold text-gray-800 mb-4">
                 Offre de Recrutement : {{ data?.data[0]?.job.position_title }}
                 </h1>
@@ -202,21 +229,22 @@ const labelsExclu =['uuid']
                  <div class=" max-w-max mt-5">
                     <h2 class="text-lg font-semibold mb-4">Documents</h2>
 
-                    <div v-if="dataValue.files.length > 0" class="space-y-2">
+                    <div v-if="data.data[0].files.length > 0" class="space-y-2">
                     <div 
-                        v-for="(file, index) in dataValue.files" 
+                        v-for="(file, index) in data.data[0].files" 
                         :key="index" 
                         class="flex items-center justify-between p-3 border rounded hover:bg-gray-50"
                     >
                         <span class="truncate max-w-xs">{{ file.name }}</span>
-                        <a 
-                        :href="file.url" 
-                        download
-                        class="text-blue-600 hover:underline flex items-center space-x-1"
-                        >
-                        <i class="uil uil-export"></i>
-                        <span>Télécharger </span>
-                        </a>
+                        <!-- {{file}} -->
+                            <a 
+                            :href="`/${file.url}`"
+                            download
+                            class="text-blue-600 hover:underline flex items-center space-x-1"
+                            >
+                            <i class="uil uil-export"></i>
+                                <span>Télécharger</span>
+                            </a>
                     </div>
                     </div>
 
@@ -225,36 +253,47 @@ const labelsExclu =['uuid']
             </div>
                 
                 <div class="w-full mt-6">
+                <!-- <pre>  {{ data?.data[0].candidat }}</pre> -->
+
                     <!-- <pre>{{ data?.data[0] }}</pre> -->
                     <div class="flex px-6 py-4  justify-between items-center w-full">
                     <!-- <h4 class="font-bold">Gerer les offres</h4> -->
                     <h2 class="text-2xl font-semibold mb-4">Liste des candidats</h2>
-                    <div class="flex justify-between items-center">
+                    <div class="flex gap-2 justify-between items-center">
                         <button
                         @click="exporteData(columns,data?.data[0]?.candidat)"
                         type="button"
                         class="bg-primary  p-2 px-3 rounded-lg text-white cursor-pointer">
                             <i class="uil uil-export"></i>
-                            <span> Importer</span>
+                            <span> Export list</span>
+                        </button>
+                        <button
+                           :disabled="exportCv.loading"
+                        @click="exporteCvs(data?.data[0]?.candidat)"
+                        type="button"
+                        class="bg-gray-50 border border-gray-200 disabled:opacity-50  p-2 px-3 rounded-lg text-primary  cursor-pointer">
+                            <i class="uil uil-export"></i>
+                            <span>{{exportCv.label}}</span>
                         </button>
                     </div>
                 </div>
                 <div class="overflow-x-auto border border-slate-200 bg-white ">
                     <Table :columns="columns" :rows="data?.data[0]?.candidat">
                            <template #documents="{ row }">
-                               <div class="flex flex-col gap-2">
+                                <div class="flex flex-col gap-2">
                                     <a
                                     v-for="(value,index) in row.documents"
-                                    :href="`/storage/${value.path}`"
+                                    :href="`${value.path}`"
+                                    :download="value.name"
                                     target="_blank"
                                     class="text-blue-600 hover:underline"
                                     >
                                     {{ value.name }}
                                     </a>
-                               </div>
+                                </div>
                             </template>
 
-                                 <template #actions="{ row }">
+                                <template #actions="{ row }">
                                     <a :href="`/manager/candidat/${row.uuid}`" class="px-3 py-1 text-sm border rounded-md hover:bg-gray-50">
                                     Voir
                                     </a>

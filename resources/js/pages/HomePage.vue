@@ -154,8 +154,8 @@ function openApply(pub: any) {
                   >
                     <span class="truncate max-w-xs">{{ file.name }}</span>
                     <a 
-                      :href="file.url" 
-                      download
+                      :href="`/${file.url}`" 
+                      :download="file.name"
                       class="text-blue-600 hover:underline flex items-center space-x-1"
                     >
                      <i class="uil uil-export"></i>

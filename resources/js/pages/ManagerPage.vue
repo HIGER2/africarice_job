@@ -13,6 +13,7 @@ const props = defineProps({
   step: String,
   data: Object,
   user: Object,
+  search: String,
 })
 
 
@@ -37,7 +38,7 @@ const components={
     <DefaultLayout :step="step" :user="user">
         <div class="flex-1 overflow-auto py-5  bg-white">
             <!-- <pre>{{ data }}</pre> -->
-            <component :is="components[step]" :data="data"/>
+        <component :is="components[step]" v-bind="props" />
         </div>
        
     </DefaultLayout>

@@ -1,14 +1,14 @@
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { useApplyForm } from '../composables';
 import AddOffre from './AddOffre.vue';
 import Table from './Table.vue';
+import UpdateOffre from './UpdateOffre.vue';
 
 defineProps({
   data: Array,
 })
-const {exportToExcel}=useApplyForm()
-
 const columns = [
   { key: "reference", label: "# Réf" },
   { key: "type", label: "Type" },
@@ -19,8 +19,17 @@ const columns = [
   { key: "expires_at", label: "Expire le" },
   { key: "candidates_count", label: "Nombre de candidats" },
 ];
+const {exportToExcel}=useApplyForm()
+const row = ref(null)
 
 
+const handleClose =()=>{
+    row.value = false
+}
+const Updated=(data)=>{
+    row.value = data
+    console.log(data);
+}
 </script>
 
 <template>
@@ -70,9 +79,9 @@ const columns = [
                     <!-- Actions -->
                         <template #actions="{ row }">
                           <div class="flex items-center gap-2">
-                              <!-- <button type="button" class="px-3 py-1 text-sm border rounded-md hover:bg-gray-50">
+                              <button @click="Updated(row)" type="button" class="px-3 cursor-pointer py-1 text-sm border rounded-md hover:bg-gray-50">
                              Modifier
-                            </button> -->
+                            </button>
                             <a :href="`/manager/offres/${row.uuid}`" class="px-3 py-1 text-sm border rounded-md hover:bg-gray-50">
                                 Voir
                             </a>
@@ -88,6 +97,8 @@ const columns = [
                             <button class="px-3 py-1 border rounded-md text-sm">Suiv</button>
                         </div>
                 </div> -->
+
+                <UpdateOffre :row="row" @close="handleClose"/>
             </div>
         </div>
   </div>

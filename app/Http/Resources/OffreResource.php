@@ -22,19 +22,20 @@ class OffreResource extends JsonResource
             'uuid' => $this->uuid,
             'reference' => $this->reference,
             'type' => $this->type,
-            'position_title'=> $this->whenLoaded('job')->position_title,
+            'position_title' => $this->whenLoaded('job')->position_title,
             'recrutement_id' => $this->recrutement_id,
             'is_published' => $this->is_published ? 'Publiée' : 'Non Publiée',
             'is_closed' => $this->is_closed ? 'Cloturée' : 'Ouverte',
+            'country_duty_station' => $this->whenLoaded('job')->country_duty_station,
             'published_at' => Carbon::parse($this->published_at)->format('d/m/Y'),
             'expires_at' => Carbon::parse($this->expires_at)->format('d/m/Y'),
-            'files' => $this->files ? $this->files->map(function($file){
+            'files' => $this->files ? $this->files->map(function ($file) {
                 return [
                     'filename' => $file->filename,
                     'path' => $file->path,
                 ];
             }) : null,
-            'files' => $this->files ? $this->files->select('filename','path') : null,
+            'files' => $this->files ? $this->files->select('filename', 'path') : null,
             'candidates_count' => $this->candidatures ? $this->candidatures->count() : 0,
         ];
     }

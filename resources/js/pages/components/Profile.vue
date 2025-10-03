@@ -129,7 +129,7 @@ defineProps({
                 <li v-for="doc in user?.application?.documents" :key="doc.uuid">
             <a 
                 :href="doc.path" 
-                download
+                :download="doc.name"
                 class="flex cursor-pointer items-center gap-2 text-indigo-600 hover:text-indigo-800 hover:underline"
             >
                 📄 <span>{{ doc.name }}</span>

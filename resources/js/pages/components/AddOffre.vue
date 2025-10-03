@@ -47,7 +47,7 @@ const handleSubmit = async() => {
           <transition name="scale">
           <div 
             v-if="open"
-            class="bg-white flex flex-col overflow-hidden  h-[560px]  rounded-2xl shadow-lg p-6 max-w-md w-full relative"
+            class="bg-white flex flex-col overflow-hidden  h-[560px]  rounded-2xl shadow-lg p-6 w-lg relative"
           >
             <!-- Bouton fermer -->
               <div class="flex items-center justify-between mb-2">
@@ -70,13 +70,12 @@ const handleSubmit = async() => {
                 v-for="(groupe,index) in fieldAddOffre"
                 >
                 <!-- {{ groupe }} -->
-                <div class="flex items-end gap-2">
+                <div class="flex items-end flex-col gap-2">
                     <FormField
                     v-for="filed in groupe"
                     :label="filed.label"
                     :field="filed"
                     v-model="newOffre.offre[filed.key]"
-                    placeholder="Ex: Developpeur Full Stack"
                 />
                 </div>
                

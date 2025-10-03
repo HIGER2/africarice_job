@@ -47,7 +47,7 @@ const columns = [
                                     <a
                                     v-for="(value,index) in row.documents"
                                     :href="`${value.path}`"
-                                    download
+                                    :download="value.name"
                                     class="text-blue-600 hover:underline"
                                     >
                                     {{ value.name }}
