@@ -76,131 +76,259 @@ export function useApplyForm(){
 
     // form fields 
 
-    const fieldAddOffre= [
-        [
-            { type: "text", key: "reference", label: "Reference du post" },
-        ],
-        [
-            { type: "text", key: "position_title", label: "Titre du post" },
-            { type: "select",options:[...country], key: "country_duty_station", label: "Pays" },
-        ],
-        [
-        ],
-        // [
-        //     { type: "text", key: "reference", label: "ToR" },
-        // ],
-        [
-            { type: "date", key: "published_at", label: "Publié le" },
-            { type: "date", key: "expires_at", label: "Date de cloture" },
-        ],
-        [
-            { type: "checkbox", key: "is_published", label: "Cocher pour publier" },
-        ],
-    ]
+    // const fieldAddOffre= [
+    //     [
+    //         { type: "text", key: "reference", label: "Reference du post" },
+    //     ],
+    //     [
+    //         { type: "text", key: "position_title", label: "Titre du post" },
+    //         { type: "select",options:[...country], key: "country_duty_station", label: "Pays" },
+    //     ],
+    //     [
+    //     ],
+    //     // [
+    //     //     { type: "text", key: "reference", label: "ToR" },
+    //     // ],
+    //     [
+    //         { type: "date", key: "published_at", label: "Publié le" },
+    //         { type: "date", key: "expires_at", label: "Date de cloture" },
+    //     ],
+    //     [
+    //         { type: "checkbox", key: "is_published", label: "Cocher pour publier" },
+    //     ],
+    // ]
 
-    const fieldAddDocument= [
-        { type: "file", key: "resume", label: "" },
-    ]
+    // const fieldAddDocument= [
+    //     { type: "file", key: "resume", label: "" },
+    // ]
     
-    const fieldDiploma= [
-        [
-            { type: "text", key: "diploma", label: "Diplôme " },
-            { type: "text", key: "option", label: "Option Diplôme " },
-        ],
-    ]
-    const fieldExperience=[
-        [
-        { type: "text", key: "company_name", label: "Nom de l'entreprise" },
-        { type: "text", key: "position", label: "Fonction" },
-        ],
-        [
-        { type: "date", key: "start_date", label: "Date de début" },
-        { type: "date", key: "end_date", label: "Date de fin" },
-        ],
+    // const fieldDiploma= [
+    //     [
+    //         { type: "text", key: "diploma", label: "Diplôme " },
+    //         { type: "text", key: "option", label: "Option Diplôme " },
+    //     ],
+    // ]
+    // const fieldExperience=[
+    //     [
+    //     { type: "text", key: "company_name", label: "Nom de l'entreprise" },
+    //     { type: "text", key: "position", label: "Fonction" },
+    //     ],
+    //     [
+    //     { type: "date", key: "start_date", label: "Date de début" },
+    //     { type: "date", key: "end_date", label: "Date de fin" },
+    //     ],
         
-    ]
-    const cgiarFiled =[
-        [
-        { type: "checkbox", key: "current", label: "Cochez si vous y travaillez actuellement" },
-        ],
-        [
-        { type: "text", key: "cgiar_center", label: "Dans lequel des centres CGIAR avez-vous déjà travaillé ?" },
-        ],
-        [
-            { type: "text", key: "cgiar_email", label: "Indiquez votre email cgiar.org" }
+    // ]
+    // const cgiarFiled =[
+    //     [
+    //     { type: "checkbox", key: "current", label: "Cochez si vous y travaillez actuellement" },
+    //     ],
+    //     [
+    //     { type: "text", key: "cgiar_center", label: "Dans lequel des centres CGIAR avez-vous déjà travaillé ?" },
+    //     ],
+    //     [
+    //         { type: "text", key: "cgiar_email", label: "Indiquez votre email cgiar.org" }
+    //     ]
+    // ]
+    // const fieldExperienceOther=[
+    //     [
+    //     { type: "text", key: "company_name", label: "Nom de l'entreprise" },
+    //     { type: "text", key: "position", label: "Fonction" },
+    //     ],
+    //     [
+    //     { type: "date", key: "start_date", label: "Date de début" },
+    //     { type: "date", key: "end_date", label: "Date de fin" },
+    //     ],
+    // ]
+    // const fieldIdentification= [
+    //     [
+    //     { type: "date", key: "birth_date", label: "Date de naissance" },
+    //     { type: "text", key: "address", label: "Adresse" },
+    //     ],
+    //     [
+    //     { type: "select", key: "gender", label: "Genre" ,options:[
+    //     {label: 'homme',value: 'male'},
+    //     {label: 'femme',value: 'female'},
+    // ]}
+    //     ]
+    // ]
+    // const fieldOrigin= [
+    //     [
+    //         { type: "select", options:[...country], key: "nationality", label: "Nationalité | Nationality" },
+    //         { type: "select",options:[...country], key: "country", label: "Pays de résidence | Country of residence" },
+    //     ],
+    //     [
+    //         { type: "text", key: "city", label: "Ville de résidence | City of residence" },
+    //         { type: "number", key: "experience_years", label: "Années d'expérience" },
+    //     ],
+    //     [
+    //         { type: "select", key: "french_level", 
+    //             options:[
+    //             {label:'school',value:'Scolaire'},
+    //             {label:'Débutant',value:'beginner'},
+    //             {label:'intermediate',value:'Intermédiaire'},
+    //             {label:'advanced',value:'Avancé'},
+    //             {label:'expert',value:'Expert'},
+    //             {label:'proficient',value:'Maîtrise'},
+    //             {label:'native',value:'Natif'},
+    //             ],
+    //             label: "Niveau français" },
+    //         { type: "select", key: "english_level", 
+    //             options:[
+    //             {label:'school',value:'Scolaire'},
+    //             {label:'Débutant',value:'beginner'},
+    //             {label:'intermediate',value:'Intermédiaire'},
+    //             {label:'advanced',value:'Avancé'},
+    //             {label:'expert',value:'Expert'},
+    //             {label:'proficient',value:'Maîtrise'},
+    //             {label:'native',value:'Natif'},
+    //             ],
+    //             label: "Niveau anglais" }
+    //     ]
+    // ]
+    // const fieldDocument= [
+    //     { type: "file", key: "resume", label: "Charger votre CV",accept:".pdf,.doc,.docx,.jpg,.jpeg,.png" },
+    //     // { type: "file", key: "cover/_letter", label: "Charger votre lettre de motivation" },
+    // ]
+    // const fieldReference= [
+    //     [
+    //         { type: "text", key: "full_name", label: "Nom et prénoms" },
+    //         { type: "text", key: "email", label: "Email" },
+    //     ],
+    //     [
+    //         { type: "text", key: "phone", label: "Téléphone" },
+    //         { type: "text", key: "function", label: "Function" },
+    //     ],
+    // ]
+            const fieldAddOffre= [
+            [
+                { type: "text", key: "reference", label: "Post Reference" },
+            ],
+            [
+                { type: "text", key: "position_title", label: "Post Title" },
+                { type: "select", options:[...country], key: "country_duty_station", label: "Country" },
+            ],
+            [
+            ],
+            [
+                { type: "date", key: "published_at", label: "Published On" },
+                { type: "date", key: "expires_at", label: "Closing Date" },
+            ],
+            [
+                { type: "checkbox", key: "is_published", label: "Check to Publish" },
+            ],
         ]
-    ]
-    const fieldExperienceOther=[
-        [
-        { type: "text", key: "company_name", label: "Nom de l'entreprise" },
-        { type: "text", key: "position", label: "Fonction" },
-        ],
-        [
-        { type: "date", key: "start_date", label: "Date de début" },
-        { type: "date", key: "end_date", label: "Date de fin" },
-        ],
-    ]
-    const fieldIdentification= [
-        [
-        { type: "date", key: "birth_date", label: "Date de naissance" },
-        { type: "text", key: "address", label: "Adresse" },
-        ],
-        [
-        { type: "select", key: "gender", label: "Genre" ,options:[
-        {label: 'homme',value: 'male'},
-        {label: 'femme',value: 'female'},
-    ]}
+
+        const fieldAddDocument= [
+            { type: "file", key: "resume", label: "" },
         ]
-    ]
-    const fieldOrigin= [
-        [
-            { type: "select", options:[...country], key: "nationality", label: "Nationalité | Nationality" },
-            { type: "select",options:[...country], key: "country", label: "Pays de résidence | Country of residence" },
-        ],
-        [
-            { type: "text", key: "city", label: "Ville de résidence | City of residence" },
-            { type: "number", key: "experience_years", label: "Années d'expérience" },
-        ],
-        [
-            { type: "select", key: "french_level", 
-                options:[
-                {label:'school',value:'Scolaire'},
-                {label:'Débutant',value:'beginner'},
-                {label:'intermediate',value:'Intermédiaire'},
-                {label:'advanced',value:'Avancé'},
-                {label:'expert',value:'Expert'},
-                {label:'proficient',value:'Maîtrise'},
-                {label:'native',value:'Natif'},
-                ],
-                label: "Niveau français" },
-            { type: "select", key: "english_level", 
-                options:[
-                {label:'school',value:'Scolaire'},
-                {label:'Débutant',value:'beginner'},
-                {label:'intermediate',value:'Intermédiaire'},
-                {label:'advanced',value:'Avancé'},
-                {label:'expert',value:'Expert'},
-                {label:'proficient',value:'Maîtrise'},
-                {label:'native',value:'Natif'},
-                ],
-                label: "Niveau anglais" }
+
+        const fieldDiploma= [
+            [
+                { type: "text", key: "diploma", label: "Diploma" },
+                { type: "text", key: "option", label: "Diploma Option" },
+            ],
         ]
-    ]
-    const fieldDocument= [
-        { type: "file", key: "resume", label: "Charger votre CV",accept:".pdf,.doc,.docx,.jpg,.jpeg,.png" },
-        // { type: "file", key: "cover/_letter", label: "Charger votre lettre de motivation" },
-    ]
-    const fieldReference= [
-        [
-            { type: "text", key: "full_name", label: "Nom et prénoms" },
-            { type: "text", key: "email", label: "Email" },
-        ],
-        [
-            { type: "text", key: "phone", label: "Téléphone" },
-            { type: "text", key: "function", label: "Function" },
-        ],
-    ]
-    
+
+        const fieldExperience=[
+            [
+                { type: "text", key: "company_name", label: "Company Name" },
+                { type: "text", key: "position", label: "Position" },
+            ],
+            [
+                { type: "date", key: "start_date", label: "Start Date" },
+                { type: "date", key: "end_date", label: "End Date" },
+            ],
+        ]
+
+        const cgiarFiled =[
+            [
+                { type: "checkbox", key: "current", label: "Check if currently working here" },
+            ],
+            [
+                { type: "text", key: "cgiar_center", label: "Which CGIAR centers have you worked at?" },
+            ],
+            [
+                { type: "text", key: "cgiar_email", label: "Provide your cgiar.org email" }
+            ]
+        ]
+
+        const fieldExperienceOther=[
+            [
+                { type: "text", key: "company_name", label: "Company Name" },
+                { type: "text", key: "position", label: "Position" },
+            ],
+            [
+                { type: "date", key: "start_date", label: "Start Date" },
+                { type: "date", key: "end_date", label: "End Date" },
+            ],
+        ]
+
+        const fieldIdentification= [
+            [
+                { type: "date", key: "birth_date", label: "Date of Birth" },
+                { type: "text", key: "address", label: "Address" },
+            ],
+            [
+                { type: "select", key: "gender", label: "Gender", options:[
+                    {label: 'Male', value: 'male'},
+                    {label: 'Female', value: 'female'},
+                ]}
+            ]
+        ]
+
+        const fieldOrigin= [
+            [
+                { type: "select", options:[...country], key: "nationality", label: "Nationality" },
+                { type: "select",options:[...country], key: "country", label: "Country of Residence" },
+            ],
+            [
+                { type: "text", key: "city", label: "City of Residence" },
+                { type: "number", key: "experience_years", label: "Years of Experience" },
+            ],
+            [
+                { type: "select", key: "french_level", 
+                    options:[
+                        {label:'School', value:'school'},
+                        {label:'Beginner', value:'beginner'},
+                        {label:'Intermediate', value:'intermediate'},
+                        {label:'Advanced', value:'advanced'},
+                        {label:'Expert', value:'expert'},
+                        {label:'Proficient', value:'proficient'},
+                        {label:'Native', value:'native'},
+                    ],
+                    label: "French Level" 
+                },
+                { type: "select", key: "english_level", 
+                    options:[
+                        {label:'School', value:'school'},
+                        {label:'Beginner', value:'beginner'},
+                        {label:'Intermediate', value:'intermediate'},
+                        {label:'Advanced', value:'advanced'},
+                        {label:'Expert', value:'expert'},
+                        {label:'Proficient', value:'proficient'},
+                        {label:'Native', value:'native'},
+                    ],
+                    label: "English Level" 
+                }
+            ]
+        ]
+
+        const fieldDocument= [
+            { type: "file", key: "resume", label: "Upload your CV", accept:".pdf,.doc,.docx,.jpg,.jpeg,.png" },
+        ]
+
+        const fieldReference= [
+            [
+                { type: "text", key: "full_name", label: "Full Name" },
+                { type: "text", key: "email", label: "Email" },
+            ],
+            [
+                { type: "text", key: "phone", label: "Phone" },
+                { type: "text", key: "function", label: "Function" },
+            ],
+        ]
+
     const initialPayload={
         diplomas:{...initDiploma},
         cgiar_information:{...initCgiarInformation},

@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -550,6 +551,26 @@ class AppController extends Controller
         }
     }
 
+    public function deleteUserDocument(Request $request)
+    {
+        // 🔹 Récupérer le candidat
+        $user = Auth::user();
+        // Vérifier si l'utilisateur a une application et au moins un document
+        if (!$user->application || $user->application->documents->isEmpty()) {
+            return response()->json([
+                'message' => 'Aucun document trouvé pour cet utilisateur.'
+            ], 404);
+        }
+
+        $document = $user->application->documents[0];
+
+        // Supprimer le fichier du stockage
+        if ($document->path && Storage::disk('public')->exists($document->path)) {
+            Storage::disk('public')->delete($document->path);
+        }
+        // Supprimer ou mettre à null le champ dans la base
+        $document->delete();
+    }
 
     public function storeEmail(Request $request)
     {
