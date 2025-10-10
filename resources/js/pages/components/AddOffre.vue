@@ -32,7 +32,7 @@ const handleSubmit = async() => {
       @click="open = true" 
      class="border-[0.1rem] border-gray-200 p-2 px-3 rounded-lg text-primary cursor-pointer">
         <i class="uil uil-plus"></i>
-        <span> Ajouter une offre</span>
+        <span>Add a Job Offer</span>
     </button> 
 
     <!-- Overlay -->
@@ -52,7 +52,7 @@ const handleSubmit = async() => {
             <!-- Bouton fermer -->
               <div class="flex items-center justify-between mb-2">
                   <h2 class="text-xl font-semibold">
-                    Ajouter une publication
+                   Add a Job Offer
                 </h2>
                 <button 
                 type="button"
@@ -109,7 +109,7 @@ const handleSubmit = async() => {
             </div>
               <button type="submit" class="w-full flex items-center justify-center bg-primary p-2 rounded-md text-white cursor-pointer">
                 <Spinnercomponent v-if="loading"/>
-                <span v-else>Enregistrer</span>
+                <span v-else>Save</span>
               </button>
               
           </div>

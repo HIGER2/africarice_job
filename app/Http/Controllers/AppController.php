@@ -122,17 +122,18 @@ class AppController extends Controller
             [
                 'name' => 'required',
                 'last_name' => 'required',
-                'phone' => 'required|numeric',
+                'phone' => 'required|numeric|unique:users,phone',
                 'email' => 'required|email|unique:users,email',
             ],
             [
-                'name.required' => 'Le nom est requis',
-                'last_name.required' => 'Le prénom est requis',
-                'phone.required' => 'Le téléphone est requis',
-                'phone.numeric' => 'Le téléphone doit être numérique',
-                'email.required' => 'L\'email est requis',
-                'email.email' => 'Format d\'email invalide',
-                'email.unique' => 'Cet email est déjà utilisé',
+                'name.required' => 'Le nom est requis / Name is required',
+                'last_name.required' => 'Le prénom est requis / Last name is required',
+                'phone.required' => 'Le téléphone est requis / Phone is required',
+                'phone.numeric' => 'Le téléphone doit être numérique / Phone must be numeric',
+                'email.required' => 'L\'email est requis / Email is required',
+                'email.email' => 'Format d\'email invalide / Invalid email format',
+                'email.unique' => 'Cet email est déjà utilisé / This email is already taken',
+                'phone.unique' => 'Ce numéro de téléphone est déjà utilisé / This phone number is already taken',
             ]
         );
 
@@ -144,10 +145,11 @@ class AppController extends Controller
         $user->save();
         session(['user_email' => $user->email]);
         // Envoyer email avec code PIN
-        Mail::raw("Votre code PIN pour se connecter : $pin", function ($message) use ($user) {
+        Mail::raw("Votre code PIN pour se connecter : $pin / Your login PIN is: $pin", function ($message) use ($user) {
             $message->to($user->email)
-                ->subject('Code PIN de connexion');
+                ->subject('Code PIN de connexion / Login PIN');
         });
+
         // return redirect()->route('verify');
         return response()->json(['message' => 'Inscription réussie. Vérifiez votre email pour le code PIN.']);
     }
@@ -161,23 +163,25 @@ class AppController extends Controller
                 'email' => 'required|email',
             ],
             [
-                'email.required' => 'L\'email est requis',
-                'email.email' => 'Format d\'email invalide',
+                'email.required' => "L'email est requis / Email is required",
+                'email.email' => "Format d'email invalide / Invalid email format",
             ]
+
         );
 
         $user = User::where('email', $request->email)->first();
-        if (!$user) return response()->json(['message' => 'Utilisateur non trouvé'], 404);
+        if (!$user) return response()->json(['message' => 'Utilisateur non trouvé / User not found'], 404);
 
         session(['user_email' => $user->email]);
         $pin = rand(1000, 9999);
         $hash = Hash::make($pin);
         $user->pin = $pin;
         $user->save();
-        Mail::raw("Votre code PIN pour se connecter : $pin", function ($message) use ($user) {
+        Mail::raw("Votre code PIN pour se connecter : $pin / Your login PIN is: $pin", function ($message) use ($user) {
             $message->to($user->email)
-                ->subject('Code PIN de connexion');
+                ->subject('Code PIN de connexion / Login PIN');
         });
+
 
         return response()->json(['message' => 'Email envoyé avec le code PIN']);
     }
@@ -190,7 +194,7 @@ class AppController extends Controller
 
         $email = session('user_email');
         $user = User::where('email', $email)->where('pin', $request->pin)->first();
-        if (!$user) return response()->json(['message' => 'Code PIN incorrect'], 401);
+        if (!$user) return response()->json(['message' => 'Code PIN incorrect | Incorrect PIN'], 401);
         // if(!$user || !Hash::check($request->pin, $user->pin)) return response()->json(['message'=>'Code PIN incorrect'], 401);
 
         // Effacer le PIN
@@ -224,7 +228,7 @@ class AppController extends Controller
 
             if ($publication->is_closed) {
                 return response()->json([
-                    'message' => 'Cette offre est clôturée.'
+                    'message' => "Cette offre est clôturée. | This job posting is closed."
                 ], 403);
             }
 
@@ -245,7 +249,7 @@ class AppController extends Controller
 
             if ($existingApplication) {
                 return response()->json([
-                    'message' => 'Vous avez déjà postulé à cette offre.',
+                    'message' => 'You have already applied for this position. | Vous avez déjà postulé à cette offre.',
                     'application' => $existingApplication,
                 ], 409); // 409 Conflict
             }
@@ -375,7 +379,7 @@ class AppController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json([
-                'message' => 'erreur interne',
+                'message' => 'Erreur interne | Internal error',
                 'erreur' => $th->getMessage(),
             ], 500);
             //throw $th;

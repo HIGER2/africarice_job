@@ -10,15 +10,16 @@ defineProps({
   data: Array,
 })
 const columns = [
-  { key: "reference", label: "# Réf" },
+  { key: "reference", label: "# Ref" },
   { key: "type", label: "Type" },
-  { key: "position_title", label: "Poste" },
-  { key: "is_published", label: "Publication" },
-  { key: "is_closed", label: "Statut" },
-  { key: "published_at", label: "Publié le" },
-  { key: "expires_at", label: "Expire le" },
-  { key: "candidates_count", label: "Nombre de candidats" },
+  { key: "position_title", label: "Position" },
+  { key: "is_published", label: "Published" },
+  { key: "is_closed", label: "Status" },
+  { key: "published_at", label: "Published on" },
+  { key: "expires_at", label: "Expires on" },
+  { key: "candidates_count", label: "Number of candidates" },
 ];
+
 const {exportToExcel}=useApplyForm()
 const row = ref(null)
 
@@ -38,14 +39,14 @@ const Updated=(data)=>{
             <div class="flex px-6 py-4  justify-between items-center w-full">
                 <!-- <pre>{{data.data }}</pre> -->
                 <!-- <h4 class="font-bold">Gerer les offres</h4> -->
-                <h2 class="text-2xl font-semibold mb-4">Gerer les offres</h2>
+                <h2 class="text-2xl font-semibold mb-4">Manage Job Offers</h2>
                 <div class="flex justify-between items-center">
                     <AddOffre />
                     <button type="button"
                     @click="exportToExcel(columns,data.data, 'Liste_des_offres.xlsx')"
                     class="bg-primary p-2 px-3 rounded-lg text-white cursor-pointer">
                         <i class="uil uil-export"></i>
-                        <span> Exporter</span>
+                        <span>Export</span>
                     </button>
                 </div>
             </div>
@@ -80,10 +81,10 @@ const Updated=(data)=>{
                         <template #actions="{ row }">
                           <div class="flex items-center gap-2">
                               <button @click="Updated(row)" type="button" class="px-3 cursor-pointer py-1 text-sm border rounded-md hover:bg-gray-50">
-                             Modifier
+                             Edit
                             </button>
                             <a :href="`/manager/offres/${row.uuid}`" class="px-3 py-1 text-sm border rounded-md hover:bg-gray-50">
-                                Voir
+                                View
                             </a>
                           </div>
                         </template>

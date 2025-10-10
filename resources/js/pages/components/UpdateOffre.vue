@@ -150,7 +150,7 @@ watch(isOpen, (value) => {
               <div class="mb-4 flex items-center justify-between">
                 <div>
                   <h2 class="text-xl font-semibold text-gray-800">
-                    {{ isEditMode ? 'Modifier la publication' : 'Ajouter une publication' }}
+                    {{ isEditMode ? 'Edit Publication' : 'Ajouter une publication' }}
                   </h2>
                   <p v-if="isEditMode && row?.reference" class="text-sm text-gray-500 mt-1">
                     Référence: {{ row.reference }}
@@ -274,7 +274,7 @@ watch(isOpen, (value) => {
               >
                 <Spinnercomponent v-if="loading" />
                 <span v-else>
-                  {{ isEditMode ? 'Mettre à jour' : 'Enregistrer' }}
+                  {{ isEditMode ? 'Update' : 'Enregistrer' }}
                 </span>
               </button>
             </div>

@@ -110,40 +110,40 @@ class CandidatureRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'diplomas.required' => 'Vous devez ajouter au moins un diplôme.',
-            'diplomas.*.diploma.required' => 'Le nom du diplôme est obligatoire.',
-            'diplomas.*.option.string' => 'L’option doit être une chaîne de caractères.',
+            'diplomas.required' => 'Vous devez ajouter au moins un diplôme. | You must add at least one diploma.',
+            'diplomas.*.diploma.required' => 'Le nom du diplôme est obligatoire. | The diploma name is required.',
+            'diplomas.*.option.string' => 'L’option doit être une chaîne de caractères. | The option must be a string.',
 
-            'cgiar_information.current.required' => 'Le statut CGIAR est obligatoire.',
-            'cgiar_information.current.boolean' => 'Le statut CGIAR doit être vrai ou faux.',
-            'cgiar_information.cgiar_email.email' => 'L’adresse e-mail CGIAR doit être valide.',
+            'cgiar_information.current.required' => 'Le statut CGIAR est obligatoire. | CGIAR status is required.',
+            'cgiar_information.current.boolean' => 'Le statut CGIAR doit être vrai ou faux. | CGIAR status must be true or false.',
+            'cgiar_information.cgiar_email.email' => 'L’adresse e-mail CGIAR doit être valide. | The CGIAR email address must be valid.',
 
-            'experience.required' => 'Vous devez ajouter au moins une expérience.',
-            'experience.*.company_name.required' => 'Le nom de l’entreprise est obligatoire.',
-            'experience.*.position.required' => 'Le poste est obligatoire.',
-            'experience.*.start_date.required' => 'La date d\'experience de début est obligatoire.',
-            'experience.*.end_date.after_or_equal' => 'La d\'experience date de fin doit être après la date de début.',
-            'experience.*.current.required' => 'Le statut actuel est obligatoire.',
+            'experience.required' => 'Vous devez ajouter au moins une expérience. | You must add at least one experience.',
+            'experience.*.company_name.required' => 'Le nom de l’entreprise est obligatoire. | Company name is required.',
+            'experience.*.position.required' => 'Le poste est obligatoire. | Position is required.',
+            'experience.*.start_date.required' => 'La date de début est obligatoire. | Start date is required.',
+            'experience.*.end_date.after_or_equal' => 'La date de fin doit être après la date de début. | End date must be after or equal to start date.',
+            'experience.*.current.required' => 'Le statut actuel est obligatoire. | Current status is required.',
 
-            'identification.birth_date.required' => 'La date de naissance est obligatoire.',
-            'identification.address.required' => 'L’adresse est obligatoire.',
-            'identification.gender.required' => 'Le genre est obligatoire.',
-            'identification.gender.in' => 'Le genre doit être male, female ou other.',
+            'identification.birth_date.required' => 'La date de naissance est obligatoire. | Birth date is required.',
+            'identification.address.required' => 'L’adresse est obligatoire. | Address is required.',
+            'identification.gender.required' => 'Le genre est obligatoire. | Gender is required.',
+            'identification.gender.in' => 'Le genre doit être male, female ou other. | Gender must be male, female, or other.',
 
-            'origin.nationality.required' => 'La nationalité est obligatoire.',
-            'origin.country.required' => 'Le pays est obligatoire.',
-            'origin.city.required' => 'La ville est obligatoire.',
-            'origin.experience_years.required' => 'Le nombre d’années d’expérience est obligatoire.',
+            'origin.nationality.required' => 'La nationalité est obligatoire. | Nationality is required.',
+            'origin.country.required' => 'Le pays est obligatoire. | Country is required.',
+            'origin.city.required' => 'La ville est obligatoire. | City is required.',
+            'origin.experience_years.required' => 'Le nombre d’années d’expérience est obligatoire. | Number of years of experience is required.',
 
-            'reference.required' => 'Vous devez ajouter au moins une référence.',
-            'reference.*.full_name.required' => 'Le nom complet de la référence est obligatoire.',
-            'reference.*.function.required' => 'La fonction de la référence est obligatoire.',
-            'reference.*.email.email' => 'L’email de la référence doit être valide.',
+            'reference.required' => 'Vous devez ajouter au moins une référence. | You must add at least one reference.',
+            'reference.*.full_name.required' => 'Le nom complet de la référence est obligatoire. | Full name of reference is required.',
+            'reference.*.function.required' => 'La fonction de la référence est obligatoire. | Reference function is required.',
+            'reference.*.email.email' => 'L’email de la référence doit être valide. | Reference email must be valid.',
 
-            'documents.required' => 'Vous devez ajouter au moins un document.',
-            'documents.*.file.required' => 'Chaque document doit être un fichier.',
-            'documents.*.file.mimes' => 'Les documents doivent être au format pdf, doc, docx, jpg ou png.',
-            'documents.*.file.max' => 'Chaque document ne peut dépasser 10MB.',
+            'documents.required' => 'Vous devez ajouter au moins un document. | You must upload at least one document.',
+            'documents.*.file.required' => 'Chaque document doit être un fichier. | Each document must be a file.',
+            'documents.*.file.mimes' => 'Les documents doivent être au format pdf, doc, docx, jpg ou png. | Documents must be in pdf, doc, docx, jpg, or png format.',
+            'documents.*.file.max' => 'Chaque document ne peut dépasser 10MB. | Each document must not exceed 10MB.',
         ];
     }
 }

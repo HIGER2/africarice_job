@@ -109,6 +109,108 @@ function openApply(pub: any) {
             </div>
 
             <div 
+  v-for="pub in publications?.data" 
+  :key="pub?.uuid" 
+  class="job-card w-full bg-white p-6 shadow hover:shadow-md cursor-pointer rounded-2xl border border-gray-100"
+>
+  <div class="flex flex-col md:flex-row justify-between items-start gap-6">
+    <div class="flex gap-5 items-start flex-1 w-full">
+      <div class="w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+        <span class="font-bold text-secondary text-xl">
+          {{ initials(pub?.job?.position_title || 'N/A') }}
+        </span>
+      </div>
+
+      <div class="flex-1 w-full">
+        <div class="flex flex-col md:flex-row md:items-start justify-between mb-3 gap-2">
+          <div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ pub.job.position_title }}</h3>
+            <div class="flex flex-wrap md:flex-nowrap items-center gap-3 text-sm text-gray-600">
+              <span class="flex items-center gap-1">
+                <i class="uil uil-building text-blue-600"></i>
+                {{ pub.job.center }}
+              </span>
+              <span class="flex items-center gap-1">
+                <i class="uil uil-map-marker text-amber-500"></i>
+                {{ pub.job.city_duty_station }}, {{ pub.job.country_duty_station }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs font-medium border border-blue-200">
+            <i class="uil uil-briefcase-alt"></i> {{ pub.type }}
+          </span>
+          <span class="px-3 py-1.5 bg-green-50 text-green-700 rounded-lg text-xs font-medium border border-green-200">
+            <i class="uil uil-calendar-alt"></i> Published: {{ formatDate(pub.published_at) }}
+          </span>
+          <span class="px-3 py-1.5 bg-orange-50 text-orange-700 rounded-lg text-xs font-medium border border-orange-200">
+            <i class="uil uil-clock"></i> Expires: {{ formatDate(pub.expires_at) }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col md:items-end gap-3 w-full md:w-auto">
+      <button 
+        @click="toggleDetails(pub.uuid)" 
+        class="px-3 py-2 bg-white border-2 border-secondary text-secondary rounded-xl font-medium hover:bg-secondary cursor-pointer hover:text-white transition-all duration-200 w-full md:min-w-[120px]"
+      >
+        <i class="uil uil-eye"></i>
+        {{ opened.includes(pub.uuid) ? 'Close' : 'View' }}
+      </button>
+      <a 
+        :href="`/apply-job/${pub.uuid}`" 
+        class="px-3 py-2 bg-gradient-to-r bg-primary text-white rounded-xl font-medium hover:shadow-lg transform hover:scale-105 transition-all duration-200 w-full md:min-w-[120px] text-center"
+      >
+        <i class="uil uil-message"></i> Apply
+      </a>
+    </div>
+  </div>
+
+  <transition name="fade">
+    <div 
+      v-if="opened.includes(pub.uuid)" 
+      class="mt-4 border-t pt-3 text-sm text-gray-600 space-y-2"
+    >
+      <p><strong>Type:</strong> {{ pub.type }}</p>
+      <p><strong>Published on:</strong> {{ formatDate(pub.published_at) }}</p>
+      <p><strong>Expires on:</strong> {{ formatDate(pub.expires_at) }}</p>
+      <p><strong>Status:</strong> 
+        <span v-if="pub.is_closed" class="text-red-500">Closed</span>
+        <span v-else class="text-green-600">Active</span>
+      </p>
+
+      <div class="max-w-max">
+        <h2 class="text-lg font-semibold mb-4">Documents</h2>
+
+        <div v-if="pub.files.length > 0" class="space-y-2">
+          <div 
+            v-for="(file, index) in pub.files" 
+            :key="index" 
+            class="flex flex-col md:flex-row items-start md:items-center justify-between p-3 border rounded hover:bg-gray-50"
+          >
+            <span class="truncate max-w-xs">{{ file.name }}</span>
+            <a 
+              :href="`/${file.url}`" 
+              :download="file.name"
+              class="text-blue-600 hover:underline flex items-center space-x-1 mt-2 md:mt-0"
+            >
+              <i class="uil uil-export"></i>
+              <span>Download</span>
+            </a>
+          </div>
+        </div>
+
+        <div v-else class="text-gray-500">No documents available.</div>
+      </div>
+    </div>
+  </transition>
+</div>
+
+
+            <!-- <div 
               v-for="pub in publications?.data" 
               :key="pub?.uuid" 
               class="job-card w-full bg-white p-6 shadow  hover:shadow-md cursor-pointer rounded-2xl border border-gray-100"
@@ -174,7 +276,6 @@ function openApply(pub: any) {
                       v-if="opened.includes(pub.uuid)" 
                       class="mt-4 border-t pt-3 text-sm text-gray-600 space-y-2"
                   >
-                      <!-- <p><strong>UUID :</strong> {{ pub.uuid }}</p> -->
                       <p><strong>Type:</strong> {{ pub.type }}</p>
                       <p><strong>Published on:</strong> {{ formatDate(pub.published_at) }}</p>
                       <p><strong>Expires on:</strong> {{ formatDate(pub.expires_at) }}</p>
@@ -208,170 +309,8 @@ function openApply(pub: any) {
                   </div>
               </transition>
 
-                <!-- <div class="flex justify-between items-start gap-6">
-                    <div class="flex gap-5 items-start flex-1">
-                        <div class="w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center   flex-shrink-0">
-                            <span class="font-bold text-secondary text-xl">
-                                {{ initials(pub?.job?.position_title || 'N/A') }}
-                            </span>
-                        </div>
-                        
-                        <div class="flex-1">
-                            <div class="flex items-start justify-between mb-3">
-                                <div>
-                                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ pub.job.position_title }}</h3>
-                                    <div class="flex items-center gap-3 text-sm text-gray-600">
-                                        <span class="flex items-center gap-1">
-                                            <i class="uil uil-building text-blue-600"></i>
-                                            {{ pub.job.center }}
-                                        </span>
-                                        <span class="flex items-center gap-1">
-                                            <i class="uil uil-map-marker text-amber-500"></i>
-                                            {{ pub.job.city_duty_station }}, {{ pub.job.country_duty_station }}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="flex flex-wrap gap-2 mb-4">
-                                <span class="px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs font-medium border border-blue-200">
-                                    <i class="uil uil-briefcase-alt"></i> {{ pub.type }}
-                                </span>
-                                <span class="px-3 py-1.5 bg-green-50 text-green-700 rounded-lg text-xs font-medium border border-green-200">
-                                    <i class="uil uil-calendar-alt"></i> Publié: {{ formatDate(pub.published_at) }}
-                                </span>
-                                <span class="px-3 py-1.5 bg-orange-50 text-orange-700 rounded-lg text-xs font-medium border border-orange-200">
-                                    <i class="uil uil-clock"></i> Expire: {{ formatDate(pub.expires_at) }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col gap-3 items-end">
-                        <button 
-                            @click="toggleDetails(pub.uuid)" 
-                            class="px-3 py-2 bg-white border-2 border-secondary text-secondary rounded-xl font-medium hover:bg-secondary cursor-pointer hover:text-white transition-all duration-200 min-w-[120px]"
-                        >
-                            <i class="uil uil-eye"></i>
-                            {{ opened.includes(pub.uuid) ? 'Fermer' : 'Voir' }}
-                        </button>
-                        <a 
-                            :href="`/apply-job/${pub.uuid}`" 
-                            class="px-3 py-2 bg-gradient-to-r bg-primary text-white rounded-xl font-medium hover:shadow-lg transform hover:scale-105 transition-all duration-200 min-w-[120px] text-center"
-                        >
-                            <i class="uil uil-message"></i> Postuler
-                        </a>
-                    </div>
-                </div> -->
-
-              <!-- <transition name="fade">
-                <div 
-                  v-if="opened.includes(pub.uuid)" 
-                  class="mt-4 border-t pt-3 text-sm text-gray-600 space-y-2"
-                >
-                
-                  <p><strong>Type :</strong> {{ pub.type }}</p>
-                  <p><strong>Publié le :</strong> {{ formatDate(pub.published_at) }}</p>
-                  <p><strong>Expire le :</strong> {{ formatDate(pub.expires_at) }}</p>
-                  <p><strong>Statut :</strong> 
-                    <span v-if="pub.is_closed" class="text-red-500">Fermée</span>
-                    <span v-else class="text-green-600">Active</span>
-                  </p>
-                  <div class=" max-w-max">
-                    <h2 class="text-lg font-semibold mb-4">Documents</h2>
-
-                    <div v-if="pub.files.length > 0" class="space-y-2">
-                      <div 
-                        v-for="(file, index) in pub.files" 
-                        :key="index" 
-                        class="flex items-center justify-between p-3 border rounded hover:bg-gray-50"
-                      >
-                        <span class="truncate max-w-xs">{{ file.name }}</span>
-                        <a 
-                          :href="`/${file.url}`" 
-                          :download="file.name"
-                          class="text-blue-600 hover:underline flex items-center space-x-1"
-                        >
-                        <i class="uil uil-export"></i>
-                          <span>Télécharger</span>
-                        </a>
-                      </div>
-                    </div>
-
-                    <div v-else class="text-gray-500">Aucun document disponible.</div>
-                  </div>
-                </div>
-            
-              </transition> -->
-
-                <!-- <transition name="fade">
-                    <div 
-                        v-if="opened.includes(pub.uuid)" 
-                        class="mt-6 pt-6 border-t border-gray-200 space-y-4"
-                    >
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl">
-                                <p class="text-sm text-gray-600 mb-1">Type de contrat</p>
-                                <p class="font-semibold text-gray-900">{{ pub.type }}</p>
-                            </div>
-                            <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-xl">
-                                <p class="text-sm text-gray-600 mb-1">Date de publication</p>
-                                <p class="font-semibold text-gray-900">{{ formatDate(pub.published_at) }}</p>
-                            </div>
-                            <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-xl">
-                                <p class="text-sm text-gray-600 mb-1">Date d'expiration</p>
-                                <p class="font-semibold text-gray-900">{{ formatDate(pub.expires_at) }}</p>
-                            </div>
-                            <div class="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl">
-                                <p class="text-sm text-gray-600 mb-1">Statut</p>
-                                <p v-if="pub.is_closed" class="font-semibold text-red-600 flex items-center gap-2">
-                                    <span class="w-2 h-2 bg-red-500 rounded-full"></span>
-                                    Fermée
-                                </p>
-                                <p v-else class="font-semibold text-green-600 flex items-center gap-2">
-                                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                                    Active
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="bg-gradient-to-br from-indigo-50 to-purple-50 p-6 rounded-xl">
-                            <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <i class="uil uil-file-download-alt text-blue-600 text-xl"></i>
-                                Documents disponibles
-                            </h2>
-
-                            <div v-if="pub.files.length > 0" class="space-y-3">
-                                <div 
-                                    v-for="(file, index) in pub.files" 
-                                    :key="index" 
-                                    class="flex items-center justify-between p-4 bg-white rounded-xl hover:shadow-md transition-all border border-gray-100"
-                                >
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-12 h-12 bg-gradient-to-br from-red-100 to-red-200 rounded-lg flex items-center justify-center">
-                                            <i class="uil uil-file-alt text-red-600 text-xl"></i>
-                                        </div>
-                                        <span class="font-medium text-gray-900">{{ file.name }}</span>
-                                    </div>
-                                    <a 
-                                        :href="`/${file.url}`" 
-                                        :download="file.name"
-                                        class="px-4 py-2 text-blue-600 hover:text-purple-600 font-medium flex items-center gap-2 transition-colors hover:bg-blue-50 rounded-lg"
-                                    >
-                                        <i class="uil uil-download-alt"></i>
-                                        <span>Télécharger</span>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div v-else class="text-center py-6 text-gray-500">
-                                <i class="uil uil-folder-open text-5xl text-gray-300 mb-3"></i>
-                                <p class="font-medium">Aucun document disponible</p>
-                            </div>
-                        </div>
-                    </div>
-                </transition> -->
-            </div>
+              
+            </div> -->
         </section>
     </main>
 </template>

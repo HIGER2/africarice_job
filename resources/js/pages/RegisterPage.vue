@@ -1,43 +1,101 @@
 <template>
-    <div class="min-h-screen flex items-center justify-center ">
-        <div class="w-full max-w-md bg-white rounded-lg">
-        <h2 class="text-2xl font-bold mb-6 text-center">Inscription</h2>
-        <form @submit.prevent="handleRegister" class="flex flex-col gap-4">
-            <div class="flex gap-2 items-end w-full">
-                <div class="flex flex-col w-full">
-                    <label for="">Nom</label>
-                    <input v-model="formData.name" type="text" placeholder="Prénom" required class="p-3 border rounded-lg" />
-                </div>
-                <div class="flex flex-col w-full">
-                    <label for="">Prénoms</label>
-                    <input v-model="formData.last_name" type="text" placeholder="Nom" required class="p-3 border rounded-lg" />
-                </div>
-            </div>
-            <div class="flex items-end gap-2 w-full">
-                    <div class="flex flex-col w-full">
-                        <label for="">Téléphone</label>
-                        <input v-model="formData.phone" required type="tel" placeholder="Téléphone"  class="p-3 border rounded-lg" />
-                    </div>
-                    <div class="flex flex-col w-full">
-                        <label for="">Email</label>
-                        <input v-model="formData.email" type="email" placeholder="Email" required class="p-3 border rounded-lg" />
-                    </div>
-            </div>
-        <div class="bg-blue-100 border-l-4 text-sm border-blue-500 text-blue-700 p-4 mt-4" role="alert">
-        <p class="font-bold">Information personnelle</p>
-        <p>Les informations que vous saisissez seront considérées comme personnelles.</p>
-        </div>
 
-        <button type="submit" class="flex items-center justify-center cursor-pointer bg-primary text-white py-3 rounded-lg hover:bg-primary-700">
-            <Spinnercomponent v-if="loading"/>
-            <span v-else>S'inscrire</span>
-        </button>
-        </form>
-            <p class="mt-4 text-center text-gray-500">
-            Déjà un compte ? <a href="/login" class="text-indigo-600 hover:underline">Connectez-vous</a>
-            </p>
+<div class="min-h-screen flex items-center justify-center bg-white px-4">
+  <div class="w-full max-w-md bg-white rounded-lg shadow p-8">
+    <!-- Logo -->
+    <div class="flex justify-center mb-6">
+      <a href="/">
+        <img
+          src="https://static.wixstatic.com/media/0839e4_7910df264aee46ba85347ab33684d739~mv2_d_4782_1488_s_2.png/v1/fill/w_520,h_160,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/0839e4_7910df264aee46ba85347ab33684d739~mv2_d_4782_1488_s_2.png"
+          alt="Logo"
+          class="w-40 object-contain"
+        />
+      </a>
+    </div>
+
+    <!-- Title -->
+    <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">
+      Create Your Account
+    </h2>
+
+    <!-- Form -->
+    <form @submit.prevent="handleRegister" class="flex w-full flex-col gap-4">
+      <!-- First Name / Last Name -->
+      <div class="flex flex-col sm:flex-row gap-3 w-full">
+        <div class="flex flex-col flex-1">
+          <label class="text-sm font-medium text-gray-700 mb-1">Family Name / nom</label>
+          <input
+            v-model="formData.name"
+            type="text"
+            placeholder="Enter your first name"
+            required
+            class="p-3 border w-full rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+          />
         </div>
+        <div class="flex flex-col flex-1">
+          <label class="text-sm font-medium text-gray-700 mb-1">First Name / Prénoms</label>
+          <input
+            v-model="formData.last_name"
+            type="text"
+            placeholder="Enter your last name"
+            required
+            class="p-3 border w-full rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+          />
+        </div>
+      </div>
+
+      <!-- Phone / Email -->
+      <div class="flex flex-col sm:flex-row gap-3 w-full">
+        <div class="flex flex-col flex-1">
+          <label class="text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+          <input
+            v-model="formData.phone"
+            type="tel"
+            placeholder="e.g. +225 07 00 00 00 00"
+            required
+            class="p-3 w-full border rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+          />
+        </div>
+        <div class="flex flex-col flex-1">
+          <label class="text-sm font-medium text-gray-700 mb-1">Email Address</label>
+          <input
+            v-model="formData.email"
+            type="email"
+            placeholder="example@mail.com"
+            required
+            class="p-3 border w-full rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+          />
+        </div>
+      </div>
+
+      <!-- Info Box -->
+      <div
+        class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 text-sm rounded-md"
+        role="alert"
+      >
+        <p class="font-bold">Personal Information</p>
+        <p>The information you enter will be considered as personal.</p>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="flex items-center justify-center cursor-pointer bg-primary text-white py-3 rounded-lg hover:bg-primary-700 transition-all"
+      >
+        <Spinnercomponent v-if="loading" />
+        <span v-else>Create Account</span>
+      </button>
+    </form>
+
+    <!-- Footer -->
+    <p class="mt-5 text-center text-gray-500 text-sm">
+       Déjà un compte ? /Already have an account? <br>  
+        <a href="/login" class="text-indigo-600 hover:underline">Connectez-vous / Sign in</a>
+    </p>
+
+  </div>
 </div>
+
 </template>
 
 

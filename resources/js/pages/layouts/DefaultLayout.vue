@@ -11,40 +11,38 @@ const props = defineProps({
   user: Object,
 })
 
-
-const tabs=[
-
+const tabs = [
     {
-        label:'Gerer les offres',
-        icon:'uil uil-briefcase-alt' ,
-        path:'offres',
+        label: 'Manage Job Offers',
+        icon: 'uil uil-briefcase-alt',
+        path: 'offres',
     },
     {
-        label:'Gerer les candidatures',
-        icon:'uil uil-user-check',
-        path:'candidatures'
-    },
-   
-    {
-        label:'Gerer les candidats',
-        icon:'uil uil-users-alt',
-        path:'candidat'
+        label: 'Manage Applications',
+        icon: 'uil uil-user-check',
+        path: 'candidatures'
     },
     {
-        label:'Gerer les documents',
-        icon:'uil uil-file-search-alt',
-        path:'documents'
+        label: 'Manage Candidates',
+        icon: 'uil uil-users-alt',
+        path: 'candidat'
     },
     {
-        label:'Parametres',
-        icon:'uil uil-sliders-v',
-        path:'parametres'
+        label: 'Manage Documents',
+        icon: 'uil uil-file-search-alt',
+        path: 'documents'
+    },
+    {
+        label: 'Settings',
+        icon: 'uil uil-sliders-v',
+        path: 'parametres'
     },
     // {
-    //     label:'Statistiques',
-    //     icon:'uil uil-chart-bar',
+    //     label: 'Statistics',
+    //     icon: 'uil uil-chart-bar',
     // }
-]
+];
+
 </script>
 
 

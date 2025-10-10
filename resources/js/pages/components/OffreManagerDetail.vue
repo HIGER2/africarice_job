@@ -18,25 +18,25 @@ const props= defineProps({
   data: Array,
 })
 const {exportToExcel,updateOffres,downloadZip}=useApplyForm()
-
-const labelsMap ={
-    candidat: "Candidat",
+const labelsMap = {
+    candidat: "Candidate",
     user_email: "Email",
-    user_phone: "Téléphone",
-    origin_nationality: "Nationalité",
-    origin_country: "Pays",
-    origin_city: "Ville",
-    origin_experience_years: "Expérience",
-    origin_french_level: "Niveau français",
-    origin_english_level: "Niveau Anglais",
+    user_phone: "Phone",
+    origin_nationality: "Nationality",
+    origin_country: "Country",
+    origin_city: "City",
+    origin_experience_years: "Experience",
+    origin_french_level: "French Level",
+    origin_english_level: "English Level",
 }
+
 
 const dataValue = computed(()=>props.data.data[0])
 
 const labelsExclu =['uuid']
 const exportCv = reactive({
     loading: false,
-    label:' Export CV'
+    label:'Export CV'
 })
 
   const columns = computed(() => {
@@ -99,183 +99,156 @@ const exportCv = reactive({
         <!-- <div v-if="$page.props.flash.message" class="alert">
             {{ $page.props.flash.message }}
         </div> -->
-            <div class="w-full mx-auto bg-white rounded-2xl  px-6">
-                <div class="flex justify-between items-center py-4 ">
-                    <ButtonBack path="/manager/offres" />
-                    <div class="flex items-center gap-2">
-                        <!-- Bouton Publication -->
-                        <Button 
-                            @click="() => updateOffres(data?.data[0]?.is_published ? 0 : 1, data?.data[0]?.uuid, 'is_published')"
-                            type="button"
-                            class="max-w-xs text-[12px] px-4 py-2 cursor-pointer font-medium rounded-lg hover:shadow inline-flex items-center gap-2 mb-3"
-                            :class="data?.data[0]?.is_published ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'"
-                        >
-                            <span v-if="data?.data[0]?.is_published">
-                                <i class="uil uil-eye"></i>
-                                Dépublier l’offre
-                            </span>
-                            <span v-else>
-                                <i class="uil uil-eye-slash"></i>
-                                Publier l’offre
-                            </span>
-                        </Button>
 
-                            <!-- Bouton Clôture -->
-                            <Button 
-                                @click="() => updateOffres(data?.data[0]?.is_closed ? 0 : 1, data?.data[0]?.uuid, 'is_closed')"
-                                type="button"
-                                class="max-w-xs text-[12px] px-4 py-2 cursor-pointer font-medium rounded-lg  hover:shadow inline-flex items-center gap-2 mb-3"
-                                :class="data?.data[0]?.is_closed ? 'bg-gray-100 text-gray-700' : 'bg-red-100 text-red-700'"
-                            >
-                                <span v-if="data?.data[0]?.is_closed">
-                                    <i class="uil uil-check-circle"></i>
-                                    Réouvrir l’offre
-                                </span>
-                                <span v-else>
-                                    <i class="uil uil-times-circle"></i>
-                                    Fermer l’offre
-                                </span>
-                            </Button>
+                <div class="w-full mx-auto bg-white rounded-2xl px-6">
+    <div class="flex justify-between items-center py-4">
+        <ButtonBack path="/manager/offres" />
+        <div class="flex items-center gap-2">
+            <!-- Publish Button -->
+            <Button 
+                @click="() => updateOffres(data?.data[0]?.is_published ? 0 : 1, data?.data[0]?.uuid, 'is_published')"
+                type="button"
+                class="max-w-xs text-[12px] px-4 py-2 cursor-pointer font-medium rounded-lg hover:shadow inline-flex items-center gap-2 mb-3"
+                :class="data?.data[0]?.is_published ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'"
+            >
+                <span v-if="data?.data[0]?.is_published">
+                    <i class="uil uil-eye"></i>
+                    Unpublish Offer
+                </span>
+                <span v-else>
+                    <i class="uil uil-eye-slash"></i>
+                    Publish Offer
+                </span>
+            </Button>
 
-                    </div>
-                </div>
-                <h1 class="text-2xl font-bold text-gray-800 mb-4">
-                Offre de Recrutement : {{ data?.data[0]?.job.position_title }}
-                </h1>
+            <!-- Close Button -->
+            <Button 
+                @click="() => updateOffres(data?.data[0]?.is_closed ? 0 : 1, data?.data[0]?.uuid, 'is_closed')"
+                type="button"
+                class="max-w-xs text-[12px] px-4 py-2 cursor-pointer font-medium rounded-lg hover:shadow inline-flex items-center gap-2 mb-3"
+                :class="data?.data[0]?.is_closed ? 'bg-gray-100 text-gray-700' : 'bg-red-100 text-red-700'"
+            >
+                <span v-if="data?.data[0]?.is_closed">
+                    <i class="uil uil-check-circle"></i>
+                    Reopen Offer
+                </span>
+                <span v-else>
+                    <i class="uil uil-times-circle"></i>
+                    Close Offer
+                </span>
+            </Button>
+        </div>
+    </div>
 
-                <!-- Informations générales -->
-                <div class="grid grid-cols-2 gap-6 text-sm">
-                <!-- <div>
-                    <p class="text-gray-500">UUID</p>
-                    <p class="font-medium">{{ uuid }}</p>
-                </div> -->
-                <div>
-                    <p class="text-gray-500">Référence</p>
-                    <p class="font-medium">{{ data?.data[0]?.reference }}</p>
-                </div>
-                <div>
-                    <p class="text-gray-500">Type</p>
-                    <p class="font-medium capitalize">{{ data?.data[0]?.type }}</p>
-                </div>
-                <!-- <div>
-                    <p class="text-gray-500">Recrutement ID</p>
-                    <p class="font-medium">{{ recrutement_id }}</p>
-                </div> -->
-                <div>
-                    <p class="text-gray-500">Publié ?</p>
-                    <p class="font-medium">
-                    <span class="px-2 py-1 rounded-full text-xs font-semibold "
-                    :class="data?.data[0]?.is_published ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
-                    >
-                        {{ data?.data[0]?.is_published ? 'Oui' : 'Non' }}
-                    </span>
-                    </p>
-                </div>
-                <div>
-                    <p class="text-gray-500">Clôturé ?</p>
-                    <p class="font-medium">
-                    <span class="px-2 py-1 rounded-full text-xs font-semibold "
-                    :class="data?.data[0]?.is_closed ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'">
-                        {{ data?.data[0]?.is_closed ? 'Oui' : 'Non' }}
-                    </span>
-                    </p>
-                </div>
-                <div>
-                    <p class="text-gray-500">Publié le</p>
-                    <p class="font-medium">{{ data?.data[0]?.published_at }}</p>
-                </div>
-                <div>
-                    <p class="text-gray-500">Expire le</p>
-                    <p class="font-medium">{{ data?.data[0]?.expires_at }}</p>
-                </div>
-                    <!-- <div>
-                        <p class="text-gray-500">Créé le</p>
-                        <p class="font-medium">{{ created_at }}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500">Mis à jour le</p>
-                        <p class="font-medium">{{ updated_at }}</p>
-                    </div> -->
-                </div>
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">
+        Recruitment Offer: {{ data?.data[0]?.job.position_title }}
+    </h1>
 
-               
+    <!-- General Information -->
+    <div class="grid grid-cols-2 gap-6 text-sm">
+        <div>
+            <p class="text-gray-500">Reference</p>
+            <p class="font-medium">{{ data?.data[0]?.reference }}</p>
+        </div>
+        <div>
+            <p class="text-gray-500">Type</p>
+            <p class="font-medium capitalize">{{ data?.data[0]?.type }}</p>
+        </div>
+        <div>
+            <p class="text-gray-500">Published?</p>
+            <p class="font-medium">
+                <span class="px-2 py-1 rounded-full text-xs font-semibold"
+                      :class="data?.data[0]?.is_published ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'">
+                    {{ data?.data[0]?.is_published ? 'Yes' : 'No' }}
+                </span>
+            </p>
+        </div>
+        <div>
+            <p class="text-gray-500">Closed?</p>
+            <p class="font-medium">
+                <span class="px-2 py-1 rounded-full text-xs font-semibold"
+                      :class="data?.data[0]?.is_closed ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'">
+                    {{ data?.data[0]?.is_closed ? 'Yes' : 'No' }}
+                </span>
+            </p>
+        </div>
+        <div>
+            <p class="text-gray-500">Published on</p>
+            <p class="font-medium">{{ data?.data[0]?.published_at }}</p>
+        </div>
+        <div>
+            <p class="text-gray-500">Expires on</p>
+            <p class="font-medium">{{ data?.data[0]?.expires_at }}</p>
+        </div>
+    </div>
 
-                <!-- Job details -->
-                <h2 class="text-xl font-semibold text-gray-800 mt-8 mb-4">Détails du poste</h2>
-                <div class="grid grid-cols-2 gap-6 text-sm">
-                <div>
-                    <p class="text-gray-500">Titre du poste</p>
-                    <p class="font-medium">{{ data?.data[0]?.job.position_title }}</p>
-                </div>
-                <div>
-                    <p class="text-gray-500">Pays d’affectation</p>
-                    <p class="font-medium">{{ data?.data[0]?.job.country_duty_station }}</p>
-                </div>
-                <div>
-                    <p class="text-gray-500">Ville</p>
-                    <p class="font-medium">{{ data?.data[0]?.job.city_duty_station ?? 'Non précisé' }}</p>
-                </div>
-                <div>
-                    <p class="text-gray-500">Grade</p>
-                    <p class="font-medium">{{ data?.data[0]?.job.grade ?? 'Non précisé' }}</p>
-                </div>
-                <div>
-                    <p class="text-gray-500">Salaire</p>
-                    <p class="font-medium">{{ data?.data[0]?.job.salary_post ?? 'Non précisé' }}</p>
-                </div>
-                </div>
+    <!-- Job Details -->
+    <h2 class="text-xl font-semibold text-gray-800 mt-8 mb-4">Job Details</h2>
+    <div class="grid grid-cols-2 gap-6 text-sm">
+        <div>
+            <p class="text-gray-500">Position Title</p>
+            <p class="font-medium">{{ data?.data[0]?.job.position_title }}</p>
+        </div>
+        <div>
+            <p class="text-gray-500">Duty Country</p>
+            <p class="font-medium">{{ data?.data[0]?.job.country_duty_station }}</p>
+        </div>
+        <div>
+            <p class="text-gray-500">City</p>
+            <p class="font-medium">{{ data?.data[0]?.job.city_duty_station ?? 'Not specified' }}</p>
+        </div>
+        <div>
+            <p class="text-gray-500">Grade</p>
+            <p class="font-medium">{{ data?.data[0]?.job.grade ?? 'Not specified' }}</p>
+        </div>
+        <div>
+            <p class="text-gray-500">Salary</p>
+            <p class="font-medium">{{ data?.data[0]?.job.salary_post ?? 'Not specified' }}</p>
+        </div>
+    </div>
 
-                <!-- Bouton retour -->
-                 <div class=" max-w-max mt-5">
-                    <h2 class="text-lg font-semibold mb-4">Documents</h2>
-
-                    <div v-if="data.data[0].files.length > 0" class="space-y-2">
-                    <div 
-                        v-for="(file, index) in data.data[0].files" 
-                        :key="index" 
-                        class="flex items-center justify-between p-3 border rounded hover:bg-gray-50"
-                    >
-                        <span class="truncate max-w-xs">{{ file.name }}</span>
-                        <!-- {{file}} -->
-                            <a 
-                            :href="`/${file.url}`"
-                            download
-                            class="text-blue-600 hover:underline flex items-center space-x-1"
-                            >
-                            <i class="uil uil-export"></i>
-                                <span>Télécharger</span>
-                            </a>
-                    </div>
-                    </div>
-
-                    <div v-else class="text-gray-500">Aucun document disponible.</div>
-                </div>
+    <!-- Documents -->
+    <div class="max-w-max mt-5">
+        <h2 class="text-lg font-semibold mb-4">Documents</h2>
+        <div v-if="data.data[0].files.length > 0" class="space-y-2">
+            <div v-for="(file, index) in data.data[0].files" :key="index" class="flex items-center justify-between p-3 border rounded hover:bg-gray-50">
+                <span class="truncate max-w-xs">{{ file.name }}</span>
+                <a :href="`/${file.url}`" download class="text-blue-600 hover:underline flex items-center space-x-1">
+                    <i class="uil uil-export"></i>
+                    <span>Download</span>
+                </a>
             </div>
-                
+        </div>
+        <div v-else class="text-gray-500">No documents available.</div>
+    </div>
+</div>
+
                 <div class="w-full mt-6">
                 <!-- <pre>  {{ data?.data[0].candidat }}</pre> -->
 
                     <!-- <pre>{{ data?.data[0] }}</pre> -->
                     <div class="flex px-6 py-4  justify-between items-center w-full">
                     <!-- <h4 class="font-bold">Gerer les offres</h4> -->
-                    <h2 class="text-2xl font-semibold mb-4">Liste des candidats</h2>
+                    <h2 class="text-2xl font-semibold mb-4">List of candidates</h2>
                     <div class="flex gap-2 justify-between items-center">
-                        <button
-                        @click="exporteData(columns,data?.data[0]?.candidat)"
-                        type="button"
-                        class="bg-primary  p-2 px-3 rounded-lg text-white cursor-pointer">
-                            <i class="uil uil-export"></i>
-                            <span> Export list</span>
-                        </button>
-                        <button
-                           :disabled="exportCv.loading"
-                        @click="exporteCvs(data?.data[0]?.candidat)"
-                        type="button"
-                        class="bg-gray-50 border border-gray-200 disabled:opacity-50  p-2 px-3 rounded-lg text-primary  cursor-pointer">
-                            <i class="uil uil-export"></i>
-                            <span>{{exportCv.label}}</span>
-                        </button>
-                    </div>
+                            <button
+                                @click="exporteData(columns, data?.data[0]?.candidat)"
+                                type="button"
+                                class="bg-primary p-2 px-3 rounded-lg text-white cursor-pointer hover:bg-primary-700 transition">
+                                <i class="uil uil-export"></i>
+                                <span>Export List</span>
+                            </button>
+
+                            <button
+                                :disabled="exportCv.loading"
+                                @click="exporteCvs(data?.data[0]?.candidat)"
+                                type="button"
+                                class="bg-gray-50 border border-gray-200 disabled:opacity-50 p-2 px-3 rounded-lg text-primary cursor-pointer hover:bg-gray-100 transition">
+                                <i class="uil uil-export"></i>
+                                <span>{{ exportCv.label }}</span>
+                            </button>
+                        </div>
+
                 </div>
                 <div class="overflow-x-auto border border-slate-200 bg-white ">
                     <Table :columns="columns" :rows="data?.data[0]?.candidat">

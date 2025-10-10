@@ -200,7 +200,7 @@ export function useApplyForm(){
     //         { type: "text", key: "function", label: "Function" },
     //     ],
     // ]
-            const fieldAddOffre= [
+        const fieldAddOffre= [
             [
                 { type: "text", key: "reference", label: "Post Reference" },
             ],
@@ -243,10 +243,10 @@ export function useApplyForm(){
 
         const cgiarFiled =[
             [
-                { type: "checkbox", key: "current", label: "Check if currently working here" },
+                { type: "checkbox", key: "current", label: "Check if currently working for CGIAR center" },
             ],
             [
-                { type: "text", key: "cgiar_center", label: "Which CGIAR centers have you worked at?" },
+                { type: "text", key: "cgiar_center", label: "Provide Name of the centers" },
             ],
             [
                 { type: "text", key: "cgiar_email", label: "Provide your cgiar.org email" }
@@ -490,73 +490,74 @@ export function useApplyForm(){
 
     // Vérification diplomas
     if (!data.diplomas || data.diplomas.length === 0) {
-        errors.push("Au moins un diplôme est requis.");
+        errors.push("Au moins un diplôme est requis. | At least one diploma is required.");
     } else {
         data.diplomas.forEach((d, i) => {
-        if (!d.diploma || !d.option) {
-            errors.push(`Diplôme ${i + 1}: diplôme et option obligatoires.`);
-        }
+            if (!d.diploma || !d.option) {
+                errors.push(`Diplôme ${i + 1}: diplôme et option obligatoires. | Diploma ${i + 1}: diploma and option are required.`);
+            }
         });
     }
 
     // Vérification cgiar_information
-    if ( data.cgiar_information.current && (!data.cgiar_information.cgiar_center || !data.cgiar_information.cgiar_email)) {
-        errors.push("Les informations CGIAR (center et email) sont obligatoires.");
+    if (data.cgiar_information.current && (!data.cgiar_information.cgiar_center || !data.cgiar_information.cgiar_email)) {
+        errors.push("Les informations CGIAR (centre et email) sont obligatoires. | CGIAR information (center and email) is required.");
     }
 
-    // Vérification experience
+    // Vérification expérience
     if (!data.experiences || data.experiences.length === 0) {
-        errors.push("Au moins une expérience est requise.");
+        errors.push("Au moins une expérience est requise. | At least one experience is required.");
     } else {
         data.experiences.forEach((exp, i) => {
-        if (!exp.company_name || !exp.position || !exp.start_date) {
-            errors.push(`Expérience ${i + 1}: nom de l’entreprise, poste et date de début obligatoires.`);
-        }
+            if (!exp.company_name || !exp.position || !exp.start_date) {
+                errors.push(`Expérience ${i + 1}: nom de l’entreprise, poste et date de début obligatoires. | Experience ${i + 1}: company name, position, and start date are required.`);
+            }
         });
     }
 
     // Vérification identification
     if (!data.identification || !data.identification.birth_date || !data.identification.gender) {
-        errors.push("Les informations d’identification (date de naissance et genre) sont obligatoires.");
+        errors.push("Les informations d’identification (date de naissance et genre) sont obligatoires. | Identification information (birth date and gender) is required.");
     }
 
     // Vérification origin
     if (!data.origin || !data.origin.nationality || !data.origin.country) {
-        errors.push("Nationalité et pays d’origine obligatoires.");
+        errors.push("Nationalité et pays d’origine obligatoires. | Nationality and country of origin are required.");
     }
 
-    // Vérification reference
+    // Vérification références
     if (!data.references || data.references.length === 0) {
-        errors.push("Au moins une référence est requise.");
+        errors.push("Au moins une référence est requise. | At least one reference is required.");
     } else {
         data.references.forEach((r, i) => {
-        if (!r.full_name || !r.email || !r.phone) {
-            errors.push(`Référence ${i + 1}: nom, email et téléphone obligatoires.`);
-        }
+            if (!r.full_name || !r.email || !r.phone) {
+                errors.push(`Référence ${i + 1}: nom, email et téléphone obligatoires. | Reference ${i + 1}: full name, email, and phone are required.`);
+            }
         });
     }
 
-    // Vérification documents (ex: au moins 1 document requis ?)
+    // Vérification documents
     if (
         !data.documents ||
-        data.documents.filter(doc => doc.file !== null && doc.file !== "").length < 1
-        && documentPreview.value.length == 0
-        ) {
-        errors.push("Veuillez télécharger au moins deux documents.");
-        }
+        data.documents.filter(doc => doc.file !== null && doc.file !== "").length < 1 &&
+        documentPreview.value.length == 0
+    ) {
+        errors.push("Veuillez télécharger votre CV. | Please upload your CV.");
+    }
 
     return errors;
-    }
+}
+
 
     const submitForm = async (uuid:string) => {
     try {
             const errors = validateForm(form);
             if (errors.length > 0) {
-            alert("Erreurs trouvées:\n- " + errors.join("\n- "));
+            alert(errors.join("\n- "));
             return false
             } 
             
-            if (!confirm("Confirmez-vous l'envoi de votre candidature ?")) {
+            if (!confirm("Would you like to confirm your application? n\ Voulez vous confirmer votre candidature ?")) {
                 return false; // Annule l'envoi si l'utilisateur clique sur "Annuler"
             }
         const formData = new FormData();
@@ -638,7 +639,7 @@ export function useApplyForm(){
 
         console.log('Réponse du serveur :', response.data?.data?.message);
 
-        alert('Candidature envoyée avec succès ✅');
+        alert('Votre candidature a été soumis avec succès. ✅ | Your application has been successfully submitted. ✅');
 
     } catch (error) {
         let message = error.response?.data?.message ? error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'
@@ -652,7 +653,7 @@ export function useApplyForm(){
         } else {
         alert(message);
         }
-        console.error('Erreur lors de l\'envoi du formulaire :', error.response?.data?.errors || error);
+        // console.error('Erreur lors de l\'envoi du formulaire :', error.response?.data?.errors || error);
         // alert(message);
     }
     };

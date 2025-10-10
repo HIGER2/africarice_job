@@ -55,31 +55,59 @@ window.location.href = '/register.html'
 </script>
 
 <template>
-<div class="min-h-screen flex items-center justify-center bg-white">
-    <div class="w-full max-w-md bg-white rounded-lg  p-8">
-        <div class="flex items-center w-full mb-4 gap-2 text-center">
-            <a href="/">
-                 <img src="https://static.wixstatic.com/media/0839e4_7910df264aee46ba85347ab33684d739~mv2_d_4782_1488_s_2.png/v1/fill/w_520,h_160,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/0839e4_7910df264aee46ba85347ab33684d739~mv2_d_4782_1488_s_2.png" alt="Logo" 
-             class="w-40 object-contain" />
-            </a>
-        </div>
-        <h2 class="text-2xl font-bold mb-6 ">Connexion</h2>
-        <form @submit.prevent="verifyEmail" class="flex flex-col gap-4">
-        <div class="w-full flex flex-col gap-2">
-            <label for="" >Email</label>
-            <input v-model="email" type="email" placeholder="Email"  class="p-3 border rounded-lg" />
-        </div>
-        <!-- <input v-if="active" v-model="pin" type="text" placeholder="Code PIN" required maxlength="4" class="p-3 border rounded-lg" /> -->
-            <button type="submit" class="flex items-center justify-center cursor-pointer bg-primary text-white py-3 rounded-lg hover:bg-primary-700">
-                <Spinnercomponent v-if="loading"/>
-                <span v-else>Continuer</span>
-            </button>
-        </form>
-        <p class="mt-4 text-center text-gray-500">
-            Pas de compte ? <a href="/register" class="text-indigo-600 hover:underline">S'inscrire</a>
-        </p>
-        <p v-if="message" class="mt-4 text-center text-red-500">{{ message }}</p>
+    <div class="min-h-screen flex items-center justify-center bg-white">
+  <div class="w-full max-w-md bg-white rounded-lg shadow p-8">
+    <!-- Logo -->
+    <div class="flex items-center w-full mb-6 justify-center">
+      <a href="/">
+        <img
+          src="https://static.wixstatic.com/media/0839e4_7910df264aee46ba85347ab33684d739~mv2_d_4782_1488_s_2.png/v1/fill/w_520,h_160,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/0839e4_7910df264aee46ba85347ab33684d739~mv2_d_4782_1488_s_2.png"
+          alt="Logo"
+          class="w-40 object-contain"
+        />
+      </a>
     </div>
+
+    <!-- Title -->
+    <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">
+      Sign In
+    </h2>
+
+    <!-- Form -->
+    <form @submit.prevent="verifyEmail" class="flex flex-col gap-4">
+      <div class="w-full flex flex-col gap-2">
+        <label for="email" class="font-medium text-gray-700">Email</label>
+        <input
+          id="email"
+          v-model="email"
+          type="email"
+          placeholder="Enter your email"
+          required
+          class="p-3 border rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="flex items-center justify-center cursor-pointer bg-primary text-white py-3 rounded-lg hover:bg-primary-700 transition-colors duration-200"
+      >
+        <Spinnercomponent v-if="loading" />
+        <span v-else>Sign in</span>
+      </button>
+    </form>
+
+    <!-- Footer -->
+    <p class="mt-6 text-center text-gray-500">
+  Vous n'avez pas de compte ? / Don’t have an account?
+  <a href="/register" class="text-indigo-600 font-medium hover:underline">
+    S’inscrire / Sign up
+  </a>
+</p>
+
+
+    <p v-if="message" class="mt-4 text-center text-red-500">{{ message }}</p>
+  </div>
 </div>
+
 </template>
 
