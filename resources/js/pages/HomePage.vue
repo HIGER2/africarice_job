@@ -80,7 +80,7 @@ function openApply(pub: any) {
         </div>
 
         <div class="relative z-10 flex flex-col h-[450px] items-center justify-center text-center py-20 px-6">
-            <h1 class="text-5xl md:text-6xl font-extrabold mb-7 drop-shadow-lg">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-7 drop-shadow-lg">
                 Our Vacancies
                 <!-- / <span class="text-white">Nos postes vacants</span>  -->
             </h1>
@@ -89,10 +89,10 @@ function openApply(pub: any) {
             </p> -->
             <div class="flex gap-4 justify-center flex-wrap">
                 <div class="bg-white/20 backdrop-blur-md px-6 py-3 rounded-full text-white font-medium">
-                    <i class="uil uil-briefcase mr-2"></i>{{ publications?.data?.length }} Postes
+                    <i class="uil uil-briefcase mr-2"></i>{{ publications?.data?.length }} Positions
                 </div>
                 <div class="bg-white/20 backdrop-blur-md px-6 py-3 rounded-full text-white font-medium">
-                    <i class="uil uil-map-marker mr-2"></i>Plusieurs Pays
+                    <i class="uil uil-map-marker mr-2"></i>Multiple Countries
                 </div>
             </div>
         </div>
