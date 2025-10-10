@@ -59,10 +59,11 @@ const removeReference = (index: number) => {
 
             <div class="w-full" v-if="!documents?.length > 0">
               <!-- {{ form.documents }} -->
-            <h2 class="text-xl font-bold mb-4">CV and Cover letter</h2>
+            <h2 class="text-xl font-bold mb-4">CV</h2>
                 <div  class="w-full mb-4" v-for="(value,index) in fieldDocument" :key="index">
                   <label class="cursor-pointer">
                         <FormField
+                        :accept="value.accept"
                         :field="value"
                         v-model="form.documents[index].file"
                       />

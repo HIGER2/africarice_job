@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -63,9 +64,10 @@ class Publication extends Model
 
     public function scopeDate($query)
     {
+        $now = Carbon::now('Africa/Abidjan');
         return $query->where('is_published', true)
-            ->whereDate('published_at', '<=', now())
-            ->whereDate('expires_at', '>=', now());
+            ->whereDate('published_at', '<=', $now)
+            ->whereDate('expires_at', '>=', $now);
     }
 
     public function scopeInternal($query)

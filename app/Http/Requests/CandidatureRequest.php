@@ -104,7 +104,6 @@ class CandidatureRequest extends FormRequest
             $rules['documents'] = 'nullable|array';
             $rules['documents.*.file'] = 'nullable|file|mimes:pdf,doc,docx,jpg,png|max:10240';
         }
-
         return $role;
     }
 

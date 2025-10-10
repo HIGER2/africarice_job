@@ -55,7 +55,7 @@ function openApply(pub: any) {
 <template>
   <div class="min-h-screen">
     <NavBar :user />
-    <section class="relative bg-black text-white">
+    <section class="relative bg-black text-white ">
         <!-- Image en arrière-plan -->
         <div class="absolute  inset-0 overflow-hidden">
             <img src="https://static.wixstatic.com/media/0839e4_237664be86134106b6ff95a1becaeb9a~mv2_d_4608_2166_s_2.jpg/v1/fill/w_1898,h_750,al_c,q_85,usm_2.00_1.00_0.00,enc_avif,quality_auto/0839e4_237664be86134106b6ff95a1becaeb9a~mv2_d_4608_2166_s_2.jpg" 
@@ -64,14 +64,11 @@ function openApply(pub: any) {
         </div>
 
         <!-- Texte centré au-dessus de l'image -->
-        <div class="relative z-10 flex flex-col items-center justify-center text-center py-20 px-6">
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-6">Découvrez les opportunités chez AfricaRice</h1>
-            <p class="text-lg md:text-xl mb-6 max-w-2xl">Consultez nos offres d'emploi et rejoignez notre équipe pour contribuer à nos projets innovants et à notre croissance.</p>
-            <div class="flex gap-4 justify-center">
-            <!-- <button class="bg-white text-primbg-primary font-semibold px-6 py-3 rounded-lg shadow hover:bg-gray-100">Voir les offres</button>
-            <button class="border border-white text-white font-semibold px-6 py-3 rounded-lg hover:bg-white hover:text-primbg-primary">Publier une offre</button> -->
-            </div>
-            </div>
+          <div class="relative z-10 flex flex-col h-[400px] items-center justify-center text-center py-20 px-6">
+              <h1 class="text-4xl md:text-5xl font-extrabold  mb-6">Our Vacancies / Nos postes vacants ?</h1>
+              <div class="flex gap-4 justify-center">
+              </div>
+          </div>
     </section>
     <main class="w-full mx-auto  gap-6 mt-2 p-20">
     <section class="w-full space-y-4">

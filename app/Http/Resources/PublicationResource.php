@@ -26,10 +26,15 @@ class PublicationResource extends JsonResource
             'is_published' => $this->is_published,
             'is_closed' => $this->is_closed,
             'published_at' => $this->published_at
-                ? Carbon::parse($this->published_at)->format('Y-m-d H:i:s')
+                ? Carbon::parse($this->published_at)
+                ->timezone('Africa/Abidjan')
+                ->format('Y-m-d H:i:s')
                 : null,
-            'expires_at'   => $this->expires_at
-                ? Carbon::parse($this->expires_at)->format('Y-m-d H:i:s')
+
+            'expires_at' => $this->expires_at
+                ? Carbon::parse($this->expires_at)
+                ->timezone('Africa/Abidjan')
+                ->format('Y-m-d H:i:s')
                 : null,
             'job' => [
                 // 'id' => $this->job->id,

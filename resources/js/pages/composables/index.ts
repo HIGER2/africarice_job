@@ -187,8 +187,8 @@ export function useApplyForm(){
         ]
     ]
     const fieldDocument= [
-        { type: "file", key: "resume", label: "Charger votre CV" },
-        { type: "file", key: "cover_letter", label: "Charger votre lettre de motivation" },
+        { type: "file", key: "resume", label: "Charger votre CV",accept:".pdf,.doc,.docx,.jpg,.jpeg,.png" },
+        // { type: "file", key: "cover/_letter", label: "Charger votre lettre de motivation" },
     ]
     const fieldReference= [
         [
@@ -411,7 +411,7 @@ export function useApplyForm(){
     // Vérification documents (ex: au moins 1 document requis ?)
     if (
         !data.documents ||
-        data.documents.filter(doc => doc.file !== null && doc.file !== "").length < 2
+        data.documents.filter(doc => doc.file !== null && doc.file !== "").length < 1
         && documentPreview.value.length == 0
         ) {
         errors.push("Veuillez télécharger au moins deux documents.");

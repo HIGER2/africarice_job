@@ -32,7 +32,7 @@
       <option v-for="opt in field.options || []" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
     </select>
     <input
-    v-bind="$attrs"
+      v-bind="$attrs"
       v-else-if="field.type === 'file'"
       type="file"
       :id="field.key"

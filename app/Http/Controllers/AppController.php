@@ -388,6 +388,10 @@ class AppController extends Controller
 
         switch ($step) {
             case 'offres':
+                Publication::whereDate('expires_at', '<', Carbon::now('Africa/Abidjan')->toDateString())
+                    ->where('is_closed', false)
+                    ->update(['is_closed' => true]);
+
                 $data = OffreResource::collection(Publication::with(['job', 'files', 'candidatures.user'])->orderBy('created_at', 'desc')->get());
                 break;
             case 'candidatures':
@@ -480,8 +484,6 @@ class AppController extends Controller
         ]);
     }
 
-
-
     public function storeOffre(OffreRequest $request)
     {
         try {
@@ -495,6 +497,7 @@ class AppController extends Controller
                 'published_at'  => $request->offre['published_at'],
                 'expires_at'    => $request->offre['expires_at'],
                 'is_published'  => filter_var($request->offre['is_published'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
+                'is_closed' => Carbon::parse($request->offre['expires_at'], 'Africa/Abidjan')->toDateString() < Carbon::now('Africa/Abidjan')->toDateString() ? true : false,
             ];
 
             if (!empty($request->offre['uuid'])) {
