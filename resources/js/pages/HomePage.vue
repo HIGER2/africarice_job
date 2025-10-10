@@ -65,7 +65,7 @@ function openApply(pub: any) {
 
         <!-- Texte centré au-dessus de l'image -->
           <div class="relative z-10 flex flex-col h-[400px] items-center justify-center text-center py-20 px-6">
-              <h1 class="text-4xl md:text-5xl font-extrabold  mb-6">Our Vacancies / Nos postes vacants ?</h1>
+              <h1 class="text-4xl md:text-5xl font-extrabold  mb-6">Our Vacancies / Nos postes vacants </h1>
               <div class="flex gap-4 justify-center">
               </div>
           </div>

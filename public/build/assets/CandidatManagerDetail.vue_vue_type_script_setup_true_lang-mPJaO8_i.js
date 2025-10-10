@@ -1,1 +1,0 @@
-import{_ as e}from"./Profile.vue_vue_type_script_setup_true_lang-LKKCo2tv.js";import{l as r,c as t,o as n,a as o}from"./app-BohmBooq.js";const m=r({__name:"CandidatManagerDetail",props:{data:Array},setup(a){return(s,c)=>(n(),t("div",null,[o(e,{user:a.data.data},null,8,["user"])]))}});export{m as _};

@@ -1,1 +1,0 @@
-import{_ as o}from"./CandidatManagerDetail.vue_vue_type_script_setup_true_lang-mPJaO8_i.js";import"./Profile.vue_vue_type_script_setup_true_lang-LKKCo2tv.js";import"./app-BohmBooq.js";export{o as default};
