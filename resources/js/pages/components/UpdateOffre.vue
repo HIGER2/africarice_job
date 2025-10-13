@@ -60,8 +60,6 @@ const populateForm = () => {
 
     // Gérer les fichiers existants si nécessaire
     if (props.row.files && props.row.files.length > 0) {
-      // Vous pouvez adapter cette partie selon votre logique
-      // Par exemple, convertir les chemins en objets File ou les afficher différemment
       newOffre.document = props.row.files.map(file => ({
         name: file.path.split('/').pop() || 'Document',
         path: file.path,

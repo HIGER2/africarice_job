@@ -1,10 +1,18 @@
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import ButtonBack from './ui/ButtonBack.vue';
+import UploadCv from './UploadCv.vue';
+import UpdateUser from './UpdateUser.vue';
 
 defineProps({
   user: Object,
 })
+
+const isOpen = ref(false)
+const setOPen=(data)=>{
+    isOpen.value = data
+}
 </script>
 
 <template>
@@ -21,12 +29,16 @@ defineProps({
                     {{ user?.name }} {{ user?.last_name }}
                     </h1>
                     <p class="text-indigo-100 mt-1">📱 {{ user?.phone }} | ✉️ {{ user?.email }}</p>
-                    <span class="mt-3 px-4 py-1 bg-white text-indigo-700 rounded-full text-sm font-semibold border border-gray-200 ">
+                    <button @click="setOPen(user)" type="button" class="px-5 cursor-pointer py-1 text-sm border rounded-md mt-3">
+                            Edit
+                    </button>
+                    <UpdateUser :row="isOpen" @close="()=>setOPen(false)"/>
+
+                    <!-- <span class="mt-3 px-4 py-1 bg-white text-indigo-700 rounded-full text-sm font-semibold border border-gray-200 ">
                     {{ user?.role }}
-                    </span>
+                    </span> -->
                 </div>
             </div>
-
             <!-- Grid Infos -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
@@ -123,19 +135,22 @@ defineProps({
 
             <!-- Documents -->
             <!-- <pre>{{ user?.application.documents }}</pre> -->
-            <div class="bg-white rounded-2xl p-6 border border-gray-200 " v-if="user?.application?.documents?.length">
+            <div class="bg-white rounded-2xl p-6 border border-gray-200 ">
             <h2 class="text-lg font-semibold mb-4 border-b pb-2">📂 Documents</h2>
-            <ul class="list-disc pl-6 text-gray-700">
-                <li v-for="doc in user?.application?.documents" :key="doc.uuid">
-            <a 
-                :href="doc.path" 
-                :download="doc.name"
-                class="flex cursor-pointer items-center gap-2 text-indigo-600 hover:text-indigo-800 hover:underline"
-            >
-                📄 <span>{{ doc.name }}</span>
-            </a>
-            </li>
-            </ul>
+            <div class="flex items-center gap-2">
+                <ul class="list-disc pl-6 text-gray-700">
+                    <li v-for="doc in user?.application?.documents" :key="doc.uuid">
+                <a 
+                    :href="doc.path" 
+                    :download="doc.name"
+                    class="flex truncate w-full cursor-pointer items-center gap-2 text-indigo-600 hover:text-indigo-800 hover:underline"
+                >
+                    📄 <span>{{ doc.name }}</span>
+                </a>
+                </li>
+                </ul>
+                <UploadCv/>
+            </div>
             </div>
         </div>
     </div>

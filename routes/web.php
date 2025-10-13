@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', [AppController::class, 'index']);
-Route::post('/register', [AppController::class, 'register']);
+Route::post('/register', [AppController::class, 'registerOrUpdate']);
 Route::post('/verify-email', [AppController::class, 'verifyEmail']);
 Route::post('/verify-pin', [AppController::class, 'verifyPin']);
 Route::post('/logout', [AppController::class, 'logout'])->middleware('auth');
@@ -39,6 +39,7 @@ Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:admin'])->
     Route::post('/parametre', [AppController::class, 'storeEmail'])->name('parametre');
     Route::post('/parametre/email', [AppController::class, 'storeEmail'])->name('email.add');
     Route::post('/parametre/user', [AppController::class, 'storeUser'])->name('user.add');
+    Route::post('/upload-cv', [AppController::class, 'uploadCv'])->name('cv.add');
 });
 
 

@@ -737,6 +737,7 @@ export function useApplyForm(){
             saveAs(content, "job_cv.zip");
         });
     };
+
     // const payLoad = (data) => {
         
     //     Object.keys(data).forEach(key => {
@@ -875,7 +876,32 @@ export function useApplyForm(){
             } finally {
                 console.log("Requête terminée");
             }
-            }
+    }
+
+    async function uploadCv(file:Blob) {
+       
+        const formData = new FormData()
+        formData.append('cv', file)
+
+        try {
+            const response = await axios.post('manager/upload-cv', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+            onUploadProgress: (progressEvent) => {
+                const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                console.log(`Upload progress: ${percent}%`)
+            },
+            })
+
+            alert('✅ CV uploaded successfully!')
+            Inertia.reload()
+            console.log('Upload response:', response.data)
+        } catch (error) {
+            console.error('Upload error:', error)
+            alert('❌ Upload failed. Please try again later.')
+        } finally {
+          
+        }
+    }
 
    return {
     form,
@@ -910,7 +936,8 @@ export function useApplyForm(){
     AddEmail,
     newUser,
     AddUser,
-    downloadZip
+    downloadZip,
+    uploadCv
   }
 
 }

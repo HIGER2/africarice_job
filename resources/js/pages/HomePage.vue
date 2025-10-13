@@ -78,8 +78,7 @@ function openApply(pub: any) {
                 alt="Hero Illustration" class="w-full h-full object-cover" />
             <div class="absolute inset-0 gradient-overlay"></div>
         </div>
-
-        <div class="relative z-10 flex flex-col h-[450px] items-center justify-center text-center py-20 px-6">
+        <div class="relative z-10 flex flex-col h-[210px] items-center justify-center text-center py-20 px-6">
             <h1 class="text-5xl md:text-7xl font-extrabold mb-7 drop-shadow-lg">
                 Our Vacancies
                 <!-- / <span class="text-white">Nos postes vacants</span>  -->
@@ -108,14 +107,15 @@ function openApply(pub: any) {
                <p class="text-gray-600 text-lg">Click on a job offer to see the details</p>
             </div>
 
-            <div 
-  v-for="pub in publications?.data" 
-  :key="pub?.uuid" 
-  class="job-card w-full bg-white p-6 shadow hover:shadow-md cursor-pointer rounded-2xl border border-gray-100"
->
-  <div class="flex flex-col md:flex-row justify-between items-start gap-6">
+  <div 
+    v-for="pub in publications?.data" 
+    :key="pub?.uuid" 
+    class="job-card w-full bg-white p-6 shadow hover:shadow-md cursor-pointer rounded-2xl border border-gray-100"
+  >
+  <div 
+  class="flex flex-col md:flex-row justify-between items-start gap-6">
     <div class="flex gap-5 items-start flex-1 w-full">
-      <div class="w-14 h-14 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+      <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
         <span class="font-bold text-secondary text-xl">
           {{ initials(pub?.job?.position_title || 'N/A') }}
         </span>
@@ -124,7 +124,7 @@ function openApply(pub: any) {
       <div class="flex-1 w-full">
         <div class="flex flex-col md:flex-row md:items-start justify-between mb-3 gap-2">
           <div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ pub.job.position_title }}</h3>
+            <h3 class="text-md font-bold text-gray-900 mb-2">{{ pub.job.position_title }}</h3>
             <div class="flex flex-wrap md:flex-nowrap items-center gap-3 text-sm text-gray-600">
               <span class="flex items-center gap-1">
                 <i class="uil uil-building text-blue-600"></i>

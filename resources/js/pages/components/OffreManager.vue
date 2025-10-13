@@ -80,7 +80,7 @@ const Updated=(data)=>{
                     <!-- Actions -->
                         <template #actions="{ row }">
                           <div class="flex items-center gap-2">
-                              <button @click="Updated(row)" type="button" class="px-3 cursor-pointer py-1 text-sm border rounded-md hover:bg-gray-50">
+                            <button @click="Updated(row)" type="button" class="px-3 cursor-pointer py-1 text-sm border rounded-md hover:bg-gray-50">
                              Edit
                             </button>
                             <a :href="`/manager/offres/${row.uuid}`" class="px-3 py-1 text-sm border rounded-md hover:bg-gray-50">

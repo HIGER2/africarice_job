@@ -28,7 +28,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+
 
 class AppController extends Controller
 {
@@ -116,42 +118,66 @@ class AppController extends Controller
 
 
     // Inscription
-    public function register(Request $request)
+    public function registerOrUpdate(Request $request)
     {
-        $request->validate(
-            [
-                'name' => 'required',
-                'last_name' => 'required',
-                'phone' => 'required|numeric|unique:users,phone',
-                'email' => 'required|email|unique:users,email',
-            ],
-            [
-                'name.required' => 'Le nom est requis / Name is required',
-                'last_name.required' => 'Le prénom est requis / Last name is required',
-                'phone.required' => 'Le téléphone est requis / Phone is required',
-                'phone.numeric' => 'Le téléphone doit être numérique / Phone must be numeric',
-                'email.required' => 'L\'email est requis / Email is required',
-                'email.email' => 'Format d\'email invalide / Invalid email format',
-                'email.unique' => 'Cet email est déjà utilisé / This email is already taken',
-                'phone.unique' => 'Ce numéro de téléphone est déjà utilisé / This phone number is already taken',
-            ]
-        );
+        $user = Auth::user();
+        // ✅ Règles de validation de base
+        $rules = [
+            'name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+        ];
 
-        $user = User::create($request->all());
-        // Générer code PIN
+        if ($user) {
+            // ✅ Si connecté : autoriser la modification mais vérifier unicité si email/téléphone changent
+            $rules['phone'] = [
+                'required',
+                'numeric',
+                Rule::unique('users', 'phone')->ignore($user->id),
+            ];
+            $rules['email'] = [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($user->id),
+            ];
+        } else {
+            // ✅ Si non connecté : création stricte
+            $rules['phone'] = 'required|numeric|unique:users,phone';
+            $rules['email'] = 'required|email|unique:users,email';
+        }
+
+        $messages = [
+            'name.required' => 'Le nom est requis / Name is required',
+            'last_name.required' => 'Le prénom est requis / Last name is required',
+            'phone.required' => 'Le téléphone est requis / Phone is required',
+            'phone.numeric' => 'Le téléphone doit être numérique / Phone must be numeric',
+            'email.required' => 'L\'email est requis / Email is required',
+            'email.email' => 'Format d\'email invalide / Invalid email format',
+            'email.unique' => 'Cet email est déjà utilisé / This email is already taken',
+            'phone.unique' => 'Ce numéro de téléphone est déjà utilisé / This phone number is already taken',
+        ];
+
+        $validated = $request->validate($rules, $messages);
+
+        // ✅ Si utilisateur connecté → mise à jour
+        if ($user) {
+            $user->update($validated);
+            return response()->json(['message' => 'Profil mis à jour avec succès / Profile updated successfully.']);
+        }
+        // ✅ Sinon → création + génération du PIN
+        $user = User::create($validated);
         $pin = rand(1000, 9999);
-        $hash = Hash::make($pin);
         $user->pin = $pin;
         $user->save();
+        // ✅ Sauvegarde email en session
         session(['user_email' => $user->email]);
-        // Envoyer email avec code PIN
-        Mail::raw("Votre code PIN pour se connecter : $pin / Your login PIN is: $pin", function ($message) use ($user) {
+
+        // ✅ Envoi du PIN par email
+        Mail::raw("Votre code PIN pour vous connecter : $pin / Your login PIN is: $pin", function ($message) use ($user) {
             $message->to($user->email)
                 ->subject('Code PIN de connexion / Login PIN');
         });
 
-        // return redirect()->route('verify');
-        return response()->json(['message' => 'Inscription réussie. Vérifiez votre email pour le code PIN.']);
+        return response()->json(['message' => 'Inscription réussie. Vérifiez votre email pour le code PIN. / Registration successful. Check your email for the PIN.']);
     }
 
 
@@ -343,7 +369,7 @@ class AppController extends Controller
                     $uploadedFile = $request->file("documents.$index.file");
 
                     if ($uploadedFile && $uploadedFile->isValid()) {
-                        $path = '/storage/' . $uploadedFile->store('applications', 'public');
+                        $path = '/storage/' . $uploadedFile->store('cv', 'public');
 
                         $application->documents()->updateOrCreate(
                             [
@@ -555,27 +581,53 @@ class AppController extends Controller
         }
     }
 
-    public function deleteUserDocument(Request $request)
+    public function uploadCv(Request $request)
     {
-        // 🔹 Récupérer le candidat
+        // 🔹 1. Validation du fichier
+        $request->validate([
+            'cv' => 'required|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120', // 5 MB max
+        ]);
+
         $user = Auth::user();
-        // Vérifier si l'utilisateur a une application et au moins un document
-        if (!$user->application || $user->application->documents->isEmpty()) {
-            return response()->json([
-                'message' => 'Aucun document trouvé pour cet utilisateur.'
-            ], 404);
+
+        // 🔹 2. Vérifier si l'utilisateur a une application
+        if (!$user->application) {
+            return response()->json(['message' => 'No application found for this user.'], 404);
         }
 
-        $document = $user->application->documents[0];
+        // 🔹 3. Récupérer le premier document (ex: CV)
+        $document = $user->application->documents()->first();
 
-        // Supprimer le fichier du stockage
-        if ($document->path && Storage::disk('public')->exists($document->path)) {
+        // 🔹 4. Supprimer l'ancien fichier si existe
+        if ($document && $document->path && Storage::disk('public')->exists($document->path)) {
             Storage::disk('public')->delete($document->path);
         }
-        // Supprimer ou mettre à null le champ dans la base
-        $document->delete();
-    }
 
+        // 🔹 5. Enregistrer le nouveau fichier
+        $path = '/storage/' . $request->file('cv')->store('cvs', 'public');
+        $filename = $request->file('cv')->getClientOriginalName();
+
+        // 🔹 6. Mettre à jour ou créer le document
+        if ($document) {
+            $document->update([
+                'name' => $filename,
+                'path' => $path,
+                // 'type' => 'cv', // optionnel
+            ]);
+        } else {
+            $document = $user->application->documents()->create([
+                'name' => $filename,
+                'path' => $path,
+                // 'type' => 'cv',
+            ]);
+        }
+
+        // 🔹 7. Réponse JSON
+        return response()->json([
+            'message' => 'CV uploaded successfully!',
+            'document' => $document,
+        ]);
+    }
     public function storeEmail(Request $request)
     {
         $request->validate([
