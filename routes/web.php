@@ -39,7 +39,6 @@ Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:admin'])->
     Route::post('/parametre', [AppController::class, 'storeEmail'])->name('parametre');
     Route::post('/parametre/email', [AppController::class, 'storeEmail'])->name('email.add');
     Route::post('/parametre/user', [AppController::class, 'storeUser'])->name('user.add');
-    Route::post('/upload-cv', [AppController::class, 'uploadCv'])->name('cv.add');
 });
 
 
@@ -49,6 +48,7 @@ Route::get('/apply-job/{uuid}', [AppController::class, 'applyJob'])
 
 Route::post('/apply-job/save', [AppController::class, 'storeOrUpdate'])->middleware('auth');
 Route::get('/profile', [AppController::class, 'profile'])->middleware('auth');
+Route::post('/upload-cv', [AppController::class, 'uploadCv'])->name('cv.add')->middleware('auth');
 Route::delete('/user/document', [AppController::class, 'deleteUserDocument'])->middleware('auth');
 
 
