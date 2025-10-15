@@ -116,7 +116,6 @@ class AppController extends Controller
         ]);
     }
 
-
     // Inscription
     public function registerOrUpdate(Request $request)
     {

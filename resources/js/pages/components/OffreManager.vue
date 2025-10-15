@@ -27,6 +27,7 @@ const row = ref(null)
 const handleClose =()=>{
     row.value = false
 }
+
 const Updated=(data)=>{
     row.value = data
     console.log(data);
