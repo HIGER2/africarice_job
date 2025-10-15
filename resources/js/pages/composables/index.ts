@@ -884,7 +884,7 @@ export function useApplyForm(){
         formData.append('cv', file)
 
         try {
-            const response = await axios.post('manager/upload-cv', formData, {
+            const response = await axios.post('/upload-cv', formData, {
             headers: { 'Content-Type': 'multipart/form-data' },
             onUploadProgress: (progressEvent) => {
                 const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total)
