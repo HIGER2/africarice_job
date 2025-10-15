@@ -530,10 +530,10 @@ class AppController extends Controller
                 'is_closed' => Carbon::parse($request->offre['expires_at'], 'Africa/Abidjan')->toDateString() < Carbon::now('Africa/Abidjan')->toDateString() ? true : false,
             ];
 
-            if (!empty($request->offre['uuid'])) {
-                // 🔹 Mise à jour
-                $publication = Publication::where("uuid", $request->offre["uuid"])->firstOrFail();
+            $publication = Publication::where("uuid", $request->offre["uuid"])->first();
 
+            if ($publication) {
+                // 🔹 Mise à jour
                 $publication->update($dataPublication);
 
                 $publication->job()->update([
@@ -541,13 +541,12 @@ class AppController extends Controller
                     'country_duty_station' => $request->offre['country_duty_station'],
                 ]);
             } else {
-                // 🔹 Création recrutement
+                // 🔹 uuid introuvable → créer une nouvelle publication
                 $recrutement = Recrutement::create([
                     'position_title'       => $request->offre['position_title'],
                     'country_duty_station' => $request->offre['country_duty_station'],
                 ]);
 
-                // 🔹 Création publication
                 $publication = Publication::create(array_merge($dataPublication, [
                     'recrutement_id' => $recrutement->id,
                 ]));
