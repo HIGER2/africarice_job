@@ -578,8 +578,9 @@ class AppController extends Controller
                 // 🔹 6. Mettre à jour ou créer le document
                 if ($document) {
                     // 🔹 4. Supprimer l'ancien fichier si existe
-                    if ($document->path && Storage::disk('public')->exists($document->path)) {
-                        Storage::disk('public')->delete($document->path);
+                    $relativePath = str_replace('/storage/', '', $document->path);
+                    if ($relativePath && Storage::disk('public')->exists($relativePath)) {
+                        Storage::disk('public')->delete($relativePath);
                     }
 
                     $document->update([
@@ -636,10 +637,12 @@ class AppController extends Controller
 
         // 🔹 3. Récupérer le premier document (ex: CV)
         $document = $user->application->documents()->first();
-
         // 🔹 4. Supprimer l'ancien fichier si existe
-        if ($document && $document->path && Storage::disk('public')->exists($document->path)) {
-            Storage::disk('public')->delete($document->path);
+        if ($document && $document->path) {
+            $relativePath = str_replace('/storage/', '', $document->path);
+            if (Storage::disk('public')->exists($relativePath)) {
+                Storage::disk('public')->delete($relativePath);
+            }
         }
 
         // 🔹 5. Enregistrer le nouveau fichier
