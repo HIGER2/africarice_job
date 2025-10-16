@@ -2,8 +2,10 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\File;
 
 class CanditureUser extends JsonResource
 {
@@ -22,7 +24,7 @@ class CanditureUser extends JsonResource
         });
         $this->application->references->map(function ($reference, $index) use (&$flattened) {
             $num = $index + 1;
-            $flattened["reference{$num}"] = "Nom : " . $reference->full_name . '; function: ' . $reference->function . '; phone: ' . $reference->phone . '; email: ' . $reference->email;
+            $flattened["reference{$num}"] = "Nom : " . $reference->full_name .  '; company name : ' . $reference->company . '; function: ' . $reference->function . '; phone: ' . $reference->phone . '; email: ' . $reference->email;
             // $flattened["option{$num}"] = $diploma->option;
         });
 
@@ -60,6 +62,10 @@ class CanditureUser extends JsonResource
             'candidat' => $this->name . ' ' . $this->last_name,
             'user_email' => $this->email,
             'user_phone' => $this->phone,
+            'gender' => $this->application->identification->gender,
+            'birth_date' => Carbon::parse($this->application->identification->birth_date)->format('d/m/Y'),
+            'age' => Carbon::parse($this->application->identification->birth_date)->age . " ans",
+
 
             // Application
             // 'application_id' => $this->user->application->id,
@@ -68,6 +74,7 @@ class CanditureUser extends JsonResource
             // Origin
             // 'origin_id' => $this->application->origin->id,
             'origin_nationality' => $this->application->origin->nationality,
+            'second_nationality'      => $this->application->origin->second_nationality,
             'origin_country' => $this->application->origin->country,
             'origin_city' => $this->application->origin->city,
             'origin_experience_years' => $this->application->origin->experience_years,
@@ -86,7 +93,7 @@ class CanditureUser extends JsonResource
             // 'document_id' => $this->user->application->documents->id,
             'documents' => $this->application->documents->map(function ($document, $index) use (&$flattened) {
                 return (object)[
-                    'name' => $document['name'],
+                    'name' => 'cv_' . $this->name . '_' . $this->last_name . '_' . $this->email . '.' . File::extension($document->name),
                     'path' => $document['path'],
                 ];
             }),

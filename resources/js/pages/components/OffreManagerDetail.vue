@@ -18,11 +18,13 @@ const props= defineProps({
   data: Array,
 })
 const {exportToExcel,updateOffres,downloadZip}=useApplyForm()
+
 const labelsMap = {
     candidat: "Candidate",
     user_email: "Email",
     user_phone: "Phone",
     origin_nationality: "Nationality",
+    second_nationality: "nationality_2",
     origin_country: "Country",
     origin_city: "City",
     origin_experience_years: "Experience",
@@ -57,6 +59,8 @@ const exportCv = reactive({
     const exporteCvs= async(data)=>{
         let files=[]
         data.forEach(candidat => {
+            console.log(candidat.candidat);
+            
         const firstDoc = candidat.documents[0]; // index 0
         if (firstDoc) {
           files.push(firstDoc)

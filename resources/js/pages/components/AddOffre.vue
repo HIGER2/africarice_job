@@ -16,6 +16,11 @@ const removeFile = (index: number) => {
   newOffre.document.splice(index, 1)
 }
 
+
+const change=(e)=>{
+  newOffre.document[0] = e
+}
+
 const handleSubmit = async() => {
   loading.value = true
   await submitOffre(newOffre)
@@ -84,7 +89,7 @@ const handleSubmit = async() => {
                     <label class="cursor-pointer">
                           <FormField
                           :field="value"
-                          @change="(e) => newOffre.document.push(e)"
+                          @change="(e)=>change(e)"
                         />
                             <div class="border border-dashed p-3 flex flex-col w-full text-center cursor-pointer">
                                 <span  class="text-gray-500 ">

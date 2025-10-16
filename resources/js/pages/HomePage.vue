@@ -316,7 +316,7 @@ function openApply(pub: any) {
 </template>
   <style scoped>
     .gradient-overlay {
-        background: linear-gradient(135deg, rgba(30, 64, 175, 0.55) 0%, rgba(124, 58, 237, 0.45) 100%);
+        background: linear-gradient(135deg, rgba(81, 192, 99, 0.55) 0%, rgba(98, 183, 96, 0.45) 100%);
     }
     .job-card {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

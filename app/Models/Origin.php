@@ -13,6 +13,7 @@ class Origin extends Model
     protected $fillable = [
         'application_id',
         'nationality',
+        'second_nationality',
         'country',
         'city',
         'experience_years',
@@ -21,7 +22,8 @@ class Origin extends Model
         'uuid',
     ];
 
-    public function application() {
+    public function application()
+    {
         return $this->belongsTo(Application::class);
     }
 

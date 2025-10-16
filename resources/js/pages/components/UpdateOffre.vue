@@ -109,11 +109,18 @@ const handleSubmit = async () => {
 };
 
 // Gérer l'ajout de document
+
 const handleDocumentChange = (file: File) => {
   if (file) {
-    newOffre.document.push(file);
+     newOffre.document[0] = file
   }
 };
+
+const isPublishedDatePassed=(fieldKey)=> {
+    if (fieldKey !== 'published_at') return false;
+     const [day, month, year] = props.row[fieldKey].split('/');
+    return new Date(`${year}-${month}-${day}`) < new Date();
+  }
 
 // Empêcher le scroll du body quand la modal est ouverte
 watch(isOpen, (value) => {
@@ -195,12 +202,14 @@ watch(isOpen, (value) => {
                  <!-- <pre>{{ newOffre.offre }}</pre> -->
                 <template v-for="(groupe, index) in fieldAddOffre" :key="`groupe-${index}`">
                   <div class="flex flex-col gap-3">
-                    <FormField
+                   <FormField
                       v-for="(field, fieldIndex) in groupe"
                       :key="`field-${index}-${fieldIndex}`"
                       :label="field.label"
                       :field="field"
                       v-model="newOffre.offre[field.key]"
+                      :disabled="isPublishedDatePassed(field.key)"
+                      
                     />
                   </div>
                 </template>

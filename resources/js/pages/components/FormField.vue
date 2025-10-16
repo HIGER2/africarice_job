@@ -4,7 +4,7 @@
   >
     <label :for="field.key" class="font-medium ">{{ field.label }}</label>
     <input
-    v-bind="$attrs"
+      v-bind="$attrs"
       v-if="field.type !== 'select' && field.type !== 'file' && field.type !== 'textarea' && field.type !== 'checkbox'"
       :type="field.type"
       :id="field.key"
@@ -60,13 +60,14 @@ const props = defineProps({
   modelValue: [String, Object, Number, Boolean],
 })
 const emit = defineEmits(['update:modelValue','change'])
-
 const onFileChange = (e) => {
-  let file = e.target.files[0]
+  const file = e.target.files[0]
   if (file) {
     emit('update:modelValue', file)
-    emit('change',file)
-    file=null
+    emit('change', file)
+    
+    // 🔹 Efface complètement le fichier du champ input
+    e.target.value = ''
   }
 }
 </script>

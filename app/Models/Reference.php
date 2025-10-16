@@ -14,12 +14,14 @@ class Reference extends Model
         'uuid',
         'application_id',
         'full_name',
+        'company',
         'function',
         'phone',
         'email'
     ];
 
-    public function application() {
+    public function application()
+    {
         return $this->belongsTo(Application::class);
     }
 

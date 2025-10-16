@@ -12,17 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('origins', function (Blueprint $table) {
-                $table->id();
-                $table->uuid('uuid')->unique()->nullable();
-                $table->foreignId('application_id')->constrained()->onDelete('cascade');
-                $table->string('nationality');
-                $table->string('country');
-                $table->string('city');
-                $table->integer('experience_years');
-                $table->string('french_level');
-                $table->string('english_level');
-                $table->timestamps();
-            });
+            $table->id();
+            $table->uuid('uuid')->unique()->nullable();
+            $table->foreignId('application_id')->constrained()->onDelete('cascade');
+            $table->string('nationality');
+            $table->string('country');
+            $table->string('city');
+            $table->integer('experience_years');
+            $table->string('french_level');
+            $table->string('english_level');
+            $table->timestamps();
+        });
     }
 
     /**

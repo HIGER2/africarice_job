@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\File;
 
 class UserResource extends JsonResource
 {
@@ -30,6 +31,7 @@ class UserResource extends JsonResource
                     // 'id'               => $this->application->origin->id,
                     'uuid'             => $this->application->origin->uuid,
                     'nationality'      => $this->application->origin->nationality,
+                    'second_nationality'      => $this->application->origin->second_nationality,
                     'country'          => $this->application->origin->country,
                     'city'             => $this->application->origin->city,
                     'experience_years' => $this->application->origin->experience_years,
@@ -37,20 +39,20 @@ class UserResource extends JsonResource
                     'english_level'    => $this->application->origin->english_level,
                 ] : null,
 
-                'documents' => $this->application->documents->map(function($doc){
+                'documents' => $this->application->documents->map(function ($doc) {
                     return [
                         // 'id'   => $doc->id,
                         'uuid' => $doc->uuid,
-                        'name' => $doc->name,
+                        'name' => 'cv_' . $this->name . '_' . $this->last_name . '_' . $this->email . '.' . File::extension($doc->name),
                         'path' => $doc->path,
                     ];
                 }),
 
-                'diplomas' => $this->application->diplomas->map(function($d){
+                'diplomas' => $this->application->diplomas->map(function ($d) {
                     return [
                         // 'id'     => $d->id,
                         'uuid'   => $d->uuid,
-                        'diploma'=> $d->diploma,
+                        'diploma' => $d->diploma,
                         'option' => $d->option,
                     ];
                 }),
@@ -63,7 +65,7 @@ class UserResource extends JsonResource
                     'cgiar_email'  => $this->application->cgiarInformation->cgiar_email,
                 ] : null,
 
-                'experiences' => $this->application->experiences->map(function($e){
+                'experiences' => $this->application->experiences->map(function ($e) {
                     return [
                         // 'id'           => $e->id,
                         'uuid'         => $e->uuid,
@@ -75,12 +77,13 @@ class UserResource extends JsonResource
                     ];
                 }),
 
-                'references' => $this->application->references->map(function($r){
+                'references' => $this->application->references->map(function ($r) {
                     return [
                         'uuid'       => $r->uuid,
                         'full_name'      => $r->full_name,
                         'phone'   => $r->phone,
                         'email'   => $r->email,
+                        'company'   => $r->company,
                         'function'   => $r->function,
                     ];
                 }),

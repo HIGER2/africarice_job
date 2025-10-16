@@ -18,10 +18,10 @@ export function useApplyForm(){
 
     
     const components=[
+        ApplyStepIdentification,
         ApplyStepDiplomas,
         ApplyStepCgiar,
         ApplyStepExperience,
-        ApplyStepIdentification,
         ApplyStepOrigin,
         ApplyStepEnd
     ]
@@ -246,7 +246,24 @@ export function useApplyForm(){
                 { type: "checkbox", key: "current", label: "Check if currently working for CGIAR center" },
             ],
             [
-                { type: "text", key: "cgiar_center", label: "Provide Name of the centers" },
+                { type: "select", key: "cgiar_center",
+                    options: [
+                        { label: 'AfricaRice', value: 'africarice' },
+                        { label: 'Alliance Bioversity & CIAT', value: 'alliance_bioversity_ciat' },
+                        { label: 'CIFOR', value: 'cifor' },
+                        { label: 'CIMMYT', value: 'cimmyt' },
+                        { label: 'CIP', value: 'cip' },
+                        { label: 'ICARDA', value: 'icarda' },
+                        { label: 'ICRAF', value: 'icraf' },
+                        { label: 'ICRISAT', value: 'icrisat' },
+                        { label: 'IFPRI', value: 'ifpri' },
+                        { label: 'IITA', value: 'iita' },
+                        { label: 'ILRI', value: 'ilri' },
+                        { label: 'IRRI', value: 'irri' },
+                        { label: 'IWMI', value: 'iwmi' },
+                        { label: 'WorldFish', value: 'worldfish' },
+                        ] ,
+                    label: "Provide Name of the centers" },
             ],
             [
                 { type: "text", key: "cgiar_email", label: "Provide your cgiar.org email" }
@@ -280,6 +297,7 @@ export function useApplyForm(){
         const fieldOrigin= [
             [
                 { type: "select", options:[...country], key: "nationality", label: "Nationality" },
+                { type: "select", options:[...country], key: "second_nationality", label: "Second nationality" },
                 { type: "select",options:[...country], key: "country", label: "Country of Residence" },
             ],
             [
@@ -326,6 +344,9 @@ export function useApplyForm(){
             [
                 { type: "text", key: "phone", label: "Phone" },
                 { type: "text", key: "function", label: "Function" },
+            ],
+            [
+                { type: "text", key: "company", label: "company" },
             ],
         ]
 

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::create('references', function (Blueprint $table) {
+        Schema::create('references', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique()->nullable();
             $table->foreignId('application_id')->constrained()->onDelete('cascade');
@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->timestamps();
         });
-
     }
 
     /**

@@ -524,7 +524,6 @@ class AppController extends Controller
             $dataPublication = [
                 'type'          => 'public',
                 'published_by'  => Auth::id(),
-                'published_at'  => $request->offre['published_at'],
                 'expires_at'    => $request->offre['expires_at'],
                 'is_published'  => filter_var($request->offre['is_published'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
                 'is_closed' => Carbon::parse($request->offre['expires_at'], 'Africa/Abidjan')->toDateString() < Carbon::now('Africa/Abidjan')->toDateString() ? true : false,
@@ -533,7 +532,20 @@ class AppController extends Controller
             $publication = Publication::where("uuid", $request->offre["uuid"])->first();
 
             if ($publication) {
-                // 🔹 Mise à jour
+                // Ancienne date déjà enregistrée
+                $newDate = Carbon::parse($request->offre['published_at']);
+                $oldDate = Carbon::parse($publication->published_at);
+                if (!$newDate->eq($oldDate)) {
+                    // Vérifie si la date de publication actuelle n'est pas encore passée
+                    if ($oldDate->lt(Carbon::now())) {
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => 'Unable to update: the publication date has already passed and cannot be modified.',
+                        ], 400);
+                    }
+                    $dataPublication["published_at"] = $request->offre['published_at'];
+                }
+
                 $publication->update($dataPublication);
 
                 $publication->job()->update([
@@ -542,6 +554,7 @@ class AppController extends Controller
                 ]);
             } else {
                 // 🔹 uuid introuvable → créer une nouvelle publication
+                $dataPublication["published_at"] = $request->offre['published_at'];
                 $recrutement = Recrutement::create([
                     'position_title'       => $request->offre['position_title'],
                     'country_duty_station' => $request->offre['country_duty_station'],
@@ -554,13 +567,41 @@ class AppController extends Controller
 
             // 🔹 Sauvegarde des documents
             if ($request->hasFile('documents')) {
-                foreach ($request->file('documents') as $file) {
-                    PublicationFile::create([
-                        'publication_id' => $publication->id,
-                        'path'           => 'storage/' . $file->store('documents', 'public'),
-                        'name'           => $file->getClientOriginalName(),
+                // 🔹 3. Récupérer le premier document (ex: CV)
+                $document = $publication?->files()->first();
+
+                $file = $request->file('documents')[0];
+                // 🔹 5. Enregistrer le nouveau fichier
+                $path = '/storage/' . $file->store('documents', 'public');
+                $filename = $file->getClientOriginalName();
+
+                // 🔹 6. Mettre à jour ou créer le document
+                if ($document) {
+                    // 🔹 4. Supprimer l'ancien fichier si existe
+                    if ($document->path && Storage::disk('public')->exists($document->path)) {
+                        Storage::disk('public')->delete($document->path);
+                    }
+
+                    $document->update([
+                        'name' => $filename,
+                        'path' => $path,
+                        // 'type' => 'cv', // optionnel
+                    ]);
+                } else {
+                    $document = $publication->files()->create([
+                        'name' => $filename,
+                        'path' => $path,
+                        // 'type' => 'cv',
                     ]);
                 }
+
+                // foreach ($request->file('documents') as $file) {
+                //     PublicationFile::create([
+                //         'publication_id' => $publication->id,
+                //         'path'           => 'storage/' . $file->store('documents', 'public'),
+                //         'name'           => $file->getClientOriginalName(),
+                //     ]);
+                // }
             }
 
             DB::commit();
