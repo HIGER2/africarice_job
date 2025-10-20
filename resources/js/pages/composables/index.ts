@@ -380,7 +380,7 @@ export function useApplyForm(){
     const newUser=reactive({
         email:'',
         last_name:"",
-        name:""
+        name:"",
     })
     // const form = reactive({
     //     diplomas: [{...initDiploma}],

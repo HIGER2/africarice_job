@@ -11,12 +11,15 @@ return new class extends Migration
         // 🔹 Liste des tables et colonnes à vérifier / ajouter
         $tables = [
 
-            'references' => [
-                'company' => fn(Blueprint $table) => $table->string('company')->nullable(),
+            // 'references' => [
+            //     'company' => fn(Blueprint $table) => $table->string('company')->nullable(),
+            // ],
+            'users' => [
+                'country_code' => fn(Blueprint $table) => $table->string('country_code')->nullable(),
             ],
-            'origins' => [
-                'second_nationality' => fn(Blueprint $table) => $table->string('second_nationality')->nullable(),
-            ],
+            // 'origins' => [
+            //     'second_nationality' => fn(Blueprint $table) => $table->string('second_nationality')->nullable(),
+            // ],
 
         ];
 

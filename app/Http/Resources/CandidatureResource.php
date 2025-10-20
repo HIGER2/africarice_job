@@ -57,7 +57,7 @@ class CandidatureResource extends JsonResource
             // 'user_id' => $this->user->id,
             'candidat' => $this->user->name . ' ' . $this->user->last_name,
             'user_email' => $this->user->email,
-            'user_phone' => $this->user->phone,
+            'user_phone' => $this->user->country_code . $this->user->phone,
 
             // Application
             // 'application_id' => $this->user->application->id,

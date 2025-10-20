@@ -5,6 +5,7 @@ import { useApplyForm } from "../composables";
 import Spinnercomponent from "./Spinnercomponent.vue";
 import { Inertia } from "@inertiajs/inertia";
 import axios from "axios";
+import countryCode from '../../data/country.json'
 
 const props = defineProps<{
   row?: boolean | null
@@ -19,7 +20,9 @@ const formData = reactive({
     name: '',
     last_name: '',
     email: '',
-    phone:''
+    phone:'',
+    country_code:"",
+
 })
 
 const { fieldAddOffre, newOffre, fieldAddDocument, submitOffre } = useApplyForm();
@@ -63,6 +66,8 @@ const populateForm = ()=>{
 }
 // Empêcher le scroll du body quand la modal est ouverte
 watch(isOpen, (value) => {
+console.log(props.row);
+
   if (value) {
     document.body.style.overflow = 'hidden';
     populateForm();
@@ -70,6 +75,8 @@ watch(isOpen, (value) => {
     document.body.style.overflow = '';
   }
 });
+
+
 </script>
 
 <template>
@@ -138,28 +145,44 @@ watch(isOpen, (value) => {
                         </div>
 
                         <!-- Phone / Email -->
-                        <div class="flex flex-col sm:flex-row gap-3 w-full">
-                            <div class="flex flex-col flex-1">
-                            <label class="text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                            <input
-                                v-model="formData.phone"
-                                type="tel"
-                                placeholder="e.g. +225 07 00 00 00 00"
-                                required
-                                class="p-3 w-full border rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
-                            />
+                          <div class="  gap-3 w-full">
+                              <div class="flex mb-3 flex-col flex-1">
+                              <label class="text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                              
+                              <div class="flex">
+                                <!-- Sélecteur des indicatifs pays -->
+                                <select
+                                  required
+                                  v-model="formData.country_code"
+                                  class="p-3 max-w-max border rounded-l-lg focus:ring-2 focus:ring-primary focus:outline-none"
+                                >
+                                  <option v-for="country in countryCode" :key="country.code" :value="country.code">
+                                    {{ country.abbreviation }} ({{ country.code }})
+                                  </option>
+                                </select>
+
+                                <!-- Champ téléphone -->
+                                <input
+                                  v-model="formData.phone"
+                                  type="tel"
+                                  placeholder="e.g. 07 00 00 00 00"
+                                  required
+                                  class="p-3 w-full border-t border-b border-r rounded-r-lg focus:ring-2 focus:ring-primary focus:outline-none"
+                                />
+                              </div>
                             </div>
-                            <div class="flex flex-col flex-1">
-                            <label class="text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                            <input
-                                v-model="formData.email"
-                                type="email"
-                                placeholder="example@mail.com"
-                                required
-                                class="p-3 border w-full rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
-                            />
+
+                              <div class="flex flex-col flex-1">
+                                <label class="text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                <input
+                                  v-model="formData.email"
+                                  type="email"
+                                  placeholder="example@mail.com"
+                                  required
+                                  class="p-3 border w-full rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+                                />
+                              </div>
                             </div>
-                        </div>
 
                         <!-- Submit Button -->
                         <button

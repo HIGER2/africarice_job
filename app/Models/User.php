@@ -27,6 +27,7 @@ class User extends Authenticatable
         'pin',
         'email',
         'candidat',
+        'country_code',
         'password',
     ];
 

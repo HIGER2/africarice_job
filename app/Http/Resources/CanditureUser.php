@@ -61,7 +61,7 @@ class CanditureUser extends JsonResource
             // 'user_id' => $this->id,
             'candidat' => $this->name . ' ' . $this->last_name,
             'user_email' => $this->email,
-            'user_phone' => $this->phone,
+            'user_phone' => $this->country_code . $this->phone,
             'gender' => $this->application->identification->gender,
             'birth_date' => Carbon::parse($this->application->identification->birth_date)->format('d/m/Y'),
             'age' => Carbon::parse($this->application->identification->birth_date)->age . " ans",

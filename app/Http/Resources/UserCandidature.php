@@ -23,7 +23,7 @@ class UserCandidature extends JsonResource
             // 'created_at'=> $this->created_at,
             // 'updated_at'=> $this->updated_at,
             'user' => $this->name . ' ' . $this->name,
-            'phone' => $this->phone,
+            'phone'      => $this->country_code . $this->phone,
             'email' => $this->email,
             // Champs de origin (aplaties)
             'nationality'      => $this->whenLoaded('application', function () {

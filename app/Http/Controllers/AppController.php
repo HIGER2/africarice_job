@@ -124,6 +124,7 @@ class AppController extends Controller
         $rules = [
             'name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
+            'country_code' => 'required|string|max:255',
         ];
 
         if ($user) {

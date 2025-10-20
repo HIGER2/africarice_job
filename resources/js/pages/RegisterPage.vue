@@ -45,17 +45,33 @@
       </div>
 
       <!-- Phone / Email -->
-      <div class="flex flex-col sm:flex-row gap-3 w-full">
-        <div class="flex flex-col flex-1">
-          <label class="text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+      <div class="  gap-3 w-full">
+        <div class="flex mb-3 flex-col flex-1">
+        <label class="text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+        
+        <div class="flex">
+          <!-- Sélecteur des indicatifs pays -->
+          <select
+            required
+            v-model="formData.country_code"
+            class="p-3 max-w-max border rounded-l-lg focus:ring-2 focus:ring-primary focus:outline-none"
+          >
+            <option v-for="country in countryCode" :key="country.code" :value="country.code">
+              {{ country.abbreviation }} ({{ country.code }})
+            </option>
+          </select>
+
+          <!-- Champ téléphone -->
           <input
             v-model="formData.phone"
             type="tel"
-            placeholder="e.g. +225 07 00 00 00 00"
+            placeholder="e.g. 07 00 00 00 00"
             required
-            class="p-3 w-full border rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+            class="p-3 w-full border-t border-b border-r rounded-r-lg focus:ring-2 focus:ring-primary focus:outline-none"
           />
         </div>
+      </div>
+
         <div class="flex flex-col flex-1">
           <label class="text-sm font-medium text-gray-700 mb-1">Email Address</label>
           <input
@@ -104,13 +120,15 @@ import { reactive, ref } from 'vue'
 import axios from 'axios'
 import { Inertia } from '@inertiajs/inertia'
 import Spinnercomponent from './components/Spinnercomponent.vue'
-
+import countryCode from '../data/country.json'
 
 const formData = reactive({
     name: '',
     last_name: '',
     email: '',
-    phone:''
+    phone:'',
+    country_code:"+225",
+
 })
 const loading=ref(false)
 
