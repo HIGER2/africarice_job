@@ -90,14 +90,19 @@ class AppController extends Controller
         ]);
     }
 
-    public function applyJob($uuid)
+    public function applyJob($uuid = null)
     {
         $user = Auth::user();
-        $publication = Publication::with('job')
-            ->where('uuid', $uuid)
-            ->where('is_closed', false)
-            // ->where('expires_at', '>=', now())
-            ->first();
+
+        $publication = null;
+        if ($uuid) {
+            $publication = Publication::with('job')
+                ->where('uuid', $uuid)
+                ->where('is_closed', false)
+                // ->where('expires_at', '>=', now())
+                ->first();
+        }
+
 
         return Inertia::render('ApplyPage', [
             'publication' => $publication,
@@ -242,22 +247,47 @@ class AppController extends Controller
             $data = $request->all(); // le JSON que tu envoies
 
             $userId = Auth::user()->id;
-
+            $applicationApplication = null;
             // Vérifier si la publication existe via UUID
-            $publication = Publication::where('uuid', $request->input('uuid'))->first();
+            if (isset($request->uuid)) {
 
-            if (!$publication) {
-                return response()->json([
-                    'message' => 'Job publication not found.'
-                ], 404);
+                $publication = Publication::where('uuid', $request->input('uuid'))->first();
+
+                if (!$publication) {
+                    return response()->json([
+                        'message' => 'Job publication not found.'
+                    ], 404);
+                }
+
+                if ($publication->is_closed) {
+                    return response()->json([
+                        'message' => "Cette offre est clôturée. | This job posting is closed."
+                    ], 403);
+                }
+
+
+
+
+                // 1. Vérifie si la candidature existe déjà
+                $existingApplication = PublicationApplication::where('user_id', $userId)
+                    ->where('publication_id', $publication->id)
+                    ->first();
+
+                if ($existingApplication) {
+                    return response()->json([
+                        'message' => 'You have already applied for this position. | Vous avez déjà postulé à cette offre.',
+                        'application' => $existingApplication,
+                    ], 409); // 409 Conflict
+                }
+
+                //2 Créer une nouvelle application
+                $applicationApplication = PublicationApplication::create([
+                    'user_id' => $userId,
+                    'publication_id' => $publication->id
+                ]);
             }
 
-            if ($publication->is_closed) {
-                return response()->json([
-                    'message' => "Cette offre est clôturée. | This job posting is closed."
-                ], 403);
-            }
-
+            // 2. Application principale
             $application = Application::firstOrCreate(
                 [
                     'user_id' => $userId,
@@ -268,23 +298,6 @@ class AppController extends Controller
                 ]
             );
 
-            // 1. Vérifie si la candidature existe déjà
-            $existingApplication = PublicationApplication::where('user_id', $userId)
-                ->where('publication_id', $publication->id)
-                ->first();
-
-            if ($existingApplication) {
-                return response()->json([
-                    'message' => 'You have already applied for this position. | Vous avez déjà postulé à cette offre.',
-                    'application' => $existingApplication,
-                ], 409); // 409 Conflict
-            }
-
-            //2 Créer une nouvelle application
-            $applicationApplication = PublicationApplication::create([
-                'user_id' => $userId,
-                'publication_id' => $publication->id
-            ]);
             // 3. Diplomas
             if (!empty($data['diplomas'])) {
                 foreach ($data['diplomas'] ?? [] as $d) {
@@ -385,17 +398,17 @@ class AppController extends Controller
                 }
             }
 
-
-
-            $primaryEmail = Email::where('is_primary', 1)->first();
-            if ($primaryEmail) {
-                Mail::to($primaryEmail->email)
-                    ->cc(Email::where('is_primary', 0)->pluck('email')->toArray())
-                    ->send(new CandidateSubmittedToTeam($applicationApplication));
+            if ($applicationApplication) {
+                $primaryEmail = Email::where('is_primary', 1)->first();
+                if ($primaryEmail) {
+                    Mail::to($primaryEmail->email)
+                        ->cc(Email::where('is_primary', 0)->pluck('email')->toArray())
+                        ->send(new CandidateSubmittedToTeam($applicationApplication));
+                }
+                // 3️⃣ Envoyer mail au candidat
+                Mail::to(Auth::user()->email)->send(new CandidateSubmittedToUser($applicationApplication));
             }
 
-            // 3️⃣ Envoyer mail au candidat
-            Mail::to(Auth::user()->email)->send(new CandidateSubmittedToUser($applicationApplication));
 
             DB::commit();
             return response()->json([

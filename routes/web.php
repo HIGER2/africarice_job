@@ -42,7 +42,7 @@ Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:admin'])->
 });
 
 
-Route::get('/apply-job/{uuid}', [AppController::class, 'applyJob'])
+Route::get('/apply-job/{uuid?}', [AppController::class, 'applyJob'])
     ->middleware('auth')
     ->name('apply.job');
 

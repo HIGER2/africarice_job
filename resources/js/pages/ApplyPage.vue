@@ -55,7 +55,6 @@ const handleSubmit=async(uuid)=>{
         >
             <i class="uil uil-arrow-left"></i> Back to Home
         </a>
-
       <!-- <a href="/" class="px-4 text-[13px]  cursor-pointer font-medium py-2 bg-gray-100 text-primary rounded-xl hover:shadow hover:bg-gray-200 inline-flex items-center gap-2 mb-3">
         <i class="uil uil-arrow-left"></i> Retour a laccuile
       </a> -->
@@ -73,24 +72,38 @@ const handleSubmit=async(uuid)=>{
           <p><strong>Expire le :</strong> {{ formatDate(publication.expires_at) }}</p>
         </div>
       </div> -->
-      <div class="bg-white border border-gray-200 rounded-lg p-5 mb-6">
-        <h2 class="text-xl font-semibold mb-3">{{ publication.job.position_title }}</h2>
-        <p class="text-gray-600">
-          {{ publication.job.center }} • {{ publication.job.city_duty_station }},
-          {{ publication.job.country_duty_station }}
-        </p>
+        <div v-if="publication" class="bg-white border border-gray-200 rounded-lg p-5 mb-6">
+          <h2 class="text-xl font-semibold mb-3">{{ publication.job.position_title }}</h2>
+          <p class="text-gray-600">
+            {{ publication.job.center }} • {{ publication.job.city_duty_station }},
+            {{ publication.job.country_duty_station }}
+          </p>
 
-        <div class="mt-3 grid grid-cols-2 gap-4 text-sm text-gray-700">
-          <p><strong>Reference:</strong> {{ publication.reference }}</p>
-          <p><strong>Type:</strong> {{ publication.type }}</p>
-          <p><strong>Published on:</strong> {{ formatDate(publication.published_at) }}</p>
-          <p><strong>Expires on:</strong> {{ formatDate(publication.expires_at) }}</p>
-          <!-- <p><strong>Contract:</strong> {{ publication.job.contract_time }}</p>
-          <p><strong>Grade:</strong> {{ publication.job.grade }}</p> -->
+          <div class="mt-3 grid grid-cols-2 gap-4 text-sm text-gray-700">
+            <p><strong>Reference:</strong> {{ publication.reference }}</p>
+            <p><strong>Type:</strong> {{ publication.type }}</p>
+            <p><strong>Published on:</strong> {{ formatDate(publication.published_at) }}</p>
+            <p><strong>Expires on:</strong> {{ formatDate(publication.expires_at) }}</p>
+          </div>
         </div>
-      </div>
+        <div v-else>
+          <!-- Version bilingue (français + anglais) -->
+          <h3 class="text-xl font-semibold text-gray-800 mb-4 text-center">
+            Complétez ou mettez à jour vos informations<br />
+            <span class="text-gray-500 text-base">Complete or update your information</span>
+          </h3>
+
+          <!-- <h3 class="text-xl font-semibold text-gray-800 mb-4">
+            Complétez ou mettez à jour vos informations
+          </h3> -->
+
+        </div>
       <div class="bg-white border border-gray-200 rounded-lg p-5">
-          <h3 class="text-lg font-semibold mb-4">Your Application</h3>
+          <h3 class="text-lg font-semibold text-gray-800 mb-4 text-center">
+            Votre candidature<br />
+            <span class="text-gray-500 text-base">Your Application</span>
+          </h3>
+
           <!-- Here your stepper -->
           <!-- <p class="text-gray-500">Multi-step form…</p> -->
           

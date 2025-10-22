@@ -200,155 +200,320 @@ export function useApplyForm(){
     //         { type: "text", key: "function", label: "Function" },
     //     ],
     // ]
-        const fieldAddOffre= [
-            [
-                { type: "text", key: "reference", label: "Post Reference" },
-            ],
-            [
-                { type: "text", key: "position_title", label: "Post Title" },
-                { type: "select", options:[...country], key: "country_duty_station", label: "Country" },
-            ],
-            [
-            ],
-            [
-                { type: "date", key: "published_at", label: "Published On" },
-                { type: "date", key: "expires_at", label: "Closing Date" },
-            ],
-            [
-                { type: "checkbox", key: "is_published", label: "Check to Publish" },
-            ],
-        ]
+        // const fieldAddOffre= [
+        //     [
+        //         { type: "text", key: "reference", label: "Post Reference" },
+        //     ],
+        //     [
+        //         { type: "text", key: "position_title", label: "Post Title" },
+        //         { type: "select", options:[...country], key: "country_duty_station", label: "Country" },
+        //     ],
+        //     [
+        //     ],
+        //     [
+        //         { type: "date", key: "published_at", label: "Published On" },
+        //         { type: "date", key: "expires_at", label: "Closing Date" },
+        //     ],
+        //     [
+        //         { type: "checkbox", key: "is_published", label: "Check to Publish" },
+        //     ],
+        // ]
 
-        const fieldAddDocument= [
-            { type: "file", key: "resume", label: "" },
-        ]
+        // const fieldAddDocument= [
+        //     { type: "file", key: "resume", label: "" },
+        // ]
 
-        const fieldDiploma= [
-            [
-                { type: "text", key: "diploma", label: "Diploma" },
-                { type: "text", key: "option", label: "Diploma Option" },
-            ],
-        ]
+        // const fieldDiploma= [
+        //     [
+        //         { type: "text", key: "diploma", label: "Diploma" },
+        //         { type: "text", key: "option", label: "Diploma Option" },
+        //     ],
+        // ]
 
-        const fieldExperience=[
-            [
-                { type: "text", key: "company_name", label: "Company Name" },
-                { type: "text", key: "position", label: "Position" },
-            ],
-            [
-                { type: "date", key: "start_date", label: "Start Date" },
-                { type: "date", key: "end_date", label: "End Date" },
-            ],
-        ]
+        // const fieldExperience=[
+        //     [
+        //         { type: "text", key: "company_name", label: "Company Name" },
+        //         { type: "text", key: "position", label: "Position" },
+        //     ],
+        //     [
+        //         { type: "date", key: "start_date", label: "Start Date" },
+        //         { type: "date", key: "end_date", label: "End Date" },
+        //     ],
+        // ]
 
-        const cgiarFiled =[
-            [
-                { type: "checkbox", key: "current", label: "Check if currently working for CGIAR center" },
+        // const cgiarFiled =[
+        //     [
+        //         { type: "checkbox", key: "current", label: "Check if currently working for CGIAR center" },
+        //     ],
+        //     [
+        //         { type: "select", key: "cgiar_center",
+        //             options: [
+        //                 { label: 'AfricaRice', value: 'africarice' },
+        //                 { label: 'Alliance Bioversity & CIAT', value: 'alliance_bioversity_ciat' },
+        //                 { label: 'CIFOR', value: 'cifor' },
+        //                 { label: 'CIMMYT', value: 'cimmyt' },
+        //                 { label: 'CIP', value: 'cip' },
+        //                 { label: 'ICARDA', value: 'icarda' },
+        //                 { label: 'ICRAF', value: 'icraf' },
+        //                 { label: 'ICRISAT', value: 'icrisat' },
+        //                 { label: 'IFPRI', value: 'ifpri' },
+        //                 { label: 'IITA', value: 'iita' },
+        //                 { label: 'ILRI', value: 'ilri' },
+        //                 { label: 'IRRI', value: 'irri' },
+        //                 { label: 'IWMI', value: 'iwmi' },
+        //                 { label: 'WorldFish', value: 'worldfish' },
+        //                 ] ,
+        //             label: "Provide Name of the centers" },
+        //     ],
+        //     [
+        //         { type: "text", key: "cgiar_email", label: "Provide your cgiar.org email" }
+        //     ]
+        // ]
+
+        // const fieldExperienceOther=[
+        //     [
+        //         { type: "text", key: "company_name", label: "Company Name" },
+        //         { type: "text", key: "position", label: "Position" },
+        //     ],
+        //     [
+        //         { type: "date", key: "start_date", label: "Start Date" },
+        //         { type: "date", key: "end_date", label: "End Date" },
+        //     ],
+        // ]
+
+        // const fieldIdentification= [
+        //     [
+        //         { type: "date", key: "birth_date", label: "Date of Birth" },
+        //         { type: "text", key: "address", label: "Address" },
+        //     ],
+        //     [
+        //         { type: "select", key: "gender", label: "Gender", options:[
+        //             {label: 'Male', value: 'male'},
+        //             {label: 'Female', value: 'female'},
+        //             {label: 'Other', value: 'other'},
+        //         ]}
+        //     ]
+        // ]
+
+        // const fieldOrigin= [
+        //     [
+        //         { type: "select", options:[...country], key: "nationality", label: "Nationality" },
+        //         { type: "select", options:[...country], key: "second_nationality", label: "Second nationality" },
+        //         { type: "select",options:[...country], key: "country", label: "Country of Residence" },
+        //     ],
+        //     [
+        //         { type: "text", key: "city", label: "City of Residence" },
+        //         { type: "number", key: "experience_years", label: "Years of Experience" },
+        //     ],
+        //     [
+        //         { type: "select", key: "french_level", 
+        //             options:[
+        //                 {label:'School', value:'school'},
+        //                 {label:'Beginner', value:'beginner'},
+        //                 {label:'Intermediate', value:'intermediate'},
+        //                 {label:'Advanced', value:'advanced'},
+        //                 {label:'Expert', value:'expert'},
+        //                 {label:'Proficient', value:'proficient'},
+        //                 {label:'Native', value:'native'},
+        //             ],
+        //             label: "French Level" 
+        //         },
+        //         { type: "select", key: "english_level", 
+        //             options:[
+        //                 {label:'School', value:'school'},
+        //                 {label:'Beginner', value:'beginner'},
+        //                 {label:'Intermediate', value:'intermediate'},
+        //                 {label:'Advanced', value:'advanced'},
+        //                 {label:'Expert', value:'expert'},
+        //                 {label:'Proficient', value:'proficient'},
+        //                 {label:'Native', value:'native'},
+        //             ],
+        //             label: "English Level" 
+        //         }
+        //     ]
+        // ]
+
+        // const fieldDocument= [
+        //     { type: "file", key: "resume", label: "Upload your CV", accept:".pdf,.doc,.docx,.jpg,.jpeg,.png" },
+        // ]
+
+        // const fieldReference= [
+        //     [
+        //         { type: "text", key: "full_name", label: "Full Name" },
+        //         { type: "text", key: "email", label: "Email" },
+        //     ],
+        //     [
+        //         { type: "text", key: "phone", label: "Phone" },
+        //         { type: "text", key: "function", label: "Function" },
+        //     ],
+        //     [
+        //         { type: "text", key: "company", label: "company" },
+        //     ],
+        // ]
+
+        const fieldAddOffre = [
+    [
+        { type: "text", key: "reference", label: "Post Reference / Référence du poste" },
+    ],
+    [
+        { type: "text", key: "position_title", label: "Post Title / Titre du poste" },
+        { type: "select", options:[...country], key: "country_duty_station", label: "Country / Pays" },
+    ],
+    [],
+    [
+        { type: "date", key: "published_at", label: "Published On / Publié le" },
+        { type: "date", key: "expires_at", label: "Closing Date / Date de clôture" },
+    ],
+    [
+        { type: "checkbox", key: "is_published", label: "Check to Publish / Cocher pour publier" },
+    ],
+]
+
+const fieldAddDocument = [
+    { type: "file", key: "resume", label: "Upload File / Importer un fichier" },
+]
+
+const fieldDiploma = [
+    [
+        { type: "text", key: "diploma", label: "Diploma / Diplôme" },
+        { type: "text", key: "option", label: "Diploma Option / Option du diplôme" },
+    ],
+]
+
+const fieldExperience = [
+    [
+        { type: "text", key: "company_name", label: "Company Name / Nom de l’entreprise" },
+        { type: "text", key: "position", label: "Position / Poste" },
+    ],
+    [
+        { type: "date", key: "start_date", label: "Start Date / Date de début" },
+        { type: "date", key: "end_date", label: "End Date / Date de fin" },
+    ],
+]
+
+const cgiarFiled = [
+    [
+        { type: "checkbox", key: "current", label: "Check if currently working for CGIAR center / Cocher si vous travaillez actuellement pour un centre du CGIAR" },
+    ],
+    [
+        { 
+            type: "select", 
+            key: "cgiar_center",
+            options: [
+                { label: 'AfricaRice', value: 'africarice' },
+                { label: 'Alliance Bioversity & CIAT', value: 'alliance_bioversity_ciat' },
+                { label: 'CIFOR', value: 'cifor' },
+                { label: 'CIMMYT', value: 'cimmyt' },
+                { label: 'CIP', value: 'cip' },
+                { label: 'ICARDA', value: 'icarda' },
+                { label: 'ICRAF', value: 'icraf' },
+                { label: 'ICRISAT', value: 'icrisat' },
+                { label: 'IFPRI', value: 'ifpri' },
+                { label: 'IITA', value: 'iita' },
+                { label: 'ILRI', value: 'ilri' },
+                { label: 'IRRI', value: 'irri' },
+                { label: 'IWMI', value: 'iwmi' },
+                { label: 'WorldFish', value: 'worldfish' },
             ],
-            [
-                { type: "select", key: "cgiar_center",
-                    options: [
-                        { label: 'AfricaRice', value: 'africarice' },
-                        { label: 'Alliance Bioversity & CIAT', value: 'alliance_bioversity_ciat' },
-                        { label: 'CIFOR', value: 'cifor' },
-                        { label: 'CIMMYT', value: 'cimmyt' },
-                        { label: 'CIP', value: 'cip' },
-                        { label: 'ICARDA', value: 'icarda' },
-                        { label: 'ICRAF', value: 'icraf' },
-                        { label: 'ICRISAT', value: 'icrisat' },
-                        { label: 'IFPRI', value: 'ifpri' },
-                        { label: 'IITA', value: 'iita' },
-                        { label: 'ILRI', value: 'ilri' },
-                        { label: 'IRRI', value: 'irri' },
-                        { label: 'IWMI', value: 'iwmi' },
-                        { label: 'WorldFish', value: 'worldfish' },
-                        ] ,
-                    label: "Provide Name of the centers" },
-            ],
-            [
-                { type: "text", key: "cgiar_email", label: "Provide your cgiar.org email" }
+            label: "Provide Name of the centers / Indiquez le nom du centre" 
+        },
+    ],
+    [
+        { type: "text", key: "cgiar_email", label: "Provide your cgiar.org email / Indiquez votre adresse e-mail cgiar.org" }
+    ]
+]
+
+const fieldExperienceOther = [
+    [
+        { type: "text", key: "company_name", label: "Company Name / Nom de l’entreprise" },
+        { type: "text", key: "position", label: "Position / Poste" },
+    ],
+    [
+        { type: "date", key: "start_date", label: "Start Date / Date de début" },
+        { type: "date", key: "end_date", label: "End Date / Date de fin" },
+    ],
+]
+
+const fieldIdentification = [
+    [
+        { type: "date", key: "birth_date", label: "Date of Birth / Date de naissance" },
+        { type: "text", key: "address", label: "Address / Adresse" },
+    ],
+    [
+        { 
+            type: "select", 
+            key: "gender", 
+            label: "Gender / Genre", 
+            options:[
+                {label: 'Male / Homme', value: 'male'},
+                {label: 'Female / Femme', value: 'female'},
+                {label: 'Other / Autre', value: 'other'},
             ]
-        ]
+        }
+    ]
+]
 
-        const fieldExperienceOther=[
-            [
-                { type: "text", key: "company_name", label: "Company Name" },
-                { type: "text", key: "position", label: "Position" },
+const fieldOrigin = [
+    [
+        { type: "select", options:[...country], key: "nationality", label: "Nationality / Nationalité" },
+        { type: "select", options:[...country], key: "second_nationality", label: "Second nationality / Deuxième nationalité" },
+        { type: "select", options:[...country], key: "country", label: "Country of Residence / Pays de résidence" },
+    ],
+    [
+        { type: "text", key: "city", label: "City of Residence / Ville de résidence" },
+        { type: "number", key: "experience_years", label: "Years of Experience / Années d’expérience" },
+    ],
+    [
+        { 
+            type: "select", 
+            key: "french_level", 
+            options:[
+                {label:'School / Scolaire', value:'school'},
+                {label:'Beginner / Débutant', value:'beginner'},
+                {label:'Intermediate / Intermédiaire', value:'intermediate'},
+                {label:'Advanced / Avancé', value:'advanced'},
+                {label:'Expert / Expert', value:'expert'},
+                {label:'Proficient / Compétent', value:'proficient'},
+                {label:'Native / Langue maternelle', value:'native'},
             ],
-            [
-                { type: "date", key: "start_date", label: "Start Date" },
-                { type: "date", key: "end_date", label: "End Date" },
+            label: "French Level / Niveau de français" 
+        },
+        { 
+            type: "select", 
+            key: "english_level", 
+            options:[
+                {label:'School / Scolaire', value:'school'},
+                {label:'Beginner / Débutant', value:'beginner'},
+                {label:'Intermediate / Intermédiaire', value:'intermediate'},
+                {label:'Advanced / Avancé', value:'advanced'},
+                {label:'Expert / Expert', value:'expert'},
+                {label:'Proficient / Compétent', value:'proficient'},
+                {label:'Native / Langue maternelle', value:'native'},
             ],
-        ]
+            label: "English Level / Niveau d’anglais" 
+        }
+    ]
+]
 
-        const fieldIdentification= [
-            [
-                { type: "date", key: "birth_date", label: "Date of Birth" },
-                { type: "text", key: "address", label: "Address" },
-            ],
-            [
-                { type: "select", key: "gender", label: "Gender", options:[
-                    {label: 'Male', value: 'male'},
-                    {label: 'Female', value: 'female'},
-                ]}
-            ]
-        ]
+const fieldDocument = [
+    { type: "file", key: "resume", label: "Upload your CV / Téléversez votre CV", accept:".pdf,.doc,.docx,.jpg,.jpeg,.png" },
+]
 
-        const fieldOrigin= [
-            [
-                { type: "select", options:[...country], key: "nationality", label: "Nationality" },
-                { type: "select", options:[...country], key: "second_nationality", label: "Second nationality" },
-                { type: "select",options:[...country], key: "country", label: "Country of Residence" },
-            ],
-            [
-                { type: "text", key: "city", label: "City of Residence" },
-                { type: "number", key: "experience_years", label: "Years of Experience" },
-            ],
-            [
-                { type: "select", key: "french_level", 
-                    options:[
-                        {label:'School', value:'school'},
-                        {label:'Beginner', value:'beginner'},
-                        {label:'Intermediate', value:'intermediate'},
-                        {label:'Advanced', value:'advanced'},
-                        {label:'Expert', value:'expert'},
-                        {label:'Proficient', value:'proficient'},
-                        {label:'Native', value:'native'},
-                    ],
-                    label: "French Level" 
-                },
-                { type: "select", key: "english_level", 
-                    options:[
-                        {label:'School', value:'school'},
-                        {label:'Beginner', value:'beginner'},
-                        {label:'Intermediate', value:'intermediate'},
-                        {label:'Advanced', value:'advanced'},
-                        {label:'Expert', value:'expert'},
-                        {label:'Proficient', value:'proficient'},
-                        {label:'Native', value:'native'},
-                    ],
-                    label: "English Level" 
-                }
-            ]
-        ]
+const fieldReference = [
+    [
+        { type: "text", key: "full_name", label: "Full Name / Nom complet" },
+        { type: "text", key: "email", label: "Email / Courriel" },
+    ],
+    [
+        { type: "text", key: "phone", label: "Phone / Téléphone" },
+        { type: "text", key: "function", label: "Function / Fonction" },
+    ],
+    [
+        { type: "text", key: "company", label: "Company / Entreprise" },
+    ],
+]
 
-        const fieldDocument= [
-            { type: "file", key: "resume", label: "Upload your CV", accept:".pdf,.doc,.docx,.jpg,.jpeg,.png" },
-        ]
 
-        const fieldReference= [
-            [
-                { type: "text", key: "full_name", label: "Full Name" },
-                { type: "text", key: "email", label: "Email" },
-            ],
-            [
-                { type: "text", key: "phone", label: "Phone" },
-                { type: "text", key: "function", label: "Function" },
-            ],
-            [
-                { type: "text", key: "company", label: "company" },
-            ],
-        ]
 
     const initialPayload={
         diplomas:{...initDiploma},
@@ -584,7 +749,7 @@ export function useApplyForm(){
         const formData = new FormData();
 
         // Ajouter les données JSON
-        formData.append('uuid',uuid );
+        formData.append('uuid',uuid ? uuid : '');
         // formData.append('identification', JSON.stringify(form.identification));
         // formData.append('origin', JSON.stringify(form.origin));
         // formData.append('diplomas', JSON.stringify(form.diplomas));
@@ -658,9 +823,19 @@ export function useApplyForm(){
         }
         });
 
-        console.log('Réponse du serveur :', response.data?.data?.message);
+        // console.log('Réponse du serveur :', response.data?.data?.message);
 
-        alert('Votre candidature a été soumis avec succès. ✅ | Your application has been successfully submitted. ✅');
+        console.log(uuid);
+        
+        const message = !uuid
+            ? 'Vos informations ont été mises à jour avec succès. ✅ | Your information has been successfully updated. ✅'
+            : 'Votre candidature a été soumise avec succès. ✅ | Your application has been successfully submitted. ✅';
+
+        if (uuid) {
+                alert(message);
+        }else{
+            Inertia.visit('/profile');
+        }
 
     } catch (error) {
         let message = error.response?.data?.message ? error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'

@@ -17,7 +17,7 @@ const setOPen=(data)=>{
 
 <template>
     <div class="w-full">
-        <div class="max-w-6xl mx-auto p-8 space-y-10 " >
+        <div class="space-y-10 " >
             <!-- <pre>{{ {user} }}</pre> -->
             <!-- Profil -->
             <div class="bg-gradient-to-r from-primary to-secondary text-white rounded-3xl p-8">

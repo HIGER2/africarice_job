@@ -2,7 +2,7 @@
   <div class="mb-3 w-full flex gap-2"
     :class="field.type =='checkbox' ? ' items-center gap-1': ' flex-col '"
   >
-    <label :for="field.key" class="font-medium ">{{ field.label }}</label>
+    <label :for="field.key" class="text-gray-700 text-[13px] font-medium">{{ field.label }}</label>
     <input
       v-bind="$attrs"
       v-if="field.type !== 'select' && field.type !== 'file' && field.type !== 'textarea' && field.type !== 'checkbox'"
