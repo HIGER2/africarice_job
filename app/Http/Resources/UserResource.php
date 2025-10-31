@@ -25,7 +25,7 @@ class UserResource extends JsonResource
 
             'application' => $this->whenLoaded('application') ? [
                 // 'id'         => $this->application->id,
-                'uuid'       => $this->application->uuid,
+                'uuid'       => optional($this->application)->uuid,
                 // 'created_at' => $this->application->created_at,
                 // 'updated_at' => $this->application->updated_at,
 

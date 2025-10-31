@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique()->nullable();
             $table->enum('application_type', ['normal', 'spontaneous'])->default('normal');
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // candidat
-            $table->foreignId('publication_id')->constrained()->onDelete('cascade'); // publication liée
+            $table->foreignId('publication_id')->nullable()->constrained()->onDelete('set null'); // publication liée
             $table->string('status')->default('pending');
             $table->date('date')->nullable();
             $table->timestamps();

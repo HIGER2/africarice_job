@@ -15,20 +15,11 @@ return new class extends Migration
                 'publication_id' => [
                     'update' => function (Blueprint $table) {
                         $table->foreignId('publication_id')->nullable()->change();
-                        // // Supprimer l'ancienne contrainte si elle existe
-                        // $table->dropForeign(['publication_id']);
-                        // // Modifier la colonne (ex: nullable)
-                        // $table->foreignId('publication_id')->nullable()->change();
-                        // // Recréer la contrainte
-                        // $table->foreign('publication_id')
-                        //     ->references('id')
-                        //     ->on('publications')
-                        //     ->onDelete('cascade');
                     },
                 ],
-                'application_type' => [
-                    'create' => fn(Blueprint $table) => $table->enum('application_type', ['normal', 'spontaneous'])->default('normal')
-                ],
+                // 'application_type' => [
+                //     'create' => fn(Blueprint $table) => $table->enum('application_type', ['normal', 'spontaneous'])->default('normal')
+                // ],
             ],
             'users' => [
                 // 'is_active' => [
