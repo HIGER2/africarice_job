@@ -48,6 +48,11 @@ class User extends Authenticatable
         return $this->hasOne(Application::class);
     }
 
+    public function candidat()
+    {
+        return $this->where('role', 'candidat');
+    }
+
     protected static function booted()
     {
         static::creating(function ($model) {

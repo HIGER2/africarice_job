@@ -108,7 +108,7 @@ class AppController extends Controller
         if ($uuid) {
             $publication = Publication::with('job')
                 ->where('uuid', $uuid)
-                ->where('is_closed', false)
+                ->where('status', 'published')
                 // ->where('expires_at', '>=', now())
                 ->first();
         }
