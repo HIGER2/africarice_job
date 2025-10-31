@@ -1133,7 +1133,7 @@ class AppController extends Controller
             'last_name' => 'required|string|max:255',
         ]);
 
-        $email = User::create(array_merge(['role' => 'admin'], $request->all()));
+        $email = User::create(array_merge(['role' => 'admin', 'is_active' => 'active'], $request->all()));
         return back()->with('message', 'Publication status updated successfully');
     }
     // Supprimer un email
