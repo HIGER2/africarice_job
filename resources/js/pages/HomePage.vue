@@ -53,23 +53,7 @@ function openApply(pub: any) {
 
 
 <template>
-  
-    <!-- <nav class="bg-white/95 backdrop-blur-md border-b border-gray-200 sticky top-0 z-20 px-4 p-3 shadow-sm">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <img src="https://static.wixstatic.com/media/0839e4_7910df264aee46ba85347ab33684d739~mv2_d_4782_1488_s_2.png/v1/fill/w_520,h_160,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/0839e4_7910df264aee46ba85347ab33684d739~mv2_d_4782_1488_s_2.png" alt="Logo" 
-                class="w-40 object-contain" />
-            </div>
-            <template v-if="user">
-                <AuthUser :user />
-            </template>
-            <template v-else>
-                <a href="/login" class="px-6 py-2.5 bg-gradient-to-r from-primary to-se text-white rounded-full font-medium hover:shadow-lg transform hover:scale-105 transition-all duration-200">
-                    Connexion
-                </a>
-            </template>
-        </div>
-    </nav> -->
+    
     <NavBar :user />
 
     <section class="relative bg-black text-white">
@@ -78,7 +62,7 @@ function openApply(pub: any) {
                 alt="Hero Illustration" class="w-full h-full object-cover" />
             <div class="absolute inset-0 gradient-overlay"></div>
         </div>
-        <div class="relative z-10 flex flex-col h-[210px] items-center justify-center text-center py-20 px-6">
+        <div class="relative z-10 flex flex-col h-[280px] items-center justify-center text-center py-20 px-6">
             <h1 class="text-5xl md:text-7xl font-extrabold mb-7 drop-shadow-lg">
                 Our Vacancies
                 <!-- / <span class="text-white">Nos postes vacants</span>  -->
@@ -86,31 +70,63 @@ function openApply(pub: any) {
             <!-- <p class="text-xl text-blue-100 mb-6 max-w-2xl">
                 Découvrez les meilleures opportunités de carrière
             </p> -->
-            <div class="flex gap-4 justify-center flex-wrap">
-                <div class="bg-white/20 backdrop-blur-md px-6 py-3 rounded-full text-white font-medium">
+            <div class="flex flex-col items-center  gap-2  justify-center flex-wrap">
+               <div class="flex gap-4 justify-center flex-wrap">
+                  <div class="px-6 py-3 rounded-full text-white font-medium">
                     <i class="uil uil-briefcase mr-2"></i>{{ publications?.data?.length }} Positions
                 </div>
-                <div class="bg-white/20 backdrop-blur-md px-6 py-3 rounded-full text-white font-medium">
+                <div class="px-6 py-3 rounded-full text-white font-medium">
                     <i class="uil uil-map-marker mr-2"></i>Multiple Countries
                 </div>
+               </div>
+               
             </div>
         </div>
     </section>
-
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <section class="w-full space-y-6">
-            <div class="mb-8">
-                <h1 class="text-4xl font-black text-gray-900 mb-2">
-                    Job offers 
-                    <span class="text-secondary">({{ publications?.data?.length }})</span>
-                </h1>
-               <p class="text-gray-600 text-lg">Click on a job offer to see the details</p>
+        <div class="flex justify-between items-center">
+            <div>
+              <h1 class="text-4xl font-black text-gray-900 mb-2">
+                  Job offers 
+                  <span class="text-secondary">({{ publications?.data?.length }})</span>
+              </h1>
+              <p class="text-gray-600 text-lg">Click on a job offer to see the details</p>
+              <!-- ✅ Fin de la section -->
             </div>
+          <!-- ✅ Section ajoutée ici -->
+              <div class="bg-blue-50 border mt-2 border-blue-200 p-4 rounded-xl mb-6 max-w-lg">
+                <p class="text-blue-900 text-sm leading-relaxed">
+                  Stay updated with our latest job openings.<br>
+                  <span class="text-gray-700">Inscrivez-vous pour être informé des nouvelles offres.</span>
+                </p>
+
+                <a 
+                  href="/register" 
+                  class="mt-3 inline-block px-5 py-2 bg-white border border-blue-300 text-blue-700 rounded-full text-sm font-medium shadow hover:bg-blue-100 transition"
+                >
+                  Create an account / Créer un compte
+                </a>
+              </div>
+        </div>
+
+          <!-- <div class="flex justify-between items-start">
+            <div class="mb-8">
+                  <h1 class="text-4xl font-black text-gray-900 mb-2">
+                      Job offers 
+                      <span class="text-secondary">({{ publications?.data?.length }})</span>
+                  </h1>
+                <p class="text-gray-600 text-lg">Click on a job offer to see the details</p>
+            </div>
+              <a href="/register" class="px-6 block max-w-max border text-[14px] shadow border-gray-200 bg-white text-primary py-3 rounded-full font-medium">
+                  Candidature spontannée
+                </a>
+          </div> -->
 
   <div 
     v-for="pub in publications?.data" 
     :key="pub?.uuid" 
-    class="job-card w-full bg-white p-6 shadow hover:shadow-md cursor-pointer rounded-2xl border border-gray-100"
+    class="job-card w-full bg-white p-6  hover:shadow cursor-pointer rounded-2xl border border-gray-200"
   >
   <div 
   class="flex flex-col md:flex-row justify-between items-start gap-6">
@@ -132,7 +148,8 @@ function openApply(pub: any) {
               </span>
               <span class="flex items-center gap-1">
                 <i class="uil uil-map-marker text-amber-500"></i>
-                {{ pub.job.city_duty_station }}, {{ pub.job.country_duty_station }}
+                  <!-- {{ pub.job.city_duty_station }} -->
+                 {{ pub.job.country_duty_station }}
               </span>
             </div>
           </div>
@@ -193,7 +210,7 @@ function openApply(pub: any) {
           >
             <span class="truncate max-w-xs">{{ file.name }}</span>
             <a 
-              :href="`/${file.url}`" 
+              :href="`${file.url}`" 
               :download="file.name"
               class="text-blue-600 hover:underline flex items-center space-x-1 mt-2 md:mt-0"
             >

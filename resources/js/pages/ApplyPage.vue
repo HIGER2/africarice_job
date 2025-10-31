@@ -1,11 +1,19 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import NavBar from './components/NavBar.vue';
 import OverlayLoader from './components/OverlayLoader.vue';
 import { useApplyForm } from './composables';
-import { usePage } from '@inertiajs/vue3'
+import { usePage } from '@inertiajs/inertia-vue3';
+// import { usePage } from '@inertiajs/vue3'
 
-// const page = usePage()
+const page = usePage()
+
+const notApply = computed(() => {
+  const url = page.url.value || ''
+  const query = new URLSearchParams(url.split('?')[1] || '')
+  return query.get('not_apply') || false
+})
+
 // const user = page.props?.auth?.user
 
 const props = defineProps({
@@ -29,7 +37,7 @@ const isLoading =ref(false)
 payLoad(props?.user?.data?.application)
 
 
-const handleSubmit=async(uuid)=>{
+const handleSubmit=async(uuid,notApply=false)=>{
   isLoading.value =true
   await submitForm(uuid)
   isLoading.value = false
@@ -126,7 +134,12 @@ const handleSubmit=async(uuid)=>{
             </div>
 
             <keep-alive>
-              <component :is="components[currentStep]" :documents="documentPreview" :form="form" />
+              <component 
+              :is="components[currentStep]" 
+              :documents="documentPreview" 
+              :form="form"
+              :notApply="notApply"
+              />
             </keep-alive>  
 
             <div class="flex justify-between border-t border-t-gray-200 bg-white mt-6 sticky bottom-0 p-4">
@@ -148,7 +161,7 @@ const handleSubmit=async(uuid)=>{
 
               <button 
                 v-else 
-                @click="handleSubmit(uuid)" 
+                @click="handleSubmit(uuid,notApply)" 
                 class="px-4 py-2 cursor-pointer bg-green-600 text-white rounded-lg"
               >
                 Submit

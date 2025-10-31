@@ -40,7 +40,7 @@ const columns = [
                 </div>
                 <div class="w-full">
                     
-                    <div class="overflow-x-auto border border-slate-200 bg-white ">
+                    <div class="overflow-x-auto  bg-white ">
                         <Table :columns="columns" :rows="data?.data">
                            <template #documents="{ row }">
                                <div class="flex flex-col gap-2">

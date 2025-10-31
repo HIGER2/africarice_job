@@ -24,8 +24,19 @@ class OffreResource extends JsonResource
             'type' => $this->type,
             'position_title' => $this->whenLoaded('job')->position_title,
             'recrutement_id' => $this->recrutement_id,
-            'is_published' => $this->is_published ? 'Publiée' : 'Non Publiée',
-            'is_closed' => $this->is_closed ? 'Cloturée' : 'Ouverte',
+            // 'is_published' => $this->is_published ? 'Publiée' : 'Non Publiée',
+            'status' => $this->status,
+            'ongoing' => $this->lastTracking?->status ?? "N/A",
+            'reason' => $this->whenLoaded('job')->reason,
+            'manager' => $this->whenLoaded('job')->manager,
+            'center' => $this->whenLoaded('job')->center,
+            'assign_by' => $this->whenLoaded('job', function ($relation) {
+                return [
+                    "name" => $relation->assign->name . ' ' . $relation->assign->last_name
+                ];
+            })['name'],
+            // 'is_closed' => $this->is_closed ? 'Cloturée' : 'Ouverte',
+
             'country_duty_station' => $this->whenLoaded('job')->country_duty_station,
             'published_at' => Carbon::parse($this->published_at)->format('d/m/Y'),
             'expires_at' => Carbon::parse($this->expires_at)->format('d/m/Y'),

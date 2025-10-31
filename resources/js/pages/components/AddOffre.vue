@@ -1,7 +1,7 @@
 
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import FormField from "./FormField.vue";
 import { useApplyForm } from "../composables";
 import Spinnercomponent from "./Spinnercomponent.vue";
@@ -9,8 +9,9 @@ import Spinnercomponent from "./Spinnercomponent.vue";
 const {fieldAddOffre,newOffre,fieldAddDocument,submitOffre}=useApplyForm()
 const open = ref(false);
 const loading =ref(false)
-
-
+const props =defineProps({
+  data: Object,
+})
 // Supprimer une référence
 const removeFile = (index: number) => {
   newOffre.document.splice(index, 1)
@@ -27,6 +28,20 @@ const handleSubmit = async() => {
   open.value = false
   loading.value = false
 };
+
+watch(
+  () => props.data,
+  (value) => {
+    if (value && value.assign) {
+      fieldAddOffre[2][0].options = value.assign.map((item) => ({
+        label: item.fullname,   // ou item.name + ' ' + item.last_name si nécessaire
+        value: item.id,            // l'id original
+      }))
+    }
+  },
+  { immediate: true }
+)
+
 
 </script>
 
@@ -59,6 +74,7 @@ const handleSubmit = async() => {
                   <h2 class="text-xl font-semibold">
                    Add a Job Offer
                 </h2>
+
                 <button 
                 type="button"
                   @click="open = false" 
@@ -75,7 +91,7 @@ const handleSubmit = async() => {
                 v-for="(groupe,index) in fieldAddOffre"
                 >
                 <!-- {{ groupe }} -->
-                <div class="flex items-end flex-col gap-2">
+                <div class="flex items-end gap-2">
                     <FormField
                     v-for="filed in groupe"
                     :label="filed.label"

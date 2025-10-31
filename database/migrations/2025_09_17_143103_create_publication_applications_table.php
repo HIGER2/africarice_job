@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('publication_applications', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique()->nullable();
+            $table->enum('application_type', ['normal', 'spontaneous'])->default('normal');
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // candidat
             $table->foreignId('publication_id')->constrained()->onDelete('cascade'); // publication liée
             $table->string('status')->default('pending');

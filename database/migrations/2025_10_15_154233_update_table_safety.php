@@ -11,11 +11,32 @@ return new class extends Migration
         // 🔹 Liste des tables et colonnes à vérifier / ajouter
         $tables = [
 
-            // 'references' => [
-            //     'company' => fn(Blueprint $table) => $table->string('company')->nullable(),
-            // ],
+            'publication_applications' => [
+                'publication_id' => [
+                    'update' => function (Blueprint $table) {
+                        $table->foreignId('publication_id')->nullable()->change();
+                        // // Supprimer l'ancienne contrainte si elle existe
+                        // $table->dropForeign(['publication_id']);
+                        // // Modifier la colonne (ex: nullable)
+                        // $table->foreignId('publication_id')->nullable()->change();
+                        // // Recréer la contrainte
+                        // $table->foreign('publication_id')
+                        //     ->references('id')
+                        //     ->on('publications')
+                        //     ->onDelete('cascade');
+                    },
+                ],
+                'application_type' => [
+                    'create' => fn(Blueprint $table) => $table->enum('application_type', ['normal', 'spontaneous'])->default('normal')
+                ],
+            ],
             'users' => [
-                'country_code' => fn(Blueprint $table) => $table->string('country_code')->nullable(),
+                // 'is_active' => [
+                //     'create' => fn(Blueprint $table) =>
+                //     $table->enum('is_active', ['active', 'not_active'])->default('not_active'),
+                //     'update' => fn(Blueprint $table) =>
+                //     $table->enum('is_active', ['active', 'not_active'])->nullable()->change(),
+                // ],
             ],
             // 'origins' => [
             //     'second_nationality' => fn(Blueprint $table) => $table->string('second_nationality')->nullable(),
@@ -27,9 +48,11 @@ return new class extends Migration
         foreach ($tables as $tableName => $columns) {
             if (Schema::hasTable($tableName)) {
                 Schema::table($tableName, function (Blueprint $table) use ($tableName, $columns) {
-                    foreach ($columns as $column => $definition) {
+                    foreach ($columns as $column => $actions) {
                         if (!Schema::hasColumn($tableName, $column)) {
-                            $definition($table); // Exécute la définition de colonne
+                            $actions['create']($table);
+                        } else {
+                            $actions['update']($table);
                         }
                     }
                 });

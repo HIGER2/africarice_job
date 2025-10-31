@@ -15,34 +15,73 @@ class OffreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'offre.uuid' => 'required|string|max:255',
+            'offre.reference' => 'required|string|max:255',
             'offre.position_title' => 'required|string|max:255',
             'offre.country_duty_station' => 'required|string|max:255',
             'offre.published_at' => 'required|date',
             'offre.expires_at' => 'required|date|after_or_equal:offre.published_at',
-            'offre.is_published' => 'required|in:true,false,1,0',
+            'offre.reason' => 'required|string|max:255',
+            'offre.manager' => 'required|string|max:255',
+            'offre.center' => 'required|string|max:255',
+            'offre.status' => 'required|string|max:255',
+            'offre.reason_replacement' => 'nullable|string|max:255',
+            'offre.assign_by' => 'nullable|string|max:255',
+            'offre.type' => 'nullable|string|max:255',
         ];
     }
+
 
     public function messages(): array
     {
         return [
-            'offre.position_title.required' => 'Le titre du poste est obligatoire.',
-            'offre.position_title.string' => 'Le titre du poste doit être une chaîne de caractères.',
-            'offre.position_title.max' => 'Le titre du poste ne peut pas dépasser 255 caractères.',
+            'offre.uuid.required' => 'The offer ID is required.',
+            'offre.uuid.string' => 'The offer ID must be a string.',
+            'offre.uuid.max' => 'The offer ID may not exceed 255 characters.',
 
-            'offre.country_duty_station.required' => 'Le pays du poste est obligatoire.',
-            'offre.country_duty_station.string' => 'Le pays du poste doit être une chaîne de caractères.',
-            'offre.country_duty_station.max' => 'Le pays du poste ne peut pas dépasser 255 caractères.',
+            'offre.reference.required' => 'The offer reference is required.',
+            'offre.reference.string' => 'The offer reference must be a string.',
+            'offre.reference.max' => 'The offer reference may not exceed 255 characters.',
 
-            'offre.published_at.required' => 'La date de publication est obligatoire.',
-            'offre.published_at.date' => 'La date de publication doit être une date valide.',
+            'offre.position_title.required' => 'The position title is required.',
+            'offre.position_title.string' => 'The position title must be a string.',
+            'offre.position_title.max' => 'The position title may not exceed 255 characters.',
 
-            'offre.expires_at.required' => 'La date d’expiration est obligatoire.',
-            'offre.expires_at.date' => 'La date d’expiration doit être une date valide.',
-            'offre.expires_at.after_or_equal' => 'La date d’expiration doit être postérieure ou égale à la date de publication.',
+            'offre.country_duty_station.required' => 'The country of duty station is required.',
+            'offre.country_duty_station.string' => 'The country of duty station must be a string.',
+            'offre.country_duty_station.max' => 'The country of duty station may not exceed 255 characters.',
 
-            'offre.is_published.required' => 'Le statut de publication est obligatoire.',
-            'offre.is_published.boolean' => 'Le statut de publication doit être vrai ou faux.',
+            'offre.published_at.required' => 'The published date is required.',
+            'offre.published_at.date' => 'The published date must be a valid date.',
+
+            'offre.expires_at.required' => 'The expiration date is required.',
+            'offre.expires_at.date' => 'The expiration date must be a valid date.',
+            'offre.expires_at.after_or_equal' => 'The expiration date must be after or equal to the published date.',
+
+            'offre.reason.required' => 'The reason is required.',
+            'offre.reason.string' => 'The reason must be a string.',
+            'offre.reason.max' => 'The reason may not exceed 255 characters.',
+
+            'offre.manager.required' => 'The manager is required.',
+            'offre.manager.string' => 'The manager must be a string.',
+            'offre.manager.max' => 'The manager may not exceed 255 characters.',
+
+            'offre.center.required' => 'The center is required.',
+            'offre.center.string' => 'The center must be a string.',
+            'offre.center.max' => 'The center may not exceed 255 characters.',
+
+            'offre.status.required' => 'The status of the offer is required.',
+            'offre.status.string' => 'The status of the offer must be a string.',
+            'offre.status.max' => 'The status of the offer may not exceed 255 characters.',
+
+            'offre.reason_replacement.string' => 'The reason for replacement must be a string.',
+            'offre.reason_replacement.max' => 'The reason for replacement may not exceed 255 characters.',
+
+            'offre.assign_by.string' => 'The assign by field must be a string.',
+            'offre.assign_by.max' => 'The assign by field may not exceed 255 characters.',
+
+            'offre.type.string' => 'The type must be a string.',
+            'offre.type.max' => 'The type may not exceed 255 characters.',
         ];
     }
 }

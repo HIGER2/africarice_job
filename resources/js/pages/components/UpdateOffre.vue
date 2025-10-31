@@ -19,7 +19,8 @@ interface OffreData {
 }
 
 const props = defineProps<{
-  row?: OffreData | null
+  row?: OffreData | null,
+  assign?: any
 }>();
 
 const emit = defineEmits<{
@@ -131,6 +132,21 @@ watch(isOpen, (value) => {
     document.body.style.overflow = '';
   }
 });
+
+
+watch(
+  () => props.assign,
+  (value) => {
+    if (value) {
+      fieldAddOffre[2][0].options = value.map((item) => ({
+        label: item.fullname,   // ou item.name + ' ' + item.last_name si nécessaire
+        value: item.id,            // l'id original
+      }))
+    }
+  },
+  { immediate: true }
+)
+
 </script>
 
 <template>
@@ -161,6 +177,9 @@ watch(isOpen, (value) => {
                     Référence: {{ row.reference }}
                   </p>
                 </div>
+                <!-- <pre>
+                    {{ row }}
+                </pre> -->
                 <button 
                   type="button"
                   :disabled="loading"
@@ -201,7 +220,7 @@ watch(isOpen, (value) => {
                 <!-- Groupes de champs -->
                  <!-- <pre>{{ newOffre.offre }}</pre> -->
                 <template v-for="(groupe, index) in fieldAddOffre" :key="`groupe-${index}`">
-                  <div class="flex flex-col gap-3">
+                  <div class="flex items-end gap-2">
                    <FormField
                       v-for="(field, fieldIndex) in groupe"
                       :key="`field-${index}-${fieldIndex}`"

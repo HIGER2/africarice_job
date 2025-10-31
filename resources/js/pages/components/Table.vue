@@ -10,9 +10,10 @@ const slots = useSlots();
 </script>
 
 <template>
-  <table class="min-w-full border-collapse divide-y divide-gray-200">
+ <div class="w-full overflow-x-auto border border-gray-200 rounded-md">
+    <table class="w-full border-collapse divide-y divide-gray-200">
     <!-- En-tête -->
-    <thead class="bg-slate-100">
+    <thead class="bg-gray-50">
       <tr>
         <th
           v-for="col in columns"
@@ -27,7 +28,7 @@ const slots = useSlots();
         <th
           v-if="slots.actions"
           scope="col"
-          class="px-6 sticky right-0 bg-slate-100 py-4 text-right text-[11px] font-bold text-primary uppercase tracking-wider"
+          class="px-6 sticky right-0 bg-gray-50 py-4 text-right text-[11px] font-bold text-primary uppercase tracking-wider"
         >
           Actions
         </th>
@@ -66,4 +67,5 @@ const slots = useSlots();
       </tr>
     </tbody>
   </table>
+ </div>
 </template>

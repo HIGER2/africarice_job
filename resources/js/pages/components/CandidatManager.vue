@@ -46,7 +46,7 @@ function fetchData() {
 <template>
   <div>
      <div class="w-full">
-                <div class="flex px-6 py-4  justify-between items-center w-full">
+                <div class="flex  py-4  justify-between items-center w-full">
                     <!-- <pre>{{ data }}</pre> -->
                     <!-- <h4 class="font-bold">Gerer les offres</h4> -->
                         <h2 class="text-2xl font-semibold mb-4">
@@ -71,7 +71,7 @@ function fetchData() {
                 </div>
                 <div class="w-full">
                     
-                    <div class="overflow-x-auto border border-slate-200 bg-white ">
+                    <div class="w-full bg-white ">
                         <Table :columns="columns" :rows="data?.data">
                            <template #documents="{ row }">
                                <div class="flex flex-col gap-2">

@@ -33,9 +33,12 @@ Route::get('/login', function () {
 Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/{step?}', [AppController::class, 'manager'])->name('dashboard');
     Route::get('/{step?}/{uuid}', [AppController::class, 'show'])->name('show');
+    Route::get('/offre/detail/{uuid}', [AppController::class, 'offreDetail'])->name('offre.detail');
     Route::post('/offre/add', [AppController::class, 'storeOffre'])->name('offre.add');
+
     Route::post('/offre/update-status/', [AppController::class, 'updateOffreStatus'])->name('offre.update.status');
     Route::post('/offre/delete/{uuid}', [AppController::class, 'deleteOffre'])->name('offre.delete');
+    Route::post('/offre/tracking', [AppController::class, 'storeOffreTranking'])->name('offre.tracking');
     Route::post('/parametre', [AppController::class, 'storeEmail'])->name('parametre');
     Route::post('/parametre/email', [AppController::class, 'storeEmail'])->name('email.add');
     Route::post('/parametre/user', [AppController::class, 'storeUser'])->name('user.add');
@@ -46,6 +49,12 @@ Route::get('/apply-job/{uuid?}', [AppController::class, 'applyJob'])
     ->middleware('auth')
     ->name('apply.job');
 
+Route::get('/completed', [AppController::class, 'completedProfile'])
+    ->middleware('auth')
+    ->name('apply.job');
+Route::post('/completed/save', [AppController::class, 'storeCompletedProfile'])->middleware('auth');
+
+Route::get('/apply-spontaneous', [AppController::class, 'spontanousApplication'])->middleware('auth');
 Route::post('/apply-job/save', [AppController::class, 'storeOrUpdate'])->middleware('auth');
 Route::get('/profile', [AppController::class, 'profile'])->middleware('auth');
 Route::post('/upload-cv', [AppController::class, 'uploadCv'])->name('cv.add')->middleware('auth');

@@ -36,8 +36,19 @@ class Recrutement extends Model
         'shared_working_arrangement',
         'initiative_lead',
         'initiative_personnel',
-        'salary_post'
+        'salary_post',
+
+        'manager',
+        'reason',
+        'reason_replacement',
+        'assign_by',
     ];
+
+
+    public function assign()
+    {
+        return $this->belongsTo(user::class, 'assign_by');
+    }
 
     protected static function booted()
     {
@@ -45,6 +56,4 @@ class Recrutement extends Model
             $model->uuid = Str::uuid()->toString();
         });
     }
-
-    
 }

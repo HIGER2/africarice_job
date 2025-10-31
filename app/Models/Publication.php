@@ -16,8 +16,8 @@ class Publication extends Model
         'uuid',
         'reference',
         'type',
-        'is_published',
-        'is_closed',
+        // 'is_published',
+        'status',
         'published_by',
         'published_at',
         'uuid',
@@ -25,9 +25,21 @@ class Publication extends Model
     ];
 
     protected $casts = [
-        'is_published' => 'boolean',
-        'is_closed' => 'boolean',
+        // 'is_published' => 'boolean',
+        // 'is_closed' => 'boolean',
     ];
+
+    public function trakings()
+    {
+        return $this->hasMany(TrakingPublication::class, 'publication_id');
+    }
+
+    public function lastTracking()
+    {
+        return $this->hasOne(TrakingPublication::class, 'publication_id')
+            ->ofMany('created_at', 'max'); // récupère celui avec la date max
+    }
+
 
     public function candidatures()
     {
@@ -57,15 +69,14 @@ class Publication extends Model
     // Scopes utiles
     public function scopePublished($query)
     {
-        return $query->where('is_published', true)
-            ->where('is_closed', false);
+        return $query->where('status', 'published');
     }
 
 
     public function scopeDate($query)
     {
         $now = Carbon::now('Africa/Abidjan');
-        return $query->where('is_published', true)
+        return $query->where('status', 'published')
             ->whereDate('published_at', '<=', $now)
             ->whereDate('expires_at', '>=', $now);
     }
@@ -90,6 +101,12 @@ class Publication extends Model
         $model->{$attribute} = $reference;
 
         return $reference;
+    }
+
+    public function updateStatus($data)
+    {
+        // 1. Créer un tracking
+        $this->trakings()->create($data);
     }
 
     protected static function booted()

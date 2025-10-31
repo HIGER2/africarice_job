@@ -15,6 +15,7 @@ class PublicationApplication extends Model
         'uuid',
         'user_id',
         'publication_id',
+        'application_type',
         'status',
         'date'
     ];
@@ -25,13 +26,17 @@ class PublicationApplication extends Model
     ];
 
     // Relations
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function publication() {
+    public function publication()
+    {
         return $this->belongsTo(Publication::class, 'publication_id');
     }
+
+
 
     protected static function booted()
     {

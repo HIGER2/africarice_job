@@ -9,6 +9,7 @@ use App\Http\Resources\CandidatureResource;
 use App\Http\Resources\OffreDetailResource;
 use App\Http\Resources\OffreResource;
 use App\Http\Resources\PublicationResource;
+use App\Http\Resources\PublicationTracking;
 use App\Http\Resources\UserCandidature;
 use App\Http\Resources\UserResource;
 use App\Mail\CandidateSubmittedToTeam;
@@ -48,6 +49,14 @@ class AppController extends Controller
             'user' => Auth::user(),
             'publications' => PublicationResource::collection($publications)
         ]);
+    }
+
+    public function offreDetail($uuid)
+    {
+
+        $publications = Publication::with('job')->where("uuid", $uuid)
+            ->first();
+        return response()->json(["data" => $publications]);
     }
 
     public function updateOffreStatus(Request $request)
@@ -90,11 +99,12 @@ class AppController extends Controller
         ]);
     }
 
-    public function applyJob($uuid = null)
+    public function applyJob(Request $request, $uuid = null)
     {
         $user = Auth::user();
-
         $publication = null;
+        $application_type = $request->query('application_type');
+
         if ($uuid) {
             $publication = Publication::with('job')
                 ->where('uuid', $uuid)
@@ -103,10 +113,31 @@ class AppController extends Controller
                 ->first();
         }
 
-
         return Inertia::render('ApplyPage', [
             'publication' => $publication,
             'uuid' => $publication ? $publication->uuid : null,
+            'user' => new UserResource(
+                $user->load(
+                    'application.diplomas',
+                    'application.cgiarInformation',
+                    'application.experiences',
+                    'application.identification',
+                    'application.origin',
+                    'application.references',
+                    'application.documents'
+                )
+            ),
+        ]);
+    }
+
+    public function completedProfile(Request $request)
+    {
+        $user = Auth::user();
+        // return Inertia::render('CompletedPage');
+
+        return Inertia::render('CompletedPage', [
+            // 'publication' => $publication,
+            // 'uuid' => $publication ? $publication->uuid : null,
             'user' => new UserResource(
                 $user->load(
                     'application.diplomas',
@@ -204,14 +235,22 @@ class AppController extends Controller
         if (!$user) return response()->json(['message' => 'Utilisateur non trouvé / User not found'], 404);
 
         session(['user_email' => $user->email]);
+
+
         $pin = rand(1000, 9999);
         $hash = Hash::make($pin);
         $user->pin = $pin;
         $user->save();
-        Mail::raw("Votre code PIN pour se connecter : $pin / Your login PIN is: $pin", function ($message) use ($user) {
-            $message->to($user->email)
-                ->subject('Code PIN de connexion / Login PIN');
-        });
+
+        if (env('APP_ENV') !== 'local') {
+            Mail::raw("Votre code PIN pour se connecter : $pin / Your login PIN is: $pin", function ($message) use ($user) {
+                $message->to($user->email)
+                    ->subject('Code PIN de connexion / Login PIN');
+            });
+        }
+
+
+
 
 
         return response()->json(['message' => 'Email envoyé avec le code PIN']);
@@ -223,9 +262,18 @@ class AppController extends Controller
             'pin' => 'required|digits:4',
         ]);
 
+        $IsCompleted = $request->query('is_complete');
+
+
         $email = session('user_email');
-        $user = User::where('email', $email)->where('pin', $request->pin)->first();
-        if (!$user) return response()->json(['message' => 'Code PIN incorrect | Incorrect PIN'], 401);
+
+        if (env('APP_ENV') === 'local') {
+            $user = User::where('email', $email)->first();
+        } else {
+            $user = User::where('email', $email)->where('pin', $request->pin)->first();
+            if (!$user) return response()->json(['message' => 'Code PIN incorrect | Incorrect PIN'], 401);
+        }
+
         // if(!$user || !Hash::check($request->pin, $user->pin)) return response()->json(['message'=>'Code PIN incorrect'], 401);
 
         // Effacer le PIN
@@ -233,7 +281,12 @@ class AppController extends Controller
         $user->save();
         Auth::login($user);
         // Retourner succès / token
-        return response()->json(['message' => 'Connexion réussie', 'user' => $user]);
+        $redirect = $user->is_active == 'active' ? '/' : '/completed';
+        return response()->json([
+            'message' => 'Connexion réussie',
+            'user' => $user,
+            'redirect' => $redirect
+        ]);
     }
 
 
@@ -246,7 +299,8 @@ class AppController extends Controller
 
             $data = $request->all(); // le JSON que tu envoies
 
-            $userId = Auth::user()->id;
+            $user = Auth::user();
+            $userId = $user->id;
             $applicationApplication = null;
             // Vérifier si la publication existe via UUID
             if (isset($request->uuid)) {
@@ -425,6 +479,186 @@ class AppController extends Controller
         }
     }
 
+
+    public function spontanousApplication(Request $request)
+    {
+        try {
+            // $validated = $request->validated();
+
+
+            DB::beginTransaction();
+
+            // $userId = Auth::user()->id;
+            // // Vérifier si la publication existe via UUID
+            // // 2. Application principale
+            // $application = Application::create(
+            //     [
+            //         'uuid' => Str::uuid(),
+            //         'user_id' => $userId,
+            //         'application_type' => 'spontaneous'
+            //     ]
+            // );
+
+            return Inertia::render('SpontaneousPage');
+
+            DB::commit();
+
+
+            return inertia::render('SpontaneousPage');
+            // return response()->json([
+            //     'success' => true,
+            //     'application_id' => $application->id,
+            // ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Erreur interne | Internal error',
+                'erreur' => $th->getMessage(),
+            ], 500);
+            //throw $th;
+        }
+    }
+
+
+    public function storeCompletedProfile(CandidatureRequest $request)
+    {
+        try {
+            $validated = $request->validated();
+
+            DB::beginTransaction();
+
+            $data = $request->all(); // le JSON que tu envoies
+            $user = Auth::user();
+            $userId = $user->id;
+            // 2. Application principale
+            $application = Application::firstOrCreate(
+                [
+                    'user_id' => $userId,
+                ],
+                [
+                    'uuid' => Str::uuid(),
+                    'user_id' => $userId,
+                ]
+            );
+            // 3. Diplomas
+            if (!empty($data['diplomas'])) {
+                foreach ($data['diplomas'] ?? [] as $d) {
+                    $application->diplomas()->updateOrCreate(
+                        [
+                            'application_id' => $application->id,
+                            'uuid'             => $d['uuid'] ?? null, // sécurité si pas d'id
+                        ],
+                        $d
+                    );
+                }
+            }
+
+            // 4. Experiences
+            if (!empty($data['experiences'])) {
+                foreach ($data['experiences'] ?? [] as $e) {
+                    $current = filter_var($e['current'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+
+                    $application->experiences()->updateOrCreate(
+                        [
+                            'application_id' => $application->id,
+                            'uuid'             => $e['uuid'] ?? null,
+                        ],
+                        [
+                            'company_name' => $e['company_name'] ?? null,
+                            'position'     => $e['position'] ?? null,
+                            'start_date'   => $e['start_date'] ?? null,
+                            'end_date'     => $e['end_date'] ?? null,
+                            'current'      => $current,
+                        ]
+                    );
+                }
+            }
+
+            // 5. References
+            if (!empty($data['references'])) {
+                foreach ($data['references'] ?? [] as $r) {
+                    $application->references()->updateOrCreate(
+                        [
+                            'application_id' => $application->id,
+                            'uuid'             => $r['uuid'] ?? null,
+                        ],
+                        $r
+                    );
+                }
+            }
+
+            // 6. CGIAR Information
+            if (!empty($data['cgiar_information'])) {
+                $cgiarData = $data['cgiar_information'] ?? [];
+
+                // sécuriser les booléens
+                if (isset($cgiarData['current'])) {
+                    $cgiarData['current'] = filter_var($cgiarData['current'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+                }
+
+                $application->cgiarInformation()->updateOrCreate(
+                    ['application_id' => $application->id],
+                    $cgiarData
+                );
+            }
+
+            // 7. Identification
+            if (!empty($data['identification'])) {
+                $application->identification()->updateOrCreate(
+                    ['application_id' => $application->id],
+                    $data['identification'] ?? []
+                );
+            }
+
+            // 8. Origin
+            if (!empty($data['origin'])) {
+                $application->origin()->updateOrCreate(
+                    ['application_id' => $application->id],
+                    $data['origin'] ?? []
+                );
+            }
+
+            // 9. Documents
+            if ($request->has('documents')) {
+                foreach ($request['documents'] as $index => $doc) {
+                    $uploadedFile = $request->file("documents.$index.file");
+
+                    if ($uploadedFile && $uploadedFile->isValid()) {
+                        $path = '/storage/' . $uploadedFile->store('cv', 'public');
+
+                        $application->documents()->updateOrCreate(
+                            [
+                                'id'             => $doc['id'] ?? null,
+                                // 'application_id' => $application->id,
+                            ],
+                            [
+                                'path' => $path,
+                                'name' => $uploadedFile->getClientOriginalName(),
+                            ]
+                        );
+                    }
+                }
+            }
+
+            // Auth::user()->update(['is_active' => 'active']);
+            $user['is_active'] = 'active';
+            $user->save();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => "lololo",
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Erreur interne | Internal error',
+                'erreur' => $th->getMessage(),
+            ], 500);
+            //throw $th;
+        }
+    }
+
     public function manager(Request $request, $step = 'offres')
     {
         $data = [];
@@ -433,13 +667,22 @@ class AppController extends Controller
         switch ($step) {
             case 'offres':
                 Publication::whereDate('expires_at', '<', Carbon::now('Africa/Abidjan')->toDateString())
-                    ->where('is_closed', false)
-                    ->update(['is_closed' => true]);
+                    ->where('status', '!=', 'closed')
+                    ->update(['status' => 'closed']);
+                $offre = OffreResource::collection(Publication::with(['job', 'files', 'candidatures.user', 'lastTracking'])->orderBy('created_at', 'desc')->get());
+                $admins = User::where('role', 'admin')
+                    ->select('id', 'name', 'last_name')
+                    ->selectRaw("CONCAT(name, ' ', last_name) as fullname")
+                    ->get();
 
-                $data = OffreResource::collection(Publication::with(['job', 'files', 'candidatures.user'])->orderBy('created_at', 'desc')->get());
+                $data = (object)[
+                    "offer" => $offre,
+                    "assign" => $admins
+                ];
+
                 break;
             case 'candidatures':
-                $data = CandidatureResource::collection(PublicationApplication::with(['publication.job', 'user.application.origin', 'user.application.diplomas', 'user.application.documents'])->orderBy('created_at', 'desc')->get());
+                $data = CandidatureResource::collection(PublicationApplication::with(['publication.job', 'publication', 'user.application.origin', 'user.application.diplomas', 'user.application.documents'])->orderBy('created_at', 'desc')->get());
                 break;
             case 'candidat':
                 $data = UserCandidature::collection(
@@ -496,6 +739,15 @@ class AppController extends Controller
                         ->get()
                 );
                 break;
+            case 'offerTracker':
+                $data = new PublicationTracking(
+                    Publication::with([
+                        'trakings',
+                    ])
+                        ->where('uuid', $uuid)
+                        ->first()
+                );
+                break;
             case 'candidatures':
                 $data = CandidatureResource::collection(PublicationApplication::with(['publication.job', 'user.application.origin', 'user.application.documents'])
                     ->where('uuid', $uuid)
@@ -528,6 +780,134 @@ class AppController extends Controller
         ]);
     }
 
+    public function offorTracker($uuid)
+    {
+        $data = [];
+        $data = OffreDetailResource::collection(
+            Publication::with([
+                'job',
+                'candidatures',
+                'files'
+            ])
+                ->where('uuid', $uuid)
+                ->get()
+        );
+
+        return Inertia::render('DetailPage', [
+            'step' => 3,
+            'user' => Auth::user(),
+            'data' => $data
+        ]);
+    }
+
+    // public function storeOffre(OffreRequest $request)
+    // {
+    //     try {
+    //         $validated = $request->validated();
+
+    //         DB::beginTransaction();
+
+    //         $dataPublication = [
+    //             'type'          => $request->offre['type'],
+    //             'published_by'  => Auth::id(),
+    //             'expires_at'    => $request->offre['expires_at'],
+    //             'is_published'  => filter_var($request->offre['is_published'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
+    //             'is_closed' => Carbon::parse($request->offre['expires_at'], 'Africa/Abidjan')->toDateString() < Carbon::now('Africa/Abidjan')->toDateString() ? true : false,
+    //         ];
+
+    //         $publication = Publication::where("uuid", $request->offre["uuid"])->first();
+
+    //         if ($publication) {
+    //             // Ancienne date déjà enregistrée
+    //             $newDate = Carbon::parse($request->offre['published_at']);
+    //             $oldDate = Carbon::parse($publication->published_at);
+    //             if (!$newDate->eq($oldDate)) {
+    //                 // Vérifie si la date de publication actuelle n'est pas encore passée
+    //                 if ($oldDate->lt(Carbon::now())) {
+    //                     return response()->json([
+    //                         'status' => 'error',
+    //                         'message' => 'Unable to update: the publication date has already passed and cannot be modified.',
+    //                     ], 400);
+    //                 }
+    //                 $dataPublication["published_at"] = $request->offre['published_at'];
+    //             }
+
+    //             $publication->update($dataPublication);
+
+    //             $publication->job()->update([
+    //                 'position_title'       => $request->offre['position_title'],
+    //                 'country_duty_station' => $request->offre['country_duty_station'],
+    //             ]);
+    //         } else {
+    //             // 🔹 uuid introuvable → créer une nouvelle publication
+    //             $dataPublication["published_at"] = $request->offre['published_at'];
+    //             $recrutement = Recrutement::create([
+    //                 'position_title'       => $request->offre['position_title'],
+    //                 'country_duty_station' => $request->offre['country_duty_station'],
+    //             ]);
+
+    //             $publication = Publication::create(array_merge($dataPublication, [
+    //                 'recrutement_id' => $recrutement->id,
+    //             ]));
+    //         }
+
+    //         // 🔹 Sauvegarde des documents
+    //         if ($request->hasFile('documents')) {
+    //             // 🔹 3. Récupérer le premier document (ex: CV)
+    //             $document = $publication?->files()->first();
+
+    //             $file = $request->file('documents')[0];
+    //             // 🔹 5. Enregistrer le nouveau fichier
+    //             $path = '/storage/' . $file->store('documents', 'public');
+    //             $filename = $file->getClientOriginalName();
+
+    //             // 🔹 6. Mettre à jour ou créer le document
+    //             if ($document) {
+    //                 // 🔹 4. Supprimer l'ancien fichier si existe
+    //                 $relativePath = str_replace('/storage/', '', $document->path);
+    //                 if ($relativePath && Storage::disk('public')->exists($relativePath)) {
+    //                     Storage::disk('public')->delete($relativePath);
+    //                 }
+
+    //                 $document->update([
+    //                     'name' => $filename,
+    //                     'path' => $path,
+    //                     // 'type' => 'cv', // optionnel
+    //                 ]);
+    //             } else {
+    //                 $document = $publication->files()->create([
+    //                     'name' => $filename,
+    //                     'path' => $path,
+    //                     // 'type' => 'cv',
+    //                 ]);
+    //             }
+
+    //             // foreach ($request->file('documents') as $file) {
+    //             //     PublicationFile::create([
+    //             //         'publication_id' => $publication->id,
+    //             //         'path'           => 'storage/' . $file->store('documents', 'public'),
+    //             //         'name'           => $file->getClientOriginalName(),
+    //             //     ]);
+    //             // }
+    //         }
+
+    //         DB::commit();
+
+    //         return response()->json([
+    //             'success'        => true,
+    //             'publication_id' => $publication->id,
+    //         ]);
+    //     } catch (\Throwable $th) {
+    //         DB::rollBack();
+
+    //         return response()->json([
+    //             'message' => 'Erreur interne',
+    //             'erreur'  => $th->getMessage(),
+    //         ], 500);
+    //     }
+    // }
+
+
     public function storeOffre(OffreRequest $request)
     {
         try {
@@ -535,63 +915,76 @@ class AppController extends Controller
 
             DB::beginTransaction();
 
-            $dataPublication = [
-                'type'          => 'public',
-                'published_by'  => Auth::id(),
-                'expires_at'    => $request->offre['expires_at'],
-                'is_published'  => filter_var($request->offre['is_published'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
-                'is_closed' => Carbon::parse($request->offre['expires_at'], 'Africa/Abidjan')->toDateString() < Carbon::now('Africa/Abidjan')->toDateString() ? true : false,
-            ];
+            $offre = $request->offre;
 
-            $publication = Publication::where("uuid", $request->offre["uuid"])->first();
-
-            if ($publication) {
-                // Ancienne date déjà enregistrée
-                $newDate = Carbon::parse($request->offre['published_at']);
-                $oldDate = Carbon::parse($publication->published_at);
-                if (!$newDate->eq($oldDate)) {
-                    // Vérifie si la date de publication actuelle n'est pas encore passée
-                    if ($oldDate->lt(Carbon::now())) {
-                        return response()->json([
-                            'status' => 'error',
-                            'message' => 'Unable to update: the publication date has already passed and cannot be modified.',
-                        ], 400);
-                    }
-                    $dataPublication["published_at"] = $request->offre['published_at'];
-                }
-
-                $publication->update($dataPublication);
-
-                $publication->job()->update([
-                    'position_title'       => $request->offre['position_title'],
-                    'country_duty_station' => $request->offre['country_duty_station'],
-                ]);
-            } else {
-                // 🔹 uuid introuvable → créer une nouvelle publication
-                $dataPublication["published_at"] = $request->offre['published_at'];
-                $recrutement = Recrutement::create([
-                    'position_title'       => $request->offre['position_title'],
-                    'country_duty_station' => $request->offre['country_duty_station'],
-                ]);
-
-                $publication = Publication::create(array_merge($dataPublication, [
-                    'recrutement_id' => $recrutement->id,
-                ]));
+            // Déterminer le statut
+            $status = $offre['status'] ?? 'pending';
+            if (Carbon::parse($offre['expires_at'], 'Africa/Abidjan')
+                ->lt(Carbon::now('Africa/Abidjan'))
+            ) {
+                $status = 'closed';
             }
 
-            // 🔹 Sauvegarde des documents
-            if ($request->hasFile('documents')) {
-                // 🔹 3. Récupérer le premier document (ex: CV)
-                $document = $publication?->files()->first();
+            // Vérifier si la publication existe
+            $publication = Publication::where("uuid", $offre["uuid"])->first();
 
+            if ($publication) {
+                // 🔹 Mise à jour de la publication
+                $publication->update([
+                    'type'         => $offre['type'] ?? null,
+                    'published_by' => Auth::id(),
+                    'published_at' => $offre['published_at'],
+                    'expires_at'   => $offre['expires_at'],
+                    'status'       => $status,
+                ]);
+
+                // 🔹 Mise à jour du recrutement lié
+                $publication->job()->update([
+                    'reference'           => $offre['reference'],
+                    'position_title'      => $offre['position_title'],
+                    'country_duty_station' => $offre['country_duty_station'],
+                    'center'              => $offre['center'],
+                    'manager'             => $offre['manager'],
+                    'reason'              => $offre['reason'],
+                    'reason_replacement'  => $offre['reason_replacement'] ?? null,
+                    'assign_by'           => $offre['assign_by'] ?? Auth::id(),
+                ]);
+            } else {
+                // 🔹 Création du recrutement
+                $recrutement = Recrutement::create([
+                    'reference'           => $offre['reference'],
+                    'position_title'      => $offre['position_title'],
+                    'country_duty_station' => $offre['country_duty_station'],
+                    'center'              => $offre['center'],
+                    'manager'             => $offre['manager'],
+                    'reason'              => $offre['reason'],
+                    'reason_replacement'  => $offre['reason_replacement'] ?? null,
+                    'assign_by'           => $offre['assign_by'] ?? Auth::id(),
+                ]);
+
+                // 🔹 Création de la publication
+                $publication = Publication::create([
+                    'uuid'         => $offre['uuid'],
+                    'reference'    => $offre['reference'],
+                    'type'         => $offre['type'] ?? null,
+                    'published_by' => Auth::id(),
+                    'published_at' => $offre['published_at'],
+                    'expires_at'   => $offre['expires_at'],
+                    'status'       => $status,
+                    'recrutement_id' => $recrutement->id,
+                ]);
+            }
+
+            // 🔹 Sauvegarde ou mise à jour du fichier
+            if ($request->hasFile('documents')) {
                 $file = $request->file('documents')[0];
-                // 🔹 5. Enregistrer le nouveau fichier
                 $path = '/storage/' . $file->store('documents', 'public');
                 $filename = $file->getClientOriginalName();
 
-                // 🔹 6. Mettre à jour ou créer le document
+                $document = $publication->files()->first();
+
                 if ($document) {
-                    // 🔹 4. Supprimer l'ancien fichier si existe
+                    // Supprime l’ancien
                     $relativePath = str_replace('/storage/', '', $document->path);
                     if ($relativePath && Storage::disk('public')->exists($relativePath)) {
                         Storage::disk('public')->delete($relativePath);
@@ -600,30 +993,53 @@ class AppController extends Controller
                     $document->update([
                         'name' => $filename,
                         'path' => $path,
-                        // 'type' => 'cv', // optionnel
                     ]);
                 } else {
-                    $document = $publication->files()->create([
+                    $publication->files()->create([
                         'name' => $filename,
                         'path' => $path,
-                        // 'type' => 'cv',
                     ]);
                 }
-
-                // foreach ($request->file('documents') as $file) {
-                //     PublicationFile::create([
-                //         'publication_id' => $publication->id,
-                //         'path'           => 'storage/' . $file->store('documents', 'public'),
-                //         'name'           => $file->getClientOriginalName(),
-                //     ]);
-                // }
             }
 
             DB::commit();
 
             return response()->json([
-                'success'        => true,
+                'success' => true,
                 'publication_id' => $publication->id,
+                'status' => $status,
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Erreur interne',
+                'erreur' => $th->getMessage(),
+            ], 500);
+        }
+    }
+
+
+    public function storeOffreTranking(Request $request)
+    {
+        try {
+            // $validated = $request->validated();
+
+            $publication = Publication::where("uuid", $request["uuid"])->first();
+
+            if (!$publication) {
+                return response()->json([
+                    'message' => 'Job publication not found.'
+                ], 404);
+            }
+
+            // Si tu veux mettre à jour ou créer un tracking
+            $tracking = $publication->updateStatus($request->all());
+
+
+            return response()->json([
+                'success'        => true,
+                'tracking' => $tracking,
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -735,5 +1151,74 @@ class AppController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/login'); // Redirige vers la page de login
+    }
+
+    /**
+     * Gère les relations multiples (diplomas, references, etc.)
+     */
+    private function syncData($application, string $relation, array $items)
+    {
+        foreach ($items as $item) {
+            $application->$relation()->updateOrCreate(
+                ['uuid' => $item['uuid'] ?? null],
+                $item
+            );
+        }
+    }
+
+    /**
+     * Gère les expériences (avec booléen current)
+     */
+    private function syncExperiences($application, array $experiences)
+    {
+        foreach ($experiences as $e) {
+            $application->experiences()->updateOrCreate(
+                ['uuid' => $e['uuid'] ?? null],
+                [
+                    'company_name' => $e['company_name'] ?? null,
+                    'position'     => $e['position'] ?? null,
+                    'start_date'   => $e['start_date'] ?? null,
+                    'end_date'     => $e['end_date'] ?? null,
+                    'current'      => filter_var($e['current'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
+                ]
+            );
+        }
+    }
+
+    /**
+     * Gère les relations simples (1-to-1)
+     */
+    private function syncSingle($application, string $relation, array $data)
+    {
+        if (!empty($data)) {
+            if (isset($data['current'])) {
+                $data['current'] = filter_var($data['current'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+            }
+            $application->$relation()->updateOrCreate(['application_id' => $application->id], $data);
+        }
+    }
+
+    /**
+     * Gère l’upload et la sauvegarde des documents
+     */
+    private function syncDocuments($application, Request $request)
+    {
+        if ($request->has('documents')) {
+            foreach ($request['documents'] as $index => $doc) {
+                $file = $request->file("documents.$index.file");
+
+                if ($file && $file->isValid()) {
+                    $path = '/storage/' . $file->store('cv', 'public');
+
+                    $application->documents()->updateOrCreate(
+                        ['id' => $doc['id'] ?? null],
+                        [
+                            'path' => $path,
+                            'name' => $file->getClientOriginalName(),
+                        ]
+                    );
+                }
+            }
+        }
     }
 }

@@ -36,9 +36,9 @@ const components={
 <template>
   <div>
     <DefaultLayout :step="step" :user="user">
-        <div class="flex-1 overflow-auto py-5  bg-white">
+        <div class="w-full">
             <!-- <pre>{{ data }}</pre> -->
-        <component :is="components[step]" v-bind="props" />
+          <component :is="components[step]" v-bind="props" />
         </div>
        
     </DefaultLayout>

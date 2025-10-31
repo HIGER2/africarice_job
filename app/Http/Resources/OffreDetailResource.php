@@ -22,8 +22,8 @@ class OffreDetailResource extends JsonResource
             'type' => $this->type,
             'recrutement_id' => $this->recrutement_id,
             'published_by' => $this->published_by,
-            'is_published' => $this->is_published,
-            'is_closed' => $this->is_closed,
+            // 'is_published' => $this->is_published,
+            'status' => $this->status,
             'published_at' => $this->published_at,
             'expires_at' => $this->expires_at,
             // 'created_at' => $this->created_at,
@@ -36,6 +36,14 @@ class OffreDetailResource extends JsonResource
                     'code_recrutement' => $this->job->code_recrutement,
                     'position_title' => $this->job->position_title,
                     'center'         => $this->job->center,
+                    'reason'         => $this->job->reason,
+                    'manager'         => $this->job->manager,
+                    'reason_replacement'         => $this->job->reason_replacement,
+                    'assign_by' => $this->whenLoaded('job', function ($relation) {
+                        return [
+                            "name" => $relation->assign->name . ' ' . $relation->assign->last_name
+                        ];
+                    })['name'],
                     'country_duty_station' => $this->job->country_duty_station,
                     'city_duty_station'    => $this->job->city_duty_station,
                     'grade'          => $this->job->grade,

@@ -6,7 +6,8 @@ import FormField from './FormField.vue';
 
 const props =defineProps({
   form: Object,
-  documents: Array
+  documents: Array,
+  notApply: Boolean
 })
 
 const initReference={
@@ -37,37 +38,39 @@ const removeReference = (index: number) => {
 <template>
 <div class="w-full">
   <!-- References Section -->
-  <h2 class="text-xl font-bold mb-4">References</h2>
+  <div v-if="!notApply">
+        <h2 class="text-xl font-bold mb-4">References</h2>
 
-  <div class="w-full mb-2 border-b border-b-gray-300 py-3" 
-       v-for="(refItem, indexRef) in form.references" :key="indexRef">
-    <div class="w-full flex gap-2" v-for="(fieldGroup, index) in fieldReference" :key="index">
-      <template v-for="value in fieldGroup" :key="value.key">
-        <FormField
-          :field="value"
-          v-model="form.references[indexRef][value.key]"
-        />
-      </template>
-    </div>
+      <div class="w-full mb-2 border-b border-b-gray-300 py-3" 
+          v-for="(refItem, indexRef) in form.references" :key="indexRef">
+        <div class="w-full flex gap-2" v-for="(fieldGroup, index) in fieldReference" :key="index">
+          <template v-for="value in fieldGroup" :key="value.key">
+            <FormField
+              :field="value"
+              v-model="form.references[indexRef][value.key]"
+            />
+          </template>
+        </div>
 
-    <button 
-      v-if="indexRef > 0 && !form.references[indexRef]?.uuid" 
-      type="button" 
-      @click="() => removeReference(indexRef)" 
-      class="p-1 w-full bg-red-50 text-red-900 text-[11px] font-bold cursor-pointer rounded-md border border-gray-200 mt-2"
-    >
-      Remove this reference
-    </button>
+        <button 
+          v-if="indexRef > 0 && !form.references[indexRef]?.uuid" 
+          type="button" 
+          @click="() => removeReference(indexRef)" 
+          class="p-1 w-full bg-red-50 text-red-900 text-[11px] font-bold cursor-pointer rounded-md border border-gray-200 mt-2"
+        >
+          Remove this reference
+        </button>
+      </div>
+
+      <button 
+        type="button" 
+        @click="addReference" 
+        class="p-1 w-full bg-gray-50 my-3 text-[11px] font-bold cursor-pointer rounded-md border border-gray-200"
+      >
+        Add a reference
+      </button>
+
   </div>
-
-  <button 
-    type="button" 
-    @click="addReference" 
-    class="p-1 w-full bg-gray-50 my-3 text-[11px] font-bold cursor-pointer rounded-md border border-gray-200"
-  >
-    Add a reference
-  </button>
-
   <!-- CV Upload Section -->
   <div class="w-full" v-if="!documents?.length > 0">
     <h2 class="text-xl font-bold mb-4">CV</h2>

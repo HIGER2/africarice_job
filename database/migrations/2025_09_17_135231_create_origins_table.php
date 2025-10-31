@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('nationality');
             $table->string('country');
             $table->string('city');
+            $table->string('second_nationality')->nullable();
             $table->integer('experience_years');
             $table->string('french_level');
             $table->string('english_level');

@@ -48,33 +48,43 @@ const tabs = [
 
 <template>
   <div>
-     <div class="w-full h-screen eoverflow-hidden flex flex-col bg-slate-100">
-        <!-- {{ data }}dqwd -->
-        <nav class="w-full flex  ">
-                <div class="flex items-center">
+     <div class="w-full h-screen">
+        <div class="h-screen fixed w-[245px] border-r border-gray-100 bg-gray-50">
+            <div class="flex items-center py-3 px-5">
+                <a href="/">
+                        <img src="https://static.wixstatic.com/media/0839e4_7910df264aee46ba85347ab33684d739~mv2_d_4782_1488_s_2.png/v1/fill/w_520,h_160,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/0839e4_7910df264aee46ba85347ab33684d739~mv2_d_4782_1488_s_2.png" alt="Logo" 
+                    class="w-30 object-contain" />
+                </a>
+            </div>
+            <div class="flex flex-col p-4">
                     <a 
                     :href="'/manager/'+value.path"
                     type="button" 
                     v-for="(value,index) in tabs"
                     :class="
                     [
-                    step== value.path ? 'bg-white border-r border-l border-slate-300' : 'border-b hover:bg-slate-200',
+                    step== value.path ? 'bg-gray-200' : ' hover:bg-gray-200',
                     index==0 ? ' border-l-0' : ''
                     ]
                     "
-                    class=" p-3 cursor-pointer text-[13px] justify-center  rounded-tr-2xl flex items-center gap-1  border-slate-300 rounded-tl-2xl   min-w-44 font-medium  text-gray-600">
+                    class=" p-2 cursor-pointer text-[13px] mb-2  rounded-lg flex items-center gap-1  border-slate-300    min-w-44 font-medium  text-gray-600">
                     <span class="text-lg">
                         <i :class="value.icon"></i>
                     </span>
                     <span> {{ value.label }}</span>
                 </a>
-                </div>
-                <div class="flex-1 flex items-center justify-end px-4 border-b border-slate-300">
-                    <AuthUser :user="user" />
-                </div>
-        </nav>
-        <!-- <pre>{{ data }}</pre> -->
-        <slot/>
+        </div>
+        </div>
+        <div class="w-[calc(100%-245px)] flex flex-col relative h-screen left-[245px] overflow-hidden">
+            <nav class="w-full sticky top-0  z-10 bg-white flex p-2 border-b border-gray-100">
+                    <div class="flex-1 flex items-center justify-end">
+                        <AuthUser :user="user" />
+                    </div>
+            </nav>
+            <div class="flex-1 overflow-x-auto p-6">
+                <slot/>
+            </div>
+       </div>
     </div>
   </div>
 </template>

@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'uuid',
         'last_name',
+        'is_active',
         'phone',
         'role',
         'pin',

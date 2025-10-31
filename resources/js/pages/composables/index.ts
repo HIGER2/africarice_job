@@ -12,10 +12,16 @@ import * as XLSX from 'xlsx';
 import { usePage } from '@inertiajs/vue3'
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
+import {useFiledStore } from "./useField";
+import { useRepository } from "./useRepository";
+import { usePayloadStore} from "./usePayload";
 
 
 export function useApplyForm(){
 
+    const useFiled = useFiledStore()
+    const repository=useRepository()
+    const usePayload=usePayloadStore()
     
     const components=[
         ApplyStepIdentification,
@@ -74,447 +80,6 @@ export function useApplyForm(){
             english_level: "",
         }
 
-    // form fields 
-
-    // const fieldAddOffre= [
-    //     [
-    //         { type: "text", key: "reference", label: "Reference du post" },
-    //     ],
-    //     [
-    //         { type: "text", key: "position_title", label: "Titre du post" },
-    //         { type: "select",options:[...country], key: "country_duty_station", label: "Pays" },
-    //     ],
-    //     [
-    //     ],
-    //     // [
-    //     //     { type: "text", key: "reference", label: "ToR" },
-    //     // ],
-    //     [
-    //         { type: "date", key: "published_at", label: "Publié le" },
-    //         { type: "date", key: "expires_at", label: "Date de cloture" },
-    //     ],
-    //     [
-    //         { type: "checkbox", key: "is_published", label: "Cocher pour publier" },
-    //     ],
-    // ]
-
-    // const fieldAddDocument= [
-    //     { type: "file", key: "resume", label: "" },
-    // ]
-    
-    // const fieldDiploma= [
-    //     [
-    //         { type: "text", key: "diploma", label: "Diplôme " },
-    //         { type: "text", key: "option", label: "Option Diplôme " },
-    //     ],
-    // ]
-    // const fieldExperience=[
-    //     [
-    //     { type: "text", key: "company_name", label: "Nom de l'entreprise" },
-    //     { type: "text", key: "position", label: "Fonction" },
-    //     ],
-    //     [
-    //     { type: "date", key: "start_date", label: "Date de début" },
-    //     { type: "date", key: "end_date", label: "Date de fin" },
-    //     ],
-        
-    // ]
-    // const cgiarFiled =[
-    //     [
-    //     { type: "checkbox", key: "current", label: "Cochez si vous y travaillez actuellement" },
-    //     ],
-    //     [
-    //     { type: "text", key: "cgiar_center", label: "Dans lequel des centres CGIAR avez-vous déjà travaillé ?" },
-    //     ],
-    //     [
-    //         { type: "text", key: "cgiar_email", label: "Indiquez votre email cgiar.org" }
-    //     ]
-    // ]
-    // const fieldExperienceOther=[
-    //     [
-    //     { type: "text", key: "company_name", label: "Nom de l'entreprise" },
-    //     { type: "text", key: "position", label: "Fonction" },
-    //     ],
-    //     [
-    //     { type: "date", key: "start_date", label: "Date de début" },
-    //     { type: "date", key: "end_date", label: "Date de fin" },
-    //     ],
-    // ]
-    // const fieldIdentification= [
-    //     [
-    //     { type: "date", key: "birth_date", label: "Date de naissance" },
-    //     { type: "text", key: "address", label: "Adresse" },
-    //     ],
-    //     [
-    //     { type: "select", key: "gender", label: "Genre" ,options:[
-    //     {label: 'homme',value: 'male'},
-    //     {label: 'femme',value: 'female'},
-    // ]}
-    //     ]
-    // ]
-    // const fieldOrigin= [
-    //     [
-    //         { type: "select", options:[...country], key: "nationality", label: "Nationalité | Nationality" },
-    //         { type: "select",options:[...country], key: "country", label: "Pays de résidence | Country of residence" },
-    //     ],
-    //     [
-    //         { type: "text", key: "city", label: "Ville de résidence | City of residence" },
-    //         { type: "number", key: "experience_years", label: "Années d'expérience" },
-    //     ],
-    //     [
-    //         { type: "select", key: "french_level", 
-    //             options:[
-    //             {label:'school',value:'Scolaire'},
-    //             {label:'Débutant',value:'beginner'},
-    //             {label:'intermediate',value:'Intermédiaire'},
-    //             {label:'advanced',value:'Avancé'},
-    //             {label:'expert',value:'Expert'},
-    //             {label:'proficient',value:'Maîtrise'},
-    //             {label:'native',value:'Natif'},
-    //             ],
-    //             label: "Niveau français" },
-    //         { type: "select", key: "english_level", 
-    //             options:[
-    //             {label:'school',value:'Scolaire'},
-    //             {label:'Débutant',value:'beginner'},
-    //             {label:'intermediate',value:'Intermédiaire'},
-    //             {label:'advanced',value:'Avancé'},
-    //             {label:'expert',value:'Expert'},
-    //             {label:'proficient',value:'Maîtrise'},
-    //             {label:'native',value:'Natif'},
-    //             ],
-    //             label: "Niveau anglais" }
-    //     ]
-    // ]
-    // const fieldDocument= [
-    //     { type: "file", key: "resume", label: "Charger votre CV",accept:".pdf,.doc,.docx,.jpg,.jpeg,.png" },
-    //     // { type: "file", key: "cover/_letter", label: "Charger votre lettre de motivation" },
-    // ]
-    // const fieldReference= [
-    //     [
-    //         { type: "text", key: "full_name", label: "Nom et prénoms" },
-    //         { type: "text", key: "email", label: "Email" },
-    //     ],
-    //     [
-    //         { type: "text", key: "phone", label: "Téléphone" },
-    //         { type: "text", key: "function", label: "Function" },
-    //     ],
-    // ]
-        // const fieldAddOffre= [
-        //     [
-        //         { type: "text", key: "reference", label: "Post Reference" },
-        //     ],
-        //     [
-        //         { type: "text", key: "position_title", label: "Post Title" },
-        //         { type: "select", options:[...country], key: "country_duty_station", label: "Country" },
-        //     ],
-        //     [
-        //     ],
-        //     [
-        //         { type: "date", key: "published_at", label: "Published On" },
-        //         { type: "date", key: "expires_at", label: "Closing Date" },
-        //     ],
-        //     [
-        //         { type: "checkbox", key: "is_published", label: "Check to Publish" },
-        //     ],
-        // ]
-
-        // const fieldAddDocument= [
-        //     { type: "file", key: "resume", label: "" },
-        // ]
-
-        // const fieldDiploma= [
-        //     [
-        //         { type: "text", key: "diploma", label: "Diploma" },
-        //         { type: "text", key: "option", label: "Diploma Option" },
-        //     ],
-        // ]
-
-        // const fieldExperience=[
-        //     [
-        //         { type: "text", key: "company_name", label: "Company Name" },
-        //         { type: "text", key: "position", label: "Position" },
-        //     ],
-        //     [
-        //         { type: "date", key: "start_date", label: "Start Date" },
-        //         { type: "date", key: "end_date", label: "End Date" },
-        //     ],
-        // ]
-
-        // const cgiarFiled =[
-        //     [
-        //         { type: "checkbox", key: "current", label: "Check if currently working for CGIAR center" },
-        //     ],
-        //     [
-        //         { type: "select", key: "cgiar_center",
-        //             options: [
-        //                 { label: 'AfricaRice', value: 'africarice' },
-        //                 { label: 'Alliance Bioversity & CIAT', value: 'alliance_bioversity_ciat' },
-        //                 { label: 'CIFOR', value: 'cifor' },
-        //                 { label: 'CIMMYT', value: 'cimmyt' },
-        //                 { label: 'CIP', value: 'cip' },
-        //                 { label: 'ICARDA', value: 'icarda' },
-        //                 { label: 'ICRAF', value: 'icraf' },
-        //                 { label: 'ICRISAT', value: 'icrisat' },
-        //                 { label: 'IFPRI', value: 'ifpri' },
-        //                 { label: 'IITA', value: 'iita' },
-        //                 { label: 'ILRI', value: 'ilri' },
-        //                 { label: 'IRRI', value: 'irri' },
-        //                 { label: 'IWMI', value: 'iwmi' },
-        //                 { label: 'WorldFish', value: 'worldfish' },
-        //                 ] ,
-        //             label: "Provide Name of the centers" },
-        //     ],
-        //     [
-        //         { type: "text", key: "cgiar_email", label: "Provide your cgiar.org email" }
-        //     ]
-        // ]
-
-        // const fieldExperienceOther=[
-        //     [
-        //         { type: "text", key: "company_name", label: "Company Name" },
-        //         { type: "text", key: "position", label: "Position" },
-        //     ],
-        //     [
-        //         { type: "date", key: "start_date", label: "Start Date" },
-        //         { type: "date", key: "end_date", label: "End Date" },
-        //     ],
-        // ]
-
-        // const fieldIdentification= [
-        //     [
-        //         { type: "date", key: "birth_date", label: "Date of Birth" },
-        //         { type: "text", key: "address", label: "Address" },
-        //     ],
-        //     [
-        //         { type: "select", key: "gender", label: "Gender", options:[
-        //             {label: 'Male', value: 'male'},
-        //             {label: 'Female', value: 'female'},
-        //             {label: 'Other', value: 'other'},
-        //         ]}
-        //     ]
-        // ]
-
-        // const fieldOrigin= [
-        //     [
-        //         { type: "select", options:[...country], key: "nationality", label: "Nationality" },
-        //         { type: "select", options:[...country], key: "second_nationality", label: "Second nationality" },
-        //         { type: "select",options:[...country], key: "country", label: "Country of Residence" },
-        //     ],
-        //     [
-        //         { type: "text", key: "city", label: "City of Residence" },
-        //         { type: "number", key: "experience_years", label: "Years of Experience" },
-        //     ],
-        //     [
-        //         { type: "select", key: "french_level", 
-        //             options:[
-        //                 {label:'School', value:'school'},
-        //                 {label:'Beginner', value:'beginner'},
-        //                 {label:'Intermediate', value:'intermediate'},
-        //                 {label:'Advanced', value:'advanced'},
-        //                 {label:'Expert', value:'expert'},
-        //                 {label:'Proficient', value:'proficient'},
-        //                 {label:'Native', value:'native'},
-        //             ],
-        //             label: "French Level" 
-        //         },
-        //         { type: "select", key: "english_level", 
-        //             options:[
-        //                 {label:'School', value:'school'},
-        //                 {label:'Beginner', value:'beginner'},
-        //                 {label:'Intermediate', value:'intermediate'},
-        //                 {label:'Advanced', value:'advanced'},
-        //                 {label:'Expert', value:'expert'},
-        //                 {label:'Proficient', value:'proficient'},
-        //                 {label:'Native', value:'native'},
-        //             ],
-        //             label: "English Level" 
-        //         }
-        //     ]
-        // ]
-
-        // const fieldDocument= [
-        //     { type: "file", key: "resume", label: "Upload your CV", accept:".pdf,.doc,.docx,.jpg,.jpeg,.png" },
-        // ]
-
-        // const fieldReference= [
-        //     [
-        //         { type: "text", key: "full_name", label: "Full Name" },
-        //         { type: "text", key: "email", label: "Email" },
-        //     ],
-        //     [
-        //         { type: "text", key: "phone", label: "Phone" },
-        //         { type: "text", key: "function", label: "Function" },
-        //     ],
-        //     [
-        //         { type: "text", key: "company", label: "company" },
-        //     ],
-        // ]
-
-        const fieldAddOffre = [
-    [
-        { type: "text", key: "reference", label: "Post Reference / Référence du poste" },
-    ],
-    [
-        { type: "text", key: "position_title", label: "Post Title / Titre du poste" },
-        { type: "select", options:[...country], key: "country_duty_station", label: "Country / Pays" },
-    ],
-    [],
-    [
-        { type: "date", key: "published_at", label: "Published On / Publié le" },
-        { type: "date", key: "expires_at", label: "Closing Date / Date de clôture" },
-    ],
-    [
-        { type: "checkbox", key: "is_published", label: "Check to Publish / Cocher pour publier" },
-    ],
-]
-
-const fieldAddDocument = [
-    { type: "file", key: "resume", label: "Upload File / Importer un fichier" },
-]
-
-const fieldDiploma = [
-    [
-        { type: "text", key: "diploma", label: "Diploma / Diplôme" },
-        { type: "text", key: "option", label: "Diploma Option / Option du diplôme" },
-    ],
-]
-
-const fieldExperience = [
-    [
-        { type: "text", key: "company_name", label: "Company Name / Nom de l’entreprise" },
-        { type: "text", key: "position", label: "Position / Poste" },
-    ],
-    [
-        { type: "date", key: "start_date", label: "Start Date / Date de début" },
-        { type: "date", key: "end_date", label: "End Date / Date de fin" },
-    ],
-]
-
-const cgiarFiled = [
-    [
-        { type: "checkbox", key: "current", label: "Check if currently working for CGIAR center / Cocher si vous travaillez actuellement pour un centre du CGIAR" },
-    ],
-    [
-        { 
-            type: "select", 
-            key: "cgiar_center",
-            options: [
-                { label: 'AfricaRice', value: 'africarice' },
-                { label: 'Alliance Bioversity & CIAT', value: 'alliance_bioversity_ciat' },
-                { label: 'CIFOR', value: 'cifor' },
-                { label: 'CIMMYT', value: 'cimmyt' },
-                { label: 'CIP', value: 'cip' },
-                { label: 'ICARDA', value: 'icarda' },
-                { label: 'ICRAF', value: 'icraf' },
-                { label: 'ICRISAT', value: 'icrisat' },
-                { label: 'IFPRI', value: 'ifpri' },
-                { label: 'IITA', value: 'iita' },
-                { label: 'ILRI', value: 'ilri' },
-                { label: 'IRRI', value: 'irri' },
-                { label: 'IWMI', value: 'iwmi' },
-                { label: 'WorldFish', value: 'worldfish' },
-            ],
-            label: "Provide Name of the centers / Indiquez le nom du centre" 
-        },
-    ],
-    [
-        { type: "text", key: "cgiar_email", label: "Provide your cgiar.org email / Indiquez votre adresse e-mail cgiar.org" }
-    ]
-]
-
-const fieldExperienceOther = [
-    [
-        { type: "text", key: "company_name", label: "Company Name / Nom de l’entreprise" },
-        { type: "text", key: "position", label: "Position / Poste" },
-    ],
-    [
-        { type: "date", key: "start_date", label: "Start Date / Date de début" },
-        { type: "date", key: "end_date", label: "End Date / Date de fin" },
-    ],
-]
-
-const fieldIdentification = [
-    [
-        { type: "date", key: "birth_date", label: "Date of Birth / Date de naissance" },
-        { type: "text", key: "address", label: "Address / Adresse" },
-    ],
-    [
-        { 
-            type: "select", 
-            key: "gender", 
-            label: "Gender / Genre", 
-            options:[
-                {label: 'Male / Homme', value: 'male'},
-                {label: 'Female / Femme', value: 'female'},
-                {label: 'Other / Autre', value: 'other'},
-            ]
-        }
-    ]
-]
-
-const fieldOrigin = [
-    [
-        { type: "select", options:[...country], key: "nationality", label: "Nationality / Nationalité" },
-        { type: "select", options:[...country], key: "second_nationality", label: "Second nationality / Deuxième nationalité" },
-        { type: "select", options:[...country], key: "country", label: "Country of Residence / Pays de résidence" },
-    ],
-    [
-        { type: "text", key: "city", label: "City of Residence / Ville de résidence" },
-        { type: "number", key: "experience_years", label: "Years of Experience / Années d’expérience" },
-    ],
-    [
-        { 
-            type: "select", 
-            key: "french_level", 
-            options:[
-                {label:'School / Scolaire', value:'school'},
-                {label:'Beginner / Débutant', value:'beginner'},
-                {label:'Intermediate / Intermédiaire', value:'intermediate'},
-                {label:'Advanced / Avancé', value:'advanced'},
-                {label:'Expert / Expert', value:'expert'},
-                {label:'Proficient / Compétent', value:'proficient'},
-                {label:'Native / Langue maternelle', value:'native'},
-            ],
-            label: "French Level / Niveau de français" 
-        },
-        { 
-            type: "select", 
-            key: "english_level", 
-            options:[
-                {label:'School / Scolaire', value:'school'},
-                {label:'Beginner / Débutant', value:'beginner'},
-                {label:'Intermediate / Intermédiaire', value:'intermediate'},
-                {label:'Advanced / Avancé', value:'advanced'},
-                {label:'Expert / Expert', value:'expert'},
-                {label:'Proficient / Compétent', value:'proficient'},
-                {label:'Native / Langue maternelle', value:'native'},
-            ],
-            label: "English Level / Niveau d’anglais" 
-        }
-    ]
-]
-
-const fieldDocument = [
-    { type: "file", key: "resume", label: "Upload your CV / Téléversez votre CV", accept:".pdf,.doc,.docx,.jpg,.jpeg,.png" },
-]
-
-const fieldReference = [
-    [
-        { type: "text", key: "full_name", label: "Full Name / Nom complet" },
-        { type: "text", key: "email", label: "Email / Courriel" },
-    ],
-    [
-        { type: "text", key: "phone", label: "Phone / Téléphone" },
-        { type: "text", key: "function", label: "Function / Fonction" },
-    ],
-    [
-        { type: "text", key: "company", label: "Company / Entreprise" },
-    ],
-]
-
-
-
     const initialPayload={
         diplomas:{...initDiploma},
         cgiar_information:{...initCgiarInformation},
@@ -526,15 +91,13 @@ const fieldReference = [
     }
     
 
-
-
     const form = reactive({
         diplomas: [{...initDiploma}],
         cgiar_information:{},
         experiences: [{...initExperience}],
         identification: {},
         origin: {},
-        references: [{...fieldExperience}],
+        references: [{...useFiled.fieldExperience}],
         documents:[{...initDoc},{...initDoc}],
     })
     const documentPreview = ref([]);
@@ -542,103 +105,14 @@ const fieldReference = [
         email:'',
         is_primary: false
     })
+
+
     const newUser=reactive({
         email:'',
         last_name:"",
         name:"",
     })
-    // const form = reactive({
-    //     diplomas: [{...initDiploma}],
-    //     cgiar_information:{
-    //         current: true,
-    //         cgiar_center: "ICRAF",
-    //         cgiar_email: "exemple@cgiar.org",
-    //     },
-    //     experience: [{...initExperience}],
-
-    //     identification: {
-    //         birth_date: "1995-05-20",
-    //         address: "Abidjan, Cocody Riviera",
-    //         gender: "male",
-    //     },
-
-    //     origin: {
-    //         nationality: "Ivoirienne",
-    //         country: "Côte d'Ivoire",
-    //         city: "Abidjan",
-    //         experience_years: 3,
-    //         french_level: "Avancé",
-    //         english_level: "Intermédiaire",
-    //     },
-    //     reference: [{ ...initReference }],
-    //     documents:[{...initDoc},{...initDoc}],
-    // })
-
-    const newOffre=reactive({
-        offre:{
-            uuid:null,
-            reference:null,
-            position_title:"",
-            country_duty_station:"france",
-            published_at:"",
-            expires_at:"",
-            is_published:true,
-        },
-        document:[]
-    })
-    // const form = reactive({
-    //     diplomas: {
-    //         recent_diploma: "dqwdwq",
-    //         recent_option: "dwqd",
-    //         second_last_diploma: "wqdwq",
-    //         second_last_option: "dwqdw",
-    //         third_last_diploma: "dwqd",
-    //         third_last_option: "qdwwqd",
-    //     },
-    //     experience: [
-    //     {
-    //         company_name_1: "",
-    //         position_1: "",
-    //         start_date_1: "",
-    //         end_date_1: "",
-    //         current_1: false,
-    //         cgiar_center_1: "",
-    //         cgiar_email_1: "",
-    //     },
-    //     {
-    //         company_name_1: "",
-    //         position_1: "",
-    //         start_date_1: "",
-    //         end_date_1: "",
-    //     },
-    //     {
-    //         company_name_1: "",
-    //         position_1: "",
-    //         start_date_1: "",
-    //         end_date_1: "",
-    //     }
-    //     ],
-        
-    //     identification: {
-    //         birth_date: "",
-    //         address: "",
-    //         gender: "",
-    //     },
-    //     origin: {
-    //         nationality: "",
-    //         country: "",
-    //         city: "",
-    //         experience_years: "",
-    //         french_level: "",
-    //         english_level: "",
-    //     },
-    //     documents: {
-    //         reference:[{...initReference}],
-    //         resume: null,
-    //         cover_letter: null,
-    //     },
-    // })
-
+    
     let currentStep =ref(0)
 
     const nextStep = () => {
@@ -743,7 +217,7 @@ const fieldReference = [
             return false
             } 
             
-            if (!confirm("Would you like to confirm your application? n\ Voulez vous confirmer votre candidature ?")) {
+            if (!confirm("Do you confirm this operation?\nConfirmez-vous cette opération ?")) {
                 return false; // Annule l'envoi si l'utilisateur clique sur "Annuler"
             }
         const formData = new FormData();
@@ -854,9 +328,98 @@ const fieldReference = [
     }
     };
 
+    const submitCompleted = async () => {
+    try {
+            const errors = validateForm(form);
+            if (errors.length > 0) {
+            alert(errors.join("\n- "));
+            return false
+            } 
+            
+             if (!confirm("Do you confirm this operation?\nConfirmez-vous cette opération ?")) {
+                return false; // Annule l'envoi si l'utilisateur clique sur "Annuler"
+            }
+            const formData = new FormData();
+
+            // Identification (objet simple)
+            Object.keys(form.identification).forEach(key => {
+            formData.append(`identification[${key}]`, form.identification[key]);
+            });
+
+            // Origin (objet simple)
+            Object.keys(form.origin).forEach(key => {
+            formData.append(`origin[${key}]`, form.origin[key]);
+            });
+
+            // Diplomas (tableau d’objets)
+            form.diplomas.forEach((item, index) => {
+            Object.keys(item).forEach(key => {
+                formData.append(`diplomas[${index}][${key}]`, item[key]);
+            });
+            });
+
+            // Experience (tableau d’objets)
+            form.experiences.forEach((item, index) => {
+            Object.keys(item).forEach(key => {
+                formData.append(`experiences[${index}][${key}]`, item[key]);
+            });
+            });
+
+            // Reference (tableau d’objets)
+            form.references.forEach((item, index) => {
+                Object.keys(item).forEach(key => {
+                    formData.append(`references[${index}][${key}]`, item[key]);
+                });
+            });
+
+            // CGIAR Information (objet simple)
+            if (form.cgiar_information.current) {
+                Object.keys(form.cgiar_information).forEach(key => {
+                formData.append(`cgiar_information[${key}]`, form.cgiar_information[key] || '');
+                });
+            }
+       
+
+        // Documents (fichiers déjà bien gérés)
+        form.documents.forEach((doc, index) => {
+        if (doc.id) formData.append(`documents[${index}][id]`, doc.id);
+        if (doc.file) formData.append(`documents[${index}][file]`, doc.file);
+        });
+        // Ajouter l'UUID de la publication/job
+        // formData.append('publication_uuid', publicationUuid.value); // mettre la valeur réelle
+
+        // Envoi de la requête
+        const response = await window.axios.post('/completed/save', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+        });
+
+
+        const message = 'Vos informations ont été mises à jour avec succès. ✅ | Your information has been successfully updated. ✅'
+            Inertia.visit('/apply-spontaneous');
+
+    } catch (error) {
+        let message = error.response?.data?.message ? error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'
+
+        if (error.response && error.response.data && error.response.data.errors) {
+        // Récupère tous les messages d'erreur et les transforme en texte
+        const messages = Object.values(error.response.data.errors)
+            .flat() // aplatit les tableaux
+            .join('\n');
+        alert(messages);
+        } else {
+        alert(message);
+        }
+        // console.error('Erreur lors de l\'envoi du formulaire :', error.response?.data?.errors || error);
+        // alert(message);
+    }
+    };
+
     async function submitOffre(data: any) {
     try {
         // Convertir reactive en objet natif
+       
         const rawData = toRaw(data)
 
         // Créer FormData
@@ -920,7 +483,6 @@ const fieldReference = [
          try {
                 const fileUrl = `http://127.0.0.1:8001${file.path}`;
                 const response = await fetch(file.path);
-                console.log(response);
                 if (!response.ok) throw new Error("Fichier introuvable");
                 const blob = await response.blob();
                 zip.file(file.name, blob);
@@ -934,29 +496,6 @@ const fieldReference = [
         });
     };
 
-    // const payLoad = (data) => {
-        
-    //     Object.keys(data).forEach(key => {
-    //         if (Array.isArray(data[key])) {
-    //             if (key== 'documents') {
-    //                 documentPreview.value = data[key]
-    //                 return
-    //             }
-    //             data[key].length > 0 ?  form[key] =  data[key] : form[key].push({...initialPayload[key]})
-    //         }
-    //         if (typeof data[key] === 'object'  && !Array.isArray(data[key])) {
-    //             form[key] = Object.assign({}, initialPayload[key], data[key]);
-    //         }
-    //     });
-
-    //     // console.log(form);
-        
-    //     // if (data.) {
-            
-    //     // }
-    //     console.log(documentPreview.value);
-        
-    // }
     function exportToExcel(columns:Array<any>, data:Array<any>, fileName:string = 'export.xlsx') {
     // Créer un tableau avec les labels comme première ligne
     const headers = columns.map(col => col.label);
@@ -1031,7 +570,6 @@ const fieldReference = [
         });
     }
 
-
     async function AddEmail(){
         console.log(newEmail);
          try {
@@ -1092,14 +630,22 @@ const fieldReference = [
             Inertia.reload()
             console.log('Upload response:', response.data)
         } catch (error) {
-            console.error('Upload error:', error)
-            alert('❌ Upload failed. Please try again later.')
+
+            let message = error.response?.data?.message ? error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'
+            if (error.response && error.response.data && error.response.data.errors) {
+            // Récupère tous les messages d'erreur et les transforme en texte
+             message = Object.values(error.response.data.errors)
+                .flat() // aplatit les tableaux
+                .join('\n');
+            } 
+            alert(message);
+
         } finally {
           
         }
     }
 
-   return {
+    return {
     form,
     currentStep,
     handleFile,
@@ -1107,22 +653,11 @@ const fieldReference = [
     prevStep,
     submitForm,
     components,
-    fieldDiploma,
-    fieldExperienceOther,
-    fieldExperience,
-    fieldIdentification,
-    fieldOrigin,
-    fieldDocument,
-    fieldReference,
     addReference,
     removeReference,
     initReference,
     initDiploma,
     initExperience,
-    cgiarFiled,
-    fieldAddOffre,
-    newOffre,
-    fieldAddDocument,
     submitOffre,
     exportToExcel,
     payLoad,
@@ -1133,7 +668,12 @@ const fieldReference = [
     newUser,
     AddUser,
     downloadZip,
-    uploadCv
-  }
+    uploadCv,
+    submitCompleted,
+    // fieldAddOffreTracker,
+    ...repository,
+    ...useFiled,
+    ...usePayload
+    }
 
 }

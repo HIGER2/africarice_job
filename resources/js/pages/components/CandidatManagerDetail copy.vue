@@ -25,8 +25,8 @@ defineProps({
 
 <template>
  <div>
-<div class="max-w-6xl mx-auto p-8 space-y-8">
-  <pre>{{ data }}</pre>
+<div class="max-w-6xl mx-auto  space-y-8">
+  <!-- <pre>{{ data }}</pre> -->
   <!-- User Info -->
   <div class="bg-white rounded-lg border border-gray-200 p-8">
     <h2 class="text-3xl font-bold text-gray-800 mb-4">Profil: {{ data.data[0].name }} {{ data.data[0].last_name }}</h2>

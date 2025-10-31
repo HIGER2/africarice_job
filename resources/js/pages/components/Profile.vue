@@ -16,7 +16,7 @@ const setOPen=(data)=>{
 </script>
 
 <template>
-    <div class="w-full">
+    <div class="max-w-4xl mx-auto">
         <div class="space-y-10 " >
             <!-- <pre>{{ {user} }}</pre> -->
             <!-- Profil -->
@@ -28,10 +28,15 @@ const setOPen=(data)=>{
                     <h1 class="mt-4 text-2xl font-bold">
                     {{ user?.name }} {{ user?.last_name }}
                     </h1>
-                    <p class="text-indigo-100 mt-1">📱 {{ user?.phone }} | ✉️ {{ user?.email }}</p>
-                    <button @click="setOPen(user)" type="button" class="px-5 cursor-pointer py-1 text-sm border rounded-md mt-3">
-                            Edit
-                    </button>
+                    <p class="text-indigo-100 mt-1">📱 {{ user?.phone_code }} | ✉️ {{ user?.email }}</p>
+                    <div class="flex items-center gap-3">
+                        <button @click="setOPen(user)" type="button" class="px-5 cursor-pointer py-1 text-sm border rounded-md mt-3">
+                                Edit profile
+                        </button>
+                        <a href="/apply-job" type="button" class="px-5 cursor-pointer py-1 text-sm border rounded-md mt-3">
+                               Update my information
+                        </a>
+                    </div>
                     <UpdateUser :row="isOpen" @close="()=>setOPen(false)"/>
 
                     <!-- <span class="mt-3 px-4 py-1 bg-white text-indigo-700 rounded-full text-sm font-semibold border border-gray-200 ">

@@ -14,12 +14,8 @@ return new class extends Migration
         Schema::create('recrutements', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique()->nullable();
-            $table->string('code_recrutement')->nullable()->unique(); 
-            $table->string('center')->nullable(); // AfricaRice/Hosted
-            $table->string('country_duty_station')->nullable();
+            $table->string('code_recrutement')->nullable()->unique();
             $table->string('city_duty_station')->nullable();
-            $table->string('position_title')->nullable();
-            $table->string('recrutement_id')->nullable()->unique();
             $table->date('contract_from')->nullable();
             $table->date('contract_to')->nullable();
             $table->date('date')->nullable();
@@ -43,6 +39,15 @@ return new class extends Migration
             $table->string('initiative_lead')->nullable();
             $table->string('initiative_personnel')->nullable();
             $table->decimal('salary_post', 15, 2)->nullable();
+
+            $table->string('reference')->nullable()->unique();
+            $table->string('position_title')->nullable();
+            $table->string('country_duty_station')->nullable();
+            $table->string('center')->nullable(); // AfricaRice/Hosted
+            $table->string('manager')->nullable();
+            $table->enum('reason', ['new', 'replacement'])->default('new');
+            $table->string('reason_replacement')->nullable();
+            $table->foreignId('assign_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
     }

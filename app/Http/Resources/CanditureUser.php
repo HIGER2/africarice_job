@@ -65,8 +65,7 @@ class CanditureUser extends JsonResource
             'gender' => $this->application->identification->gender,
             'birth_date' => Carbon::parse($this->application->identification->birth_date)->format('d/m/Y'),
             'age' => Carbon::parse($this->application->identification->birth_date)->age . " ans",
-
-
+            'date' => Carbon::parse($this->application->date)->format('d/m/Y'),
             // Application
             // 'application_id' => $this->user->application->id,
             // 'application_uuid' => $this->user->application->uuid,
@@ -93,7 +92,7 @@ class CanditureUser extends JsonResource
             // 'document_id' => $this->user->application->documents->id,
             'documents' => $this->application->documents->map(function ($document, $index) use (&$flattened) {
                 return (object)[
-                    'name' => 'cv_' . $this->name . '_' . $this->last_name . '_' . $this->email . '.' . File::extension($document->name),
+                    'name' => 'cv_' . $this->name . '_' . $this->last_name . '_' . $this->email . '_' . Carbon::parse($this->application->date)->format('d-m-Y') . '.' . File::extension($document->name),
                     'path' => $document['path'],
                 ];
             }),

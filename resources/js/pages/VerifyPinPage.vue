@@ -62,20 +62,27 @@
 
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import Spinnercomponent from './components/Spinnercomponent.vue'
 import { Inertia } from '@inertiajs/inertia'
+import { usePage } from '@inertiajs/inertia-vue3';
 
 
 const pin = ref('')
 const message = ref('')
 const loading =ref(false)
+const page = usePage()
 
+const is_complete = computed(() => {
+  const url = page.url.value || ''
+  const query = new URLSearchParams(url.split('?')[1] || '')
+  return query.get('is_complete') || false
+})
 async function verifyPin() {
     try {
         loading.value = true
-    await axios.post('/verify-pin', {pin: pin.value })
-            Inertia.visit('/')
+      let response = await axios.post(`/verify-pin`, {pin: pin.value })
+            Inertia.visit(response?.data?.redirect)
     } catch (err) {
         const errors = err.response?.data?.message || Object.values(err.response?.data?.errors).flat().join('\n')
         if (errors.length > 0) {

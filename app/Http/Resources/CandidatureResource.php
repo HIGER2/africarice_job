@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -39,12 +40,13 @@ class CandidatureResource extends JsonResource
 
             // Publication / Job
             // 'publication_id' => $this->publication->id,
-            'publication_reference' => $this->publication->reference,
-            'publication_type' => $this->publication->type,
+            'publication_reference' => optional($this->publication)->reference,
+            'publication_type' => optional($this->publication)->type,
             // 'publication_is_published' => $this->publication->is_published,
-            'publication_is_closed' => $this->publication->is_closed ? 'Cloturée' : 'Ouverte',
+            'publication_is_closed' => optional($this->publication)->status,
             // 'job_id' => $this->publication->job->id,
-            'job_position_title' => $this->publication->job->position_title,
+            'job_position_title' => optional($this->publication?->job)->position_title,
+            'date' => Carbon::parse($this->date)->format('d/m/Y'),
             // 'job_center' => $this->publication->job->center,
             // 'job_city' => $this->publication->job->city_duty_station,
             // 'job_country' => $this->publication->job->country_duty_station,

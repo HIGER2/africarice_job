@@ -5,16 +5,23 @@ import { useApplyForm } from '../composables';
 import AddOffre from './AddOffre.vue';
 import Table from './Table.vue';
 import UpdateOffre from './UpdateOffre.vue';
+import StatusOngoing from './ui/StatusOngoing.vue';
+import StatusOffer from './ui/StatusOffer.vue';
+import Spinnercomponent from './Spinnercomponent.vue';
 
 defineProps({
   data: Array,
 })
 const columns = [
   { key: "reference", label: "# Ref" },
+  { key: "assign_by", label: "Recruiter" },
   { key: "type", label: "Type" },
+  { key: "manager", label: "Manager" },
+  { key: "center", label: "Recruitment Entity" },
   { key: "position_title", label: "Position" },
-  { key: "is_published", label: "Published" },
-  { key: "is_closed", label: "Status" },
+  { key: "status", label: "Status" },
+  { key: "ongoing", label: "Ongoing status" },
+  { key: "reason", label: "Reason" },
   { key: "published_at", label: "Published on" },
   { key: "expires_at", label: "Expires on" },
   { key: "candidates_count", label: "Number of candidates" },
@@ -22,29 +29,71 @@ const columns = [
 
 const {exportToExcel}=useApplyForm()
 const row = ref(null)
-
-
+const loading= ref(false)
+const isIndex= ref(null)
 const handleClose =()=>{
     row.value = false
 }
-
-const Updated=(data)=>{
-    row.value = data
-    console.log(data);
+const setRowData = (data) => {
+  row.value = {
+    uuid: data.uuid ?? null,
+    reference: data.reference ?? null,
+    position_title: data.job?.position_title ?? '',
+    country_duty_station: data.job.country_duty_station ?? 'france',
+    published_at: data.published_at ?? '',
+    type: data.type ?? 'public',
+    expires_at: data.expires_at ?? '',
+    assign_by: data.job.assign_by ?? '',
+    reason: data.job.reason ?? '',
+    manager: data.job.manager ?? '',
+    center: data.job.center ?? '',
+    status: data.status ?? '',
+    reason_replacement: data.job.reason_replacement ?? ''
+  }
 }
+
+
+const Updated=async(data)=>{
+
+    try {
+        isIndex.value = data?.uuid
+        loading.value =true
+        const response = await axios.get(`/manager/offre/detail/${data?.uuid}`);
+        setRowData(response.data.data)
+        loading.value = false
+        // Inertia.reload();
+    } catch (error) {
+            let message = error.response?.data?.message ? error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'
+            if (error.response && error.response.data && error.response.data.errors) {
+            // Récupère tous les messages d'erreur et les transforme en texte
+                    message = Object.values(error.response.data.errors)
+                .flat() // aplatit les tableaux
+                .join('\n');
+            alert(message);
+            } else {
+            alert(message);
+            }
+    } finally {
+        console.log("Requête terminée");
+    }
+}
+
+// const getDetails=(uuid)=>{
+
+// }
 </script>
 
 <template>
   <div>
-        <div class="w-full">
-            <div class="flex px-6 py-4  justify-between items-center w-full">
-                <!-- <pre>{{data.data }}</pre> -->
+        <div class="w-full ">
+            <div class="flex  justify-between items-center w-full">
                 <!-- <h4 class="font-bold">Gerer les offres</h4> -->
+                <!-- {{ data }} -->
                 <h2 class="text-2xl font-semibold mb-4">Manage Job Offers</h2>
                 <div class="flex justify-between items-center">
-                    <AddOffre />
+                    <AddOffre :data="data" />
                     <button type="button"
-                    @click="exportToExcel(columns,data.data, 'Liste_des_offres.xlsx')"
+                    @click="exportToExcel(columns,data.offer, 'Liste_des_offres.xlsx')"
                     class="bg-primary p-2 px-3 rounded-lg text-white cursor-pointer">
                         <i class="uil uil-export"></i>
                         <span>Export</span>
@@ -52,40 +101,31 @@ const Updated=(data)=>{
                 </div>
             </div>
             <div class="w-full">
-                <div class="overflow-x-auto border border-slate-200 bg-white ">
-                    <Table :columns="columns" :rows="data.data">
+                <div class="w-ful">
+                    <Table :columns="columns" :rows="data?.offer">
                     <!-- Publication -->
-                    <template #is_published="{ row }">
-                        <span
-                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
-                        :class="row.is_published === 'Publiée'
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-gray-100 text-gray-800'"
-                        >
-                        {{ row.is_published }}
-                        </span>
+                    
+                    <template #ongoing="{ row }">
+                        <StatusOngoing :status="row.ongoing" />
                     </template>
-
                     <!-- Statut -->
-                    <template #is_closed="{ row }">
-                        <span
-                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
-                        :class="row.is_closed === 'Ouverte'
-                            ? 'bg-blue-100 text-blue-800'
-                            : 'bg-red-100 text-red-800'"
-                        >
-                        {{ row.is_closed }}
-                        </span>
+                    <template #status="{ row }">
+                    <StatusOffer  :status="row?.status" />
                     </template>
 
                     <!-- Actions -->
                         <template #actions="{ row }">
                           <div class="flex items-center gap-2">
                             <button @click="Updated(row)" type="button" class="px-3 cursor-pointer py-1 text-sm border rounded-md hover:bg-gray-50">
-                             Edit
+                             <Spinnercomponent v-if="loading && isIndex ==row.uuid " />
+                             <span v-else>Edit</span>
+
                             </button>
                             <a :href="`/manager/offres/${row.uuid}`" class="px-3 py-1 text-sm border rounded-md hover:bg-gray-50">
                                 View
+                            </a>
+                             <a :href="`/manager/offerTracker/${row.uuid}`" class="px-3 py-1 text-sm border rounded-md hover:bg-gray-50">
+                                Tracking
                             </a>
                           </div>
                         </template>
@@ -99,8 +139,7 @@ const Updated=(data)=>{
                             <button class="px-3 py-1 border rounded-md text-sm">Suiv</button>
                         </div>
                 </div> -->
-
-                <UpdateOffre :row="row" @close="handleClose"/>
+                <UpdateOffre :row="row" :assign="data.assign" @close="handleClose"/>
             </div>
         </div>
   </div>

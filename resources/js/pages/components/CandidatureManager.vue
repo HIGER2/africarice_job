@@ -3,6 +3,7 @@
 import { computed } from 'vue';
 import Table from './Table.vue';
 import { useApplyForm } from '../composables';
+import StatusOffer from './ui/StatusOffer.vue';
 
 const props = defineProps({
   data: {
@@ -95,7 +96,7 @@ const labelsMap = {
                 </div>
                 <div class="w-full">
                     
-                    <div class="overflow-x-auto border border-slate-200 bg-white ">
+                    <div class="overflow-x-aut ">
                     <Table :columns="columns" :rows="data?.data">
                             <!-- Slot document (avec lien téléchargeable) -->
                             <template #documents="{ row }">
@@ -111,14 +112,7 @@ const labelsMap = {
                                </div>
                             </template>
                                 <template #publication_is_closed="{ row }">
-                                    <span
-                                    class="inline-flex px-2 py-1 text-xs font-semibold rounded-full"
-                                    :class="row.publication_is_closed === 'Ouverte'
-                                        ? 'bg-blue-100 text-blue-800'
-                                        : 'bg-red-100 text-red-800'"
-                                    >
-                                    {{ row.publication_is_closed }}
-                                    </span>
+                                  <StatusOffer :status="row.publication_is_closed"/>
                                 </template>
 
                                 <!-- Slot actions -->

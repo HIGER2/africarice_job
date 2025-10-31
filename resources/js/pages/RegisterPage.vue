@@ -1,6 +1,76 @@
+
+<script setup>
+import { computed, reactive, ref } from 'vue'
+import axios from 'axios'
+import { Inertia } from '@inertiajs/inertia'
+import Spinnercomponent from './components/Spinnercomponent.vue'
+import countryCode from '../data/country.json'
+import { usePage } from '@inertiajs/inertia-vue3';
+
+const formData = reactive({
+    name: '',
+    last_name: '',
+    email: '',
+    phone:'',
+    country_code:"+225",
+
+})
+
+const page = usePage()
+
+const notApply = computed(() => {
+  const url = page.url.value || ''
+  const query = new URLSearchParams(url.split('?')[1] || '')
+  return query.get('not_apply') || false
+})
+
+const loading=ref(false)
+
+function goLogin() {
+window.location.href = '/login.html'
+}
+
+const submit = () => {
+  Inertia.post('/register', formData, {
+    onSuccess: (data) => {
+        console.log(data);
+        
+    //   alert('Connexion réussie 🎉')
+    },
+    onError: (errors) => {
+      console.log(errors)
+      alert('Erreur de connexion ❌')
+    }
+  })
+}
+
+async function handleRegister() {
+    try {
+        loading.value = true
+        let response = await axios.post('/register',formData)
+        console.log(response);
+        Inertia.visit('/verify?is_complete=true')
+    // alert('Inscription réussie ! Vérifiez votre email pour le code PIN.')
+    // goLogin()
+    } catch (err) {
+        let message = 'Erreur lors de la vérification de l\'email.'
+                
+        if (err?.response?.data?.errors?.length > 0) {
+            message  =  Object.values(err?.response?.data?.errors).flat().flat().join('\n')
+        }else if (err?.response?.data?.message) {
+            message = err?.response?.data?.message
+        }
+        alert(message)
+    }finally{
+        loading.value = false
+    }
+}
+</script>
+
+
 <template>
 
-<div class="min-h-screen flex items-center justify-center bg-white px-4">
+<div class="min-h-screen flex items-center justify-center bg-white p-8">
   <div class="w-full max-w-md bg-white rounded-lg shadow p-8">
     <!-- Logo -->
     <div class="flex justify-center mb-6">
@@ -57,7 +127,7 @@
             class="p-3 max-w-max border rounded-l-lg focus:ring-2 focus:ring-primary focus:outline-none"
           >
             <option v-for="country in countryCode" :key="country.code" :value="country.code">
-              {{ country.abbreviation }} ({{ country.code }})
+              {{ country.code }}
             </option>
           </select>
 
@@ -114,62 +184,3 @@
 
 </template>
 
-
-<script setup>
-import { reactive, ref } from 'vue'
-import axios from 'axios'
-import { Inertia } from '@inertiajs/inertia'
-import Spinnercomponent from './components/Spinnercomponent.vue'
-import countryCode from '../data/country.json'
-
-const formData = reactive({
-    name: '',
-    last_name: '',
-    email: '',
-    phone:'',
-    country_code:"+225",
-
-})
-const loading=ref(false)
-
-function goLogin() {
-window.location.href = '/login.html'
-}
-
-const submit = () => {
-  Inertia.post('/register', formData, {
-    onSuccess: (data) => {
-        console.log(data);
-        
-    //   alert('Connexion réussie 🎉')
-    },
-    onError: (errors) => {
-      console.log(errors)
-      alert('Erreur de connexion ❌')
-    }
-  })
-}
-
-
-async function handleRegister() {
-    try {
-        loading.value = true
-        let response = await axios.post('/register',formData)
-        console.log(response);
-        Inertia.visit('/verify')
-    // alert('Inscription réussie ! Vérifiez votre email pour le code PIN.')
-    // goLogin()
-    } catch (err) {
-        let message = 'Erreur lors de la vérification de l\'email.'
-                
-        if (err?.response?.data?.errors?.length > 0) {
-            message  =  Object.values(err?.response?.data?.errors).flat().flat().join('\n')
-        }else if (err?.response?.data?.message) {
-            message = err?.response?.data?.message
-        }
-        alert(message)
-    }finally{
-        loading.value = false
-    }
-}
-</script>
