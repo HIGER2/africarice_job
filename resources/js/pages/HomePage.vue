@@ -95,7 +95,7 @@ function openApply(pub: any) {
               <!-- ✅ Fin de la section -->
             </div>
           <!-- ✅ Section ajoutée ici -->
-              <div class="bg-blue-50 border mt-2 border-blue-200 p-4 rounded-xl mb-6 max-w-lg">
+              <div v-if="!user" class="bg-blue-50 border mt-2 border-blue-200 p-4 rounded-xl mb-6 max-w-lg">
                 <p class="text-blue-900 text-sm leading-relaxed">
                   Stay updated with our latest job openings.<br>
                   <span class="text-gray-700">Inscrivez-vous pour être informé des nouvelles offres.</span>

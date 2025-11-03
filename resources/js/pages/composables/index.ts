@@ -115,6 +115,17 @@ export function useApplyForm(){
     })
     
     let currentStep =ref(0)
+    function isEmpty(value) {
+        return (
+            value === null ||
+            value === undefined ||
+            value === false ||
+            (typeof value === 'string' && value.trim() === '') ||
+            (typeof value === 'number' && isNaN(value)) ||
+            (Array.isArray(value) && value.length === 0) ||
+            (typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0)
+        )
+        }
 
     function validateObjectById(obj, prefix) {
         let valid = true
@@ -123,7 +134,7 @@ export function useApplyForm(){
             const el = document.getElementById(`${key}`)
             if (el) {
             const value = obj[key]
-            if (value === null || value.toString().trim() === '') {
+            if (isEmpty(value)) {
                 el.classList.add('is-invalid')
                 valid = false
             } else {
@@ -146,7 +157,7 @@ export function useApplyForm(){
                 console.log('====================================');
                 if (el) {
                     const value = item[key]
-                    if (value === null || value.toString().trim() === '') {
+                    if (isEmpty(value)) {
                     el.classList.add('is-invalid')
                     valid = false
                     } else {
@@ -171,7 +182,6 @@ export function useApplyForm(){
                 break
                 case 2: // CGIAR information (exemple d’objet simple)
                 if (form.cgiar_information.current) isValid = validateObjectById(form.cgiar_information, 'cgiar_information')
-                
                 break
                 case 3: // Experiences 
                 isValid = validateArrayById(form.experiences, 'experiences')
