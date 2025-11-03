@@ -151,10 +151,6 @@ export function useApplyForm(){
             array.forEach((item, index) => {
                 Object.keys(item).forEach(key => {
                 const el = document.getElementById(`${index+key}`)
-                console.log('====================================');
-                console.log(el);
-                console.log(index+key);
-                console.log('====================================');
                 if (el) {
                     const value = item[key]
                     if (isEmpty(value)) {
@@ -170,7 +166,8 @@ export function useApplyForm(){
             return valid
     }
 
-    function validateStep(current, form) {
+    async function validateStep(current, form) {
+        await nextTick();
             let isValid = true
 
             switch (current) {
@@ -211,23 +208,6 @@ export function useApplyForm(){
 
     const nextStep = (current:any,form) => {
         validateStep(current,form)
-        // switch (current) {
-        //     case 0:
-        //         const allFilled = Object.values(form.identification).every(
-        //             value => value !== null && value !== ''
-        //         );
-        //         break;
-        
-        //     default:
-        //         break;
-        // }
-        //   let valide = true
-        //     console.log('====================================');
-        //     console.log(form);
-        //     console.log('====================================');
-        // if (currentStep.value < components.length - 1) {
-        // currentStep.value++
-        // }
     }
 
     
