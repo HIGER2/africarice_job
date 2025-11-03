@@ -13,9 +13,9 @@ return new class extends Migration
 
             'publication_applications' => [
                 'publication_id' => [
-                    'update' => function (Blueprint $table) {
-                        $table->foreignId('publication_id')->nullable()->change();
-                    },
+                    // 'update' => function (Blueprint $table) {
+                    //     $table->foreignId('publication_id')->nullable()->change();
+                    // },
                 ],
                 // 'application_type' => [
                 //     'create' => fn(Blueprint $table) => $table->enum('application_type', ['normal', 'spontaneous'])->default('normal')
@@ -23,8 +23,8 @@ return new class extends Migration
             ],
             'references' => [
                 'country_code' => [
-                    'create' => fn(Blueprint $table) =>
-                    $table->string('country_code')->nullable(),
+                    // 'create' => fn(Blueprint $table) =>
+                    // $table->string('country_code')->nullable(),
                     // 'update' => fn(Blueprint $table) =>
                     // $table->enum('is_active', ['active', 'not_active'])->nullable()->change(),
                 ],
