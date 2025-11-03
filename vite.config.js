@@ -13,4 +13,14 @@ export default defineConfig({
         vue(),
 
     ],
+    resolve: {
+        alias: {
+        '@public': '/public',
+        },
+  },
+//   server: {
+//     fs: {
+//       allow: ['./public', './resources'],
+//     },
+//   },
 });

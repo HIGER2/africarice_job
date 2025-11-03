@@ -17,7 +17,8 @@ class Reference extends Model
         'company',
         'function',
         'phone',
-        'email'
+        'email',
+        "country_code"
     ];
 
     public function application()

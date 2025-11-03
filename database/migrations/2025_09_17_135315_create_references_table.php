@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('full_name');
             $table->string('function')->nullable();
             $table->string('phone')->nullable();
+            $table->string('country_code')->nullable();
             $table->string('email')->nullable();
             $table->string('company')->nullable();
             $table->timestamps();

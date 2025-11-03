@@ -479,7 +479,6 @@ class AppController extends Controller
         }
     }
 
-
     public function spontanousApplication(Request $request)
     {
         try {

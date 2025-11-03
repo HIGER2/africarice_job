@@ -87,6 +87,7 @@ class UserResource extends JsonResource
                         'email'   => $r->email,
                         'company'   => $r->company,
                         'function'   => $r->function,
+                        'country_code'   => $r->country_code,
                     ];
                 }),
 

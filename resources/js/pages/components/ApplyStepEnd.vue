@@ -2,6 +2,7 @@
 <script lang="ts" setup>
 import { useApplyForm } from '../composables';
 import FormField from './FormField.vue';
+import FormFields from './FormFields.vue';
 
 
 const props =defineProps({
@@ -16,6 +17,7 @@ const initReference={
         function:'',
         phone:'',
         email:'',
+        country_code:"+225",
     }
 
 const {fieldDocument,fieldReference,handleFile,documentPreview}=useApplyForm()
@@ -38,14 +40,23 @@ const removeReference = (index: number) => {
 <template>
 <div class="w-full">
   <!-- References Section -->
+   <!-- <pre>{{ form.references }}</pre> -->
   <div v-if="!notApply">
         <h2 class="text-xl font-bold mb-4">References</h2>
 
       <div class="w-full mb-2 border-b border-b-gray-300 py-3" 
           v-for="(refItem, indexRef) in form.references" :key="indexRef">
+
         <div class="w-full flex gap-2" v-for="(fieldGroup, index) in fieldReference" :key="index">
           <template v-for="value in fieldGroup" :key="value.key">
+            <FormFields
+              v-if="value.type=='select-input'"
+              :field="value"
+              v-model="form.references[indexRef]"
+            />
+
             <FormField
+              v-else
               :field="value"
               v-model="form.references[indexRef][value.key]"
             />

@@ -4,6 +4,7 @@ import AuthUser from '../components/AuthUser.vue';
 
 import { usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import Logo from '../components/logo.vue';
 const { props:data } = usePage()
 
 const props = defineProps({
@@ -52,8 +53,7 @@ const tabs = [
         <div class="h-screen fixed w-[245px] border-r border-gray-100 bg-gray-50">
             <div class="flex items-center py-3 px-5">
                 <a href="/">
-                        <img src="https://static.wixstatic.com/media/0839e4_7910df264aee46ba85347ab33684d739~mv2_d_4782_1488_s_2.png/v1/fill/w_520,h_160,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/0839e4_7910df264aee46ba85347ab33684d739~mv2_d_4782_1488_s_2.png" alt="Logo" 
-                    class="w-30 object-contain" />
+                     <Logo/>
                 </a>
             </div>
             <div class="flex flex-col p-4">

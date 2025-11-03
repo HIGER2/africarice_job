@@ -24,7 +24,7 @@ class CanditureUser extends JsonResource
         });
         $this->application->references->map(function ($reference, $index) use (&$flattened) {
             $num = $index + 1;
-            $flattened["reference{$num}"] = "Nom : " . $reference->full_name .  '; company name : ' . $reference->company . '; function: ' . $reference->function . '; phone: ' . $reference->phone . '; email: ' . $reference->email;
+            $flattened["reference{$num}"] = "Nom : " . $reference->full_name .  '; company name : ' . $reference->company . '; function: ' . $reference->function . '; phone: ' . ($reference->country_code ?? '') . $reference->phone . '; email: ' . $reference->email;
             // $flattened["option{$num}"] = $diploma->option;
         });
 

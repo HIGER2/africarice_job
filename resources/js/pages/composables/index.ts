@@ -39,6 +39,7 @@ export function useApplyForm(){
         function:'',
         phone:'',
         email:'',
+        country_code:"+225",
     }
     const initDoc={
             uuid:null,
@@ -458,13 +459,13 @@ export function useApplyForm(){
 
         Object.keys(data).forEach(key => {
             if (Array.isArray(data[key])) {
-            if (key === 'documents') {
-                documentPreview.value = data[key]
-                return
-            }
-            data[key].length > 0
-                ? form[key] = data[key]
-                : form[key].push({ ...initialPayload[key] })
+                if (key === 'documents') {
+                    documentPreview.value = data[key]
+                    return
+                }
+                data[key].length > 0
+                    ? form[key] = data[key]
+                    : form[key].push({ ...initialPayload[key] })
             }
 
             if (typeof data[key] === 'object' && !Array.isArray(data[key])) {
@@ -472,7 +473,7 @@ export function useApplyForm(){
             }
         })
 
-        console.log(documentPreview.value)
+        // console.log(documentPreview.value)
     }
 
     const downloadZip = async (data) => {

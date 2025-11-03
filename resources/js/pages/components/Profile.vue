@@ -132,7 +132,7 @@ const setOPen=(data)=>{
                 <div v-for="ref in user?.application?.references" :key="ref.uuid" class="border p-4 rounded-xl bg-gray-50 border border-gray-200 -sm">
                 <p class="font-semibold text-gray-800">{{ ref.full_name }}</p>
                 <p class="text-sm text-gray-500">{{ ref.function }}</p>
-                <p class="text-sm">📱 {{ ref.phone }}</p>
+                <p class="text-sm">📱 {{(ref.country_code ?? '')+ref.phone }}</p>
                 <p class="text-sm">✉️ {{ ref.email }}</p>
                 </div>
             </div>

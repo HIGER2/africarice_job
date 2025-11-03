@@ -238,7 +238,18 @@ export  function useFiledStore(){
                     { type: "text", key: "email", label: "Email / Courriel" },
                 ],
                 [
-                    { type: "text", key: "phone", label: "Phone / Téléphone" },
+                { type: "select-input",
+                    options: country.map(item => ({
+                            label: item.code,
+                            value: item.code
+                        })),
+                    label: "Phone / Téléphone" ,
+                    keySelect: "country_code", 
+                    keyInput: "phone",
+                },
+                    // { type: "text", key: "phone", label: "Phone / Téléphone" },
+                ],
+                [
                     { type: "text", key: "function", label: "Function / Fonction" },
                 ],
                 [

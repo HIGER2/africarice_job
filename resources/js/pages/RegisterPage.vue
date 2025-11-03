@@ -13,7 +13,6 @@ const formData = reactive({
     email: '',
     phone:'',
     country_code:"+225",
-
 })
 
 const page = usePage()
@@ -117,7 +116,7 @@ async function handleRegister() {
       <!-- Phone / Email -->
       <div class="  gap-3 w-full">
         <div class="flex mb-3 flex-col flex-1">
-        <label class="text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+        <label class="text-sm font-medium text-gray-700 mb-1">Phone Number / Téléphone</label>
         
         <div class="flex">
           <!-- Sélecteur des indicatifs pays -->

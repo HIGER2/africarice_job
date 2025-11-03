@@ -21,13 +21,13 @@ return new class extends Migration
                 //     'create' => fn(Blueprint $table) => $table->enum('application_type', ['normal', 'spontaneous'])->default('normal')
                 // ],
             ],
-            'users' => [
-                // 'is_active' => [
-                //     'create' => fn(Blueprint $table) =>
-                //     $table->enum('is_active', ['active', 'not_active'])->default('not_active'),
-                //     'update' => fn(Blueprint $table) =>
-                //     $table->enum('is_active', ['active', 'not_active'])->nullable()->change(),
-                // ],
+            'references' => [
+                'country_code' => [
+                    'create' => fn(Blueprint $table) =>
+                    $table->string('country_code')->nullable(),
+                    // 'update' => fn(Blueprint $table) =>
+                    // $table->enum('is_active', ['active', 'not_active'])->nullable()->change(),
+                ],
             ],
             // 'origins' => [
             //     'second_nationality' => fn(Blueprint $table) => $table->string('second_nationality')->nullable(),
