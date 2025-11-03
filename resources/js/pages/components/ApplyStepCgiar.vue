@@ -20,6 +20,7 @@ const {cgiarFiled}=useApplyForm()
         <FormField
           v-for="value in field"
           :key="value.key"
+          :id="value.key"
           :field="value"
           v-model="form.cgiar_information[value.key]"
           :disabled="value.type !== 'checkbox' && !form.cgiar_information['current']"

@@ -52,6 +52,7 @@ const removeReference = (index: number) => {
             <FormFields
               v-if="value.type=='select-input'"
               :field="value"
+              :id="index+value.key"
               v-model="form.references[indexRef]"
             />
 

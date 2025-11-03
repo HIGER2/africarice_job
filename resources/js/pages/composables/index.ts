@@ -82,10 +82,10 @@ export function useApplyForm(){
         }
 
     const initialPayload={
+        identification:{...initIdentification},
         diplomas:{...initDiploma},
         cgiar_information:{...initCgiarInformation},
         experiences:{...initExperience},
-        identification:{...initIdentification},
         origin:{...initOrigin},
         reference:{...initReference},
         documents:{...initDoc},
@@ -116,10 +116,108 @@ export function useApplyForm(){
     
     let currentStep =ref(0)
 
-    const nextStep = () => {
-        if (currentStep.value < components.length - 1) {
-        currentStep.value++
+    function validateObjectById(obj, prefix) {
+        let valid = true
+
+        Object.keys(obj).forEach(key => {
+            const el = document.getElementById(`${key}`)
+            if (el) {
+            const value = obj[key]
+            if (value === null || value.toString().trim() === '') {
+                el.classList.add('is-invalid')
+                valid = false
+            } else {
+                el.classList.remove('is-invalid')
+            }
+            }
+        })
+
+        return valid
+    }
+
+    function validateArrayById(array, prefix) {
+            let valid = true
+            array.forEach((item, index) => {
+                Object.keys(item).forEach(key => {
+                const el = document.getElementById(`${index+key}`)
+                console.log('====================================');
+                console.log(el);
+                console.log(index+key);
+                console.log('====================================');
+                if (el) {
+                    const value = item[key]
+                    if (value === null || value.toString().trim() === '') {
+                    el.classList.add('is-invalid')
+                    valid = false
+                    } else {
+                    el.classList.remove('is-invalid')
+                    }
+                }
+                })
+            })
+
+            return valid
+    }
+
+    function validateStep(current, form) {
+            let isValid = true
+
+            switch (current) {
+                case 0: // Identification
+                isValid = validateObjectById(form.identification, 'identification')
+                break
+                case 1: // Diplomas
+                isValid = validateArrayById(form.diplomas, 'diplomas')
+                break
+                case 2: // CGIAR information (exemple d’objet simple)
+                if (form.cgiar_information.current) isValid = validateObjectById(form.cgiar_information, 'cgiar_information')
+                
+                break
+                case 3: // Experiences 
+                isValid = validateArrayById(form.experiences, 'experiences')
+                break
+                case 4: // Origin (objet simple) 
+                isValid = validateObjectById(form.origin, 'origin')
+                break
+                case 5:  // References
+                isValid = validateObjectById(form.reference, 'reference')
+                break
+                default:
+                isValid = true
+                break
+            }
+
+            if (!isValid) {
+                console.warn("Certains champs sont vides")
+                return false
+            }
+
+            // Passe à l’étape suivante si tout est valide
+            if (currentStep.value < components.length - 1) {
+                currentStep.value++
+            }
+            return true
         }
+
+    const nextStep = (current:any,form) => {
+        validateStep(current,form)
+        // switch (current) {
+        //     case 0:
+        //         const allFilled = Object.values(form.identification).every(
+        //             value => value !== null && value !== ''
+        //         );
+        //         break;
+        
+        //     default:
+        //         break;
+        // }
+        //   let valide = true
+        //     console.log('====================================');
+        //     console.log(form);
+        //     console.log('====================================');
+        // if (currentStep.value < components.length - 1) {
+        // currentStep.value++
+        // }
     }
 
     

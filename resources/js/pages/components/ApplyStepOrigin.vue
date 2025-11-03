@@ -20,6 +20,7 @@ defineProps({
       <FormField
         v-for="value in field"
         :key="value.key"
+        :id="value.key"
         :field="value"
         v-model="form.origin[value.key]"
       />

@@ -2,12 +2,11 @@
   <div class="mb-3 w-full flex gap-2"
     :class="field.type =='checkbox' ? ' items-center gap-1': ' flex-col '"
   >
-    <label :for="field.key" class="text-gray-700 text-[13px] font-medium">{{ field.label }}</label>
+    <label :for="$attrs.id ?? field.key" class="text-gray-700 text-[13px] font-medium">{{ field.label }}</label>
     <input
-      v-bind="$attrs"
       v-if="field.type !== 'select' && field.type !== 'file' && field.type !== 'textarea' && field.type !== 'checkbox'"
       :type="field.type"
-      :id="field.key"
+      v-bind="$attrs"
       :value="modelValue"
       :placeholder="field.label"
       @input="$emit('update:modelValue', $event.target.value)"
@@ -15,7 +14,7 @@
       :class="field.type =='checkbox' ? '': 'w-full'"
     />
     <textarea
-    v-bind="$attrs"
+      v-bind="$attrs"
       v-else-if="field.type === 'textarea'"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
@@ -59,6 +58,9 @@ const props = defineProps({
   field: Object,
   modelValue: [String, Object, Number, Boolean],
 })
+defineOptions({
+  inheritAttrs: false
+});
 const emit = defineEmits(['update:modelValue','change'])
 const onFileChange = (e) => {
   const file = e.target.files[0]

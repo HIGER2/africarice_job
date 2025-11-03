@@ -153,7 +153,7 @@ const handleSubmit=async(uuid,notApply=false)=>{
 
               <button 
                 v-if="currentStep < components.length - 1" 
-                @click="nextStep" 
+                @click="()=>nextStep(currentStep,form)" 
                 class="px-4 py-2 cursor-pointer bg-primary text-white rounded-lg"
               >
                 Next
@@ -228,3 +228,11 @@ const handleSubmit=async(uuid,notApply=false)=>{
       </div> -->
   </div>
 </template>
+
+<style>
+.is-invalid {
+  border: 1px solid red !important;
+  /* box-shadow: 0 0 5px rgba(255,0,0,0.3); */
+}
+
+</style>
