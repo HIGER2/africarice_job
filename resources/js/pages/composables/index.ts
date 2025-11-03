@@ -1,5 +1,5 @@
 
-import { reactive, ref, toRaw } from "vue"
+import { nextTick, reactive, ref, toRaw } from "vue"
 import ApplyStepDiplomas from '../components/ApplyStepDiplomas.vue';
 import ApplyStepExperience from '../components/ApplyStepExperience.vue';
 import ApplyStepIdentification from '../components/ApplyStepIdentification.vue';
