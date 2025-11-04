@@ -97,8 +97,13 @@ function openApply(pub: any) {
           <!-- ✅ Section ajoutée ici -->
               <div v-if="!user" class="bg-blue-50 border mt-2 border-blue-200 p-4 rounded-xl mb-6 max-w-lg">
                 <p class="text-blue-900 text-sm leading-relaxed">
-                  Stay updated with our latest job openings.<br>
-                  <span class="text-gray-700">Inscrivez-vous pour être informé des nouvelles offres.</span>
+                  Inscrivez-vous pour être informé des nouvelles offres !
+                  Votre talent est notre avenir : envoyez-nous votre candidature spontanée
+                  <br>
+                  <span class="text-gray-700">
+                    Sign up to be notified about new job opportunities!
+Your talent is our future: send us your spontaneous application.
+                  </span>
                 </p>
 
                 <a 
@@ -136,20 +141,25 @@ function openApply(pub: any) {
           {{ initials(pub?.job?.position_title || 'N/A') }}
         </span>
       </div>
-
+      <!-- <pre>{{ pub.job}}</pre> -->
       <div class="flex-1 w-full">
         <div class="flex flex-col md:flex-row md:items-start justify-between mb-3 gap-2">
           <div>
             <h3 class="text-md font-bold text-gray-900 mb-2">{{ pub.job.position_title }}</h3>
             <div class="flex flex-wrap md:flex-nowrap items-center gap-3 text-sm text-gray-600">
-              <span class="flex items-center gap-1">
-                <i class="uil uil-building text-blue-600"></i>
-                {{ pub.job.center }}
-              </span>
+             
               <span class="flex items-center gap-1">
                 <i class="uil uil-map-marker text-amber-500"></i>
                   <!-- {{ pub.job.city_duty_station }} -->
                  {{ pub.job.country_duty_station }}
+              </span>
+               <span class="flex items-center gap-1">
+                <i class="uil uil-building text-blue-600"></i>
+                {{ pub.job.city_duty_station }}
+              </span>
+               <span class="flex items-center gap-1">
+                <i class="uil uil-building text-blue-600"></i>
+                {{ pub.job.center }}
               </span>
             </div>
           </div>
@@ -162,6 +172,7 @@ function openApply(pub: any) {
           <span class="px-3 py-1.5 bg-green-50 text-green-700 rounded-lg text-xs font-medium border border-green-200">
             <i class="uil uil-calendar-alt"></i> Published: {{ formatDate(pub.published_at) }}
           </span>
+          
           <span class="px-3 py-1.5 bg-orange-50 text-orange-700 rounded-lg text-xs font-medium border border-orange-200">
             <i class="uil uil-clock"></i> Expires: {{ formatDate(pub.expires_at) }}
           </span>
@@ -192,6 +203,8 @@ function openApply(pub: any) {
       class="mt-4 border-t pt-3 text-sm text-gray-600 space-y-2"
     >
       <p><strong>Type:</strong> {{ pub.type }}</p>
+      <p><strong>Garde:</strong> {{ pub.job?.grade }}</p>
+      <p><strong>Division:</strong> {{pub.job?.division }}</p>
       <p><strong>Published on:</strong> {{ formatDate(pub.published_at) }}</p>
       <p><strong>Expires on:</strong> {{ formatDate(pub.expires_at) }}</p>
       <p><strong>Status:</strong> 

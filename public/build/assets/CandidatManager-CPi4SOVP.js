@@ -1,1 +1,0 @@
-import{_ as o}from"./CandidatManager.vue_vue_type_script_setup_true_lang-yqy913V3.js";import"./app-DsXdfWFG.js";import"./Table.vue_vue_type_script_setup_true_lang-BLbu57cG.js";import"./index-M1Uedtvd.js";export{o as default};

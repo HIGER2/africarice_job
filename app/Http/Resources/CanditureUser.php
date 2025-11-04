@@ -30,7 +30,7 @@ class CanditureUser extends JsonResource
 
         $this->application->experiences->map(function ($experience, $index) use (&$flattened) {
             $num = $index + 1;
-            $flattened["experience{$num}"] = "Entreprise{$num} : " . $experience->company_name . '; Poste: ' . $experience->position . '; De: ' . $experience->start_date . '; A: ' . $experience->end_date;
+            $flattened["experience{$num}"] = "Entreprise{$num} : " . $experience->company_name . '; Poste: ' . $experience->position . '; De: ' . $experience->start_date . '; A: ' . ($experience->current ? 'Présent' : $experience->end_date);
             // $flattened["option{$num}"] = $diploma->option;
         });
 
@@ -59,26 +59,33 @@ class CanditureUser extends JsonResource
 
             // User
             // 'user_id' => $this->id,
-            'candidat' => $this->name . ' ' . $this->last_name,
-            'user_email' => $this->email,
-            'user_phone' => $this->country_code . $this->phone,
-            'gender' => $this->application->identification->gender,
-            'birth_date' => Carbon::parse($this->application->identification->birth_date)->format('d/m/Y'),
-            'age' => Carbon::parse($this->application->identification->birth_date)->age . " ans",
-            'date' => Carbon::parse($this->application->date)->format('d/m/Y'),
-            // Application
-            // 'application_id' => $this->user->application->id,
-            // 'application_uuid' => $this->user->application->uuid,
+            'candidat' => trim(($this->name ?? '') . ' ' . ($this->last_name ?? '')) ?: 'N/A',
 
-            // Origin
-            // 'origin_id' => $this->application->origin->id,
-            'origin_nationality' => $this->application->origin->nationality,
-            'second_nationality'      => $this->application->origin->second_nationality,
-            'origin_country' => $this->application->origin->country,
-            'origin_city' => $this->application->origin->city,
-            'origin_experience_years' => $this->application->origin->experience_years,
-            'origin_french_level' => $this->application->origin->french_level,
-            'origin_english_level' => $this->application->origin->english_level,
+            'user_email' => $this->email ?? 'N/A',
+            'user_phone' => ($this->country_code ?? '') . ($this->phone ?? ''),
+
+            'gender' => $this->application?->identification?->gender ?? 'N/A',
+
+            'birth_date' => $this->application?->identification?->birth_date
+                ? Carbon::parse($this->application->identification->birth_date)->format('d/m/Y')
+                : 'N/A',
+
+            'age' => $this->application?->identification?->birth_date
+                ? Carbon::parse($this->application->identification->birth_date)->age . " ans"
+                : 'N/A',
+
+            'date' => $this->application?->date
+                ? Carbon::parse($this->application->date)->format('d/m/Y')
+                : 'N/A',
+
+            'origin_nationality'      => $this->application?->origin?->nationality ?? 'N/A',
+            'second_nationality'      => $this->application?->origin?->second_nationality ?? 'N/A',
+            'origin_country'          => $this->application?->origin?->country ?? 'N/A',
+            'origin_city'             => $this->application?->origin?->city ?? 'N/A',
+            'origin_experience_years' => $this->application?->origin?->experience_years ?? 0,
+            'origin_french_level'     => $this->application?->origin?->french_level ?? 'N/A',
+            'origin_english_level'    => $this->application?->origin?->english_level ?? 'N/A',
+
             // Diplomas
             // Diplomas aplatis
 

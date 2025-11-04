@@ -2,7 +2,9 @@
   <div class="mb-3 w-full flex gap-2"
     :class="field.type =='checkbox' ? ' items-center gap-1': ' flex-col '"
   >
-    <label :for="$attrs.id ?? field.key" class="text-gray-700 text-[13px] font-medium">{{ field.label }}</label>
+    <label :for="$attrs.id ?? field.key" class="text-gray-700 text-[13px] font-medium">
+      {{ field.label }}
+    </label>
     <input
       v-if="field.type !== 'select' && field.type !== 'file' && field.type !== 'textarea' && field.type !== 'checkbox'"
       :type="field.type"
@@ -39,10 +41,9 @@
       class="hidden"
     />
     <input
-    v-bind="$attrs"
+      v-bind="$attrs"
       v-else-if="field.type === 'checkbox'"
       type="checkbox"
-      :id="field.key"
       :value="modelValue"
       :checked="modelValue"
        @change="$emit('update:modelValue', !modelValue)"

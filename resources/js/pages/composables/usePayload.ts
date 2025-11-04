@@ -23,6 +23,10 @@ export function usePayloadStore(){
             center:'',
             status:'',
             reason_replacement:"",
+            grade:'',
+            division:'',
+            program:'',
+            city_duty_station:'',
         },
         document:[]
     })

@@ -20,8 +20,6 @@ export function useRepository(){
     
             const message = 'Tracker has been successfully add. ✅'
                 Inertia.reload()
-               
-    
         } catch (error) {
             let message = error.response?.data?.message ? error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'
             if (error.response && error.response.data && error.response.data.errors) {

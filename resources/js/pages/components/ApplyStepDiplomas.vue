@@ -37,7 +37,7 @@ const removeReference = (index: number) => {
       <template v-for="(value,index) in fieldGroup" :key="value.key">
         <FormField
           :field="value"
-          :id="indexRef+value.key"
+          :id="`${indexRef}${value.key}`"
           v-model="form.diplomas[indexRef][value.key]"
         />
       </template>

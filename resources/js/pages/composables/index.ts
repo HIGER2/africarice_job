@@ -1,5 +1,5 @@
 
-import { nextTick, reactive, ref, toRaw } from "vue"
+import { reactive, ref, toRaw } from "vue"
 import ApplyStepDiplomas from '../components/ApplyStepDiplomas.vue';
 import ApplyStepExperience from '../components/ApplyStepExperience.vue';
 import ApplyStepIdentification from '../components/ApplyStepIdentification.vue';
@@ -56,7 +56,7 @@ export function useApplyForm(){
             position: "",
             start_date: "",
             end_date: "",
-            current: '',
+            current: false,
     }
     const initCgiarInformation={
         uuid:null,
@@ -166,8 +166,7 @@ export function useApplyForm(){
             return valid
     }
 
-    async function validateStep(current, form) {
-        await nextTick();
+    function validateStep(current, form) {
             let isValid = true
 
             switch (current) {
@@ -204,10 +203,13 @@ export function useApplyForm(){
                 currentStep.value++
             }
             return true
-        }
+    }
 
     const nextStep = (current:any,form) => {
-        validateStep(current,form)
+        // validateStep(current,form)
+         if (currentStep.value < components.length - 1) {
+                currentStep.value++
+            }
     }
 
     
@@ -235,68 +237,66 @@ export function useApplyForm(){
     }
 
     function validateForm(data) {
-    let errors = [];
+        let errors = [];
+        // Vérification diplomas
+        if (!data.diplomas || data.diplomas.length === 0) {
+            errors.push("Au moins un diplôme est requis. | At least one diploma is required.");
+        } else {
+            data.diplomas.forEach((d, i) => {
+                if (!d.diploma || !d.option) {
+                    errors.push(`Diplôme ${i + 1}: diplôme et option obligatoires. | Diploma ${i + 1}: diploma and option are required.`);
+                }
+            });
+        }
 
-    // Vérification diplomas
-    if (!data.diplomas || data.diplomas.length === 0) {
-        errors.push("Au moins un diplôme est requis. | At least one diploma is required.");
-    } else {
-        data.diplomas.forEach((d, i) => {
-            if (!d.diploma || !d.option) {
-                errors.push(`Diplôme ${i + 1}: diplôme et option obligatoires. | Diploma ${i + 1}: diploma and option are required.`);
-            }
-        });
+        // Vérification cgiar_information
+        if (data.cgiar_information.current && (!data.cgiar_information.cgiar_center || !data.cgiar_information.cgiar_email)) {
+            errors.push("Les informations CGIAR (centre et email) sont obligatoires. | CGIAR information (center and email) is required.");
+        }
+
+        // Vérification expérience
+        if (!data.experiences || data.experiences.length === 0) {
+            errors.push("Au moins une expérience est requise. | At least one experience is required.");
+        } else {
+            data.experiences.forEach((exp, i) => {
+                if (!exp.company_name || !exp.position || !exp.start_date) {
+                    errors.push(`Expérience ${i + 1}: nom de l’entreprise, poste et date de début obligatoires. | Experience ${i + 1}: company name, position, and start date are required.`);
+                }
+            });
+        }
+
+        // Vérification identification
+        if (!data.identification || !data.identification.birth_date || !data.identification.gender) {
+            errors.push("Les informations d’identification (date de naissance et genre) sont obligatoires. | Identification information (birth date and gender) is required.");
+        }
+
+        // Vérification origin
+        if (!data.origin || !data.origin.nationality || !data.origin.country) {
+            errors.push("Nationalité et pays d’origine obligatoires. | Nationality and country of origin are required.");
+        }
+
+        // Vérification références
+        if (!data.references || data.references.length === 0) {
+            errors.push("Au moins une référence est requise. | At least one reference is required.");
+        } else {
+            data.references.forEach((r, i) => {
+                if (!r.full_name || !r.email || !r.phone) {
+                    errors.push(`Référence ${i + 1}: nom, email et téléphone obligatoires. | Reference ${i + 1}: full name, email, and phone are required.`);
+                }
+            });
+        }
+
+        // Vérification documents
+        if (
+            !data.documents ||
+            data.documents.filter(doc => doc.file !== null && doc.file !== "").length < 1 &&
+            documentPreview.value.length == 0
+        ) {
+            errors.push("Veuillez télécharger votre CV. | Please upload your CV.");
+        }
+
+        return errors;
     }
-
-    // Vérification cgiar_information
-    if (data.cgiar_information.current && (!data.cgiar_information.cgiar_center || !data.cgiar_information.cgiar_email)) {
-        errors.push("Les informations CGIAR (centre et email) sont obligatoires. | CGIAR information (center and email) is required.");
-    }
-
-    // Vérification expérience
-    if (!data.experiences || data.experiences.length === 0) {
-        errors.push("Au moins une expérience est requise. | At least one experience is required.");
-    } else {
-        data.experiences.forEach((exp, i) => {
-            if (!exp.company_name || !exp.position || !exp.start_date) {
-                errors.push(`Expérience ${i + 1}: nom de l’entreprise, poste et date de début obligatoires. | Experience ${i + 1}: company name, position, and start date are required.`);
-            }
-        });
-    }
-
-    // Vérification identification
-    if (!data.identification || !data.identification.birth_date || !data.identification.gender) {
-        errors.push("Les informations d’identification (date de naissance et genre) sont obligatoires. | Identification information (birth date and gender) is required.");
-    }
-
-    // Vérification origin
-    if (!data.origin || !data.origin.nationality || !data.origin.country) {
-        errors.push("Nationalité et pays d’origine obligatoires. | Nationality and country of origin are required.");
-    }
-
-    // Vérification références
-    if (!data.references || data.references.length === 0) {
-        errors.push("Au moins une référence est requise. | At least one reference is required.");
-    } else {
-        data.references.forEach((r, i) => {
-            if (!r.full_name || !r.email || !r.phone) {
-                errors.push(`Référence ${i + 1}: nom, email et téléphone obligatoires. | Reference ${i + 1}: full name, email, and phone are required.`);
-            }
-        });
-    }
-
-    // Vérification documents
-    if (
-        !data.documents ||
-        data.documents.filter(doc => doc.file !== null && doc.file !== "").length < 1 &&
-        documentPreview.value.length == 0
-    ) {
-        errors.push("Veuillez télécharger votre CV. | Please upload your CV.");
-    }
-
-    return errors;
-}
-
 
     const submitForm = async (uuid:string) => {
     try {

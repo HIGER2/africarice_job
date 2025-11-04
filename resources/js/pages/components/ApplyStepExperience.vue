@@ -34,8 +34,9 @@ const removeReference = (index: number) => {
       <template v-for="value in fieldGroup" :key="value.key">
         <FormField
           :field="value"
-          :id="index+value.key"
+          :id="`${indexRef}${value.key}`"
           v-model="form.experiences[indexRef][value.key]"
+          :disabled="value.key == 'end_date' && form.experiences[indexRef].current"
         />
       </template>
     </div>

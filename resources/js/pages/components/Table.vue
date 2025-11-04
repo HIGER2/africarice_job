@@ -10,16 +10,16 @@ const slots = useSlots();
 </script>
 
 <template>
- <div class="w-full overflow-x-auto border border-gray-200 rounded-md">
-    <table class="w-full border-collapse divide-y divide-gray-200">
+ <div class="w-full   rounded-md">
+    <table class="w-full border-collapse ">
     <!-- En-tête -->
-    <thead class="bg-gray-50">
+    <thead class=" bg-white">
       <tr>
         <th
           v-for="col in columns"
           :key="col.key"
           scope="col"
-          class="px-6 border-r  border-gray-300 py-4 text-left text-[10px] font-bold text-primary uppercase tracking-wider"
+          class="px-6 border-b text-nowrap border-gray-300 py-4 text-left text-[10px] font-bold text-primary uppercase tracking-wider"
         >
           {{ col.label }}
         </th>
@@ -28,7 +28,7 @@ const slots = useSlots();
         <th
           v-if="slots.actions"
           scope="col"
-          class="px-6 sticky right-0 bg-gray-50 py-4 text-right text-[11px] font-bold text-primary uppercase tracking-wider"
+          class="px-6 sticky right-0 bg-white py-4 text-right text-[11px] font-bold text-primary uppercase tracking-wider"
         >
           Actions
         </th>
@@ -46,7 +46,7 @@ const slots = useSlots();
         <td
           v-for="col in columns"
           :key="col.key"
-          class="px-6 border-r border-gray-300 py-4 whitespace-nowrap text-sm text-gray-700"
+          class="px-6 border-b border-gray-300 py-4 whitespace-nowrap text-sm text-gray-700"
         >
           <!-- Vérifie si un slot existe pour cette colonne -->
           <slot
@@ -60,7 +60,7 @@ const slots = useSlots();
         <!-- Slot Actions -->
         <td
           v-if="slots.actions"
-          class="px-6 sticky right-0 bg-white border-r py-4 whitespace-nowrap text-right text-sm"
+          class="px-6 sticky right-0 bg-white  py-4 whitespace-nowrap text-right text-sm"
         >
           <slot name="actions" :row="row" />
         </td>

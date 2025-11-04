@@ -368,7 +368,8 @@ class AppController extends Controller
             // 4. Experiences
             if (!empty($data['experiences'])) {
                 foreach ($data['experiences'] ?? [] as $e) {
-                    $current = filter_var($e['current'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+                    // $current = filter_var($e['current'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+                    $current = filter_var($e['current'] ?? false, FILTER_VALIDATE_BOOLEAN);
 
                     $application->experiences()->updateOrCreate(
                         [
@@ -379,7 +380,7 @@ class AppController extends Controller
                             'company_name' => $e['company_name'] ?? null,
                             'position'     => $e['position'] ?? null,
                             'start_date'   => $e['start_date'] ?? null,
-                            'end_date'     => $e['end_date'] ?? null,
+                            'end_date'     => $current ? null : ($e['end_date'] ?? null),
                             'current'      => $current,
                         ]
                     );
@@ -668,14 +669,24 @@ class AppController extends Controller
                 Publication::whereDate('expires_at', '<', Carbon::now('Africa/Abidjan')->toDateString())
                     ->where('status', '!=', 'closed')
                     ->update(['status' => 'closed']);
-                $offre = OffreResource::collection(Publication::with(['job', 'files', 'candidatures.user', 'lastTracking'])->orderBy('created_at', 'desc')->get());
+                $offres = OffreResource::collection(
+                    Publication::with(['job', 'files', 'candidatures.user', 'lastTracking'])
+                        ->when($search, function ($q) use ($search) {
+                            $q->whereHas('job', function ($jobQuery) use ($search) {
+                                $jobQuery->where('position_title', 'like', "%{$search}%")
+                                    ->orWhere('reference', 'like', "%{$search}%");
+                            });
+                        })
+                        ->orderBy('created_at', 'desc')
+                        ->get()
+                );
                 $admins = User::where('role', 'admin')
                     ->select('id', 'name', 'last_name')
                     ->selectRaw("CONCAT(name, ' ', last_name) as fullname")
                     ->get();
 
                 $data = (object)[
-                    "offer" => $offre,
+                    "offer" => $offres,
                     "assign" => $admins
                 ];
 
@@ -906,7 +917,6 @@ class AppController extends Controller
     //     }
     // }
 
-
     public function storeOffre(OffreRequest $request)
     {
         try {
@@ -939,13 +949,17 @@ class AppController extends Controller
 
                 // 🔹 Mise à jour du recrutement lié
                 $publication->job()->update([
-                    'reference'           => $offre['reference'],
+                    // 'reference'           => $offre['reference'],
                     'position_title'      => $offre['position_title'],
                     'country_duty_station' => $offre['country_duty_station'],
                     'center'              => $offre['center'],
                     'manager'             => $offre['manager'],
                     'reason'              => $offre['reason'],
                     'reason_replacement'  => $offre['reason_replacement'] ?? null,
+                    'city_duty_station'     => $offre['city_duty_station'] ?? null,
+                    'division'           => $offre['division'] ?? null,
+                    'grade'           => $offre['grade'] ?? null,
+                    'program'           => $offre['program'] ?? null,
                     'assign_by'           => $offre['assign_by'] ?? Auth::id(),
                 ]);
             } else {
@@ -959,6 +973,11 @@ class AppController extends Controller
                     'reason'              => $offre['reason'],
                     'reason_replacement'  => $offre['reason_replacement'] ?? null,
                     'assign_by'           => $offre['assign_by'] ?? Auth::id(),
+                    'city_duty_station'     => $offre['city_duty_station'] ?? null,
+                    'division'           => $offre['division'] ?? null,
+                    'grade'           => $offre['grade'] ?? null,
+                    'program'           => $offre['program'] ?? null,
+
                 ]);
 
                 // 🔹 Création de la publication

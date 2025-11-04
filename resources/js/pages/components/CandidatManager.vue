@@ -10,6 +10,7 @@ const props = defineProps({
   user: Object,
   step: Number
 })
+
 const search = ref(props.search || null)
 let timer = null
 
@@ -70,8 +71,7 @@ function fetchData() {
                     </div>
                 </div>
                 <div class="w-full">
-                    
-                    <div class="w-full bg-white ">
+                    <div class="w-full overflow-x-auto bg-white ">
                         <Table :columns="columns" :rows="data?.data">
                            <template #documents="{ row }">
                                <div class="flex flex-col gap-2">
@@ -94,7 +94,6 @@ function fetchData() {
                         </Table>
 
                     </div>
-
                         <!-- Pagination (optionnel)
                         <div class="mt-4 flex items-center justify-between p-3">
                             <div class="text-sm text-gray-600">

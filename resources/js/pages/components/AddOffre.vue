@@ -33,7 +33,7 @@ watch(
   () => props.data,
   (value) => {
     if (value && value.assign) {
-      fieldAddOffre[2][0].options = value.assign.map((item) => ({
+      fieldAddOffre[5][0].options = value.assign.map((item) => ({
         label: item.fullname,   // ou item.name + ' ' + item.last_name si nécessaire
         value: item.id,            // l'id original
       }))
@@ -46,11 +46,11 @@ watch(
 </script>
 
 <template>
-  <div class="p-6">
+  <div class="">
     <!-- Bouton -->
      <button 
       @click="open = true" 
-     class="border-[0.1rem] border-gray-200 p-2 px-3 rounded-lg text-primary cursor-pointer">
+     class="border-0 bg-primary  border-gray-200 p-2 px-3 rounded-lg text-white cursor-pointer">
         <i class="uil uil-plus"></i>
         <span>Add a Job Offer</span>
     </button> 

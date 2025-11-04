@@ -12,8 +12,10 @@ import StatusOngoing from './ui/StatusOngoing.vue';
 
 const props= defineProps({
   data: Array,
+  search: String,
 })
 const {exportToExcel,updateOffres,downloadZip}=useApplyForm()
+
 
 const labelsMap = {
     id: "#",
@@ -84,8 +86,14 @@ const exportCv = reactive({
                 <!-- <h4 class="font-bold">Gerer les offres</h4> -->
                  <!-- {{ data?.data?.trakings }} -->
                 <h2 class="text-xl font-semibold mb-4">Job Application Tracking History</h2>
-                <div class="flex gap-2 justify-between items-center">
+                <div class="flex  justify-between items-center">
                     <AddOffreTracking :data="data?.data"/>
+                    <button type="button"
+                    @click="exportToExcel(columns,data?.data?.trakings, 'Liste_des_offres.xlsx')"
+                    class="border-[0.1rem] border-gray-200 p-2 px-3 rounded-lg text-primary cursor-pointer">
+                        <i class="uil uil-export"></i>
+                        <span>Export</span>
+                    </button>
                         <!-- <button
                             type="button"
                             class="bg-primary p-2 px-3 rounded-lg text-white cursor-pointer hover:bg-primary-700 transition">

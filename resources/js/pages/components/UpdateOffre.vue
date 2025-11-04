@@ -138,7 +138,7 @@ watch(
   () => props.assign,
   (value) => {
     if (value) {
-      fieldAddOffre[2][0].options = value.map((item) => ({
+      fieldAddOffre[5][0].options = value.map((item) => ({
         label: item.fullname,   // ou item.name + ' ' + item.last_name si nécessaire
         value: item.id,            // l'id original
       }))

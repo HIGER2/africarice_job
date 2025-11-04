@@ -33,12 +33,17 @@ class OffreDetailResource extends JsonResource
             'job' => $this->whenLoaded('job', function () {
                 return [
                     'uuid'           => $this->job->uuid,
-                    'code_recrutement' => $this->job->code_recrutement,
-                    'position_title' => $this->job->position_title,
-                    'center'         => $this->job->center,
-                    'reason'         => $this->job->reason,
-                    'manager'         => $this->job->manager,
-                    'reason_replacement'         => $this->job->reason_replacement,
+                    'code_recrutement' => $this?->job?->code_recrutement,
+                    'position_title' => $this?->job?->position_title,
+                    'center'         => $this?->job?->center,
+                    'reason'         => $this?->job?->reason,
+                    'manager'         => $this?->job?->manager ?? "N/A",
+                    'reason_replacement' => $this->whenLoaded('job')?->reason_replacement ?? "N/A",
+                    'country_duty_station' => $this->whenLoaded('job')?->country_duty_station ?? "N/A",
+                    'city_duty_station' => $this->whenLoaded('job')?->city_duty_station ?? "N/A",
+                    'division' => $this->whenLoaded('job')?->division ?? "N/A",
+                    'grade' => $this->whenLoaded('job')?->grade ?? "N/A",
+                    'program' => $this->whenLoaded('job')?->program ?? "N/A",
                     'assign_by' => $this->whenLoaded('job', function ($relation) {
                         return [
                             "name" => $relation->assign->name . ' ' . $relation->assign->last_name

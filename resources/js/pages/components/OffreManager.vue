@@ -1,6 +1,6 @@
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useApplyForm } from '../composables';
 import AddOffre from './AddOffre.vue';
 import Table from './Table.vue';
@@ -8,8 +8,12 @@ import UpdateOffre from './UpdateOffre.vue';
 import StatusOngoing from './ui/StatusOngoing.vue';
 import StatusOffer from './ui/StatusOffer.vue';
 import Spinnercomponent from './Spinnercomponent.vue';
+import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3'
+import { onBeforeUnmount } from 'vue';
 
-defineProps({
+
+const props = defineProps({
   data: Array,
 })
 const columns = [
@@ -19,9 +23,17 @@ const columns = [
   { key: "manager", label: "Manager" },
   { key: "center", label: "Recruitment Entity" },
   { key: "position_title", label: "Position" },
+  { key: "country_duty_station", label: "Country duty station" },
+  { key: "city_duty_station", label: "City duty station" },
+  { key: "division", label: "Division" },
+  { key: "grade", label: "Grade" },
+  { key: "program", label: "Program" },
   { key: "status", label: "Status" },
   { key: "ongoing", label: "Ongoing status" },
+  { key: "comment", label: "Comment tacking" },
+  { key: "date_tracking", label: "Date tracking" },
   { key: "reason", label: "Reason" },
+  { key: "reason_replacement", label: "Replacement fullname" },
   { key: "published_at", label: "Published on" },
   { key: "expires_at", label: "Expires on" },
   { key: "candidates_count", label: "Number of candidates" },
@@ -31,6 +43,10 @@ const {exportToExcel}=useApplyForm()
 const row = ref(null)
 const loading= ref(false)
 const isIndex= ref(null)
+
+const search = ref(props.search || null)
+let timer = null
+
 const handleClose =()=>{
     row.value = false
 }
@@ -43,13 +59,32 @@ const setRowData = (data) => {
     published_at: data.published_at ?? '',
     type: data.type ?? 'public',
     expires_at: data.expires_at ?? '',
+    status: data.status ?? '',
     assign_by: data.job.assign_by ?? '',
     reason: data.job.reason ?? '',
     manager: data.job.manager ?? '',
     center: data.job.center ?? '',
-    status: data.status ?? '',
+    grade: data.job.grade ?? '',
+    program: data.job.program ?? '',
+    division: data.job.division ?? '',
+    city_duty_station: data.job.city_duty_station ?? '',
     reason_replacement: data.job.reason_replacement ?? ''
   }
+}
+
+
+
+function fetchData() {
+   // Annuler le précédent timer
+        if (timer) clearTimeout(timer)
+        // Lancer un nouveau timer
+        timer = setTimeout(() => {
+            Inertia.get(
+            '/manager/offres',
+            { search: search.value },
+            { preserveState: true, replace: true }
+            )
+        }, 300) 
 }
 
 
@@ -78,6 +113,11 @@ const Updated=async(data)=>{
     }
 }
 
+onBeforeUnmount(() => {
+  // Quand vous quittez la page
+  router.reload()
+})
+
 // const getDetails=(uuid)=>{
 
 // }
@@ -85,22 +125,26 @@ const Updated=async(data)=>{
 
 <template>
   <div>
-        <div class="w-full ">
-            <div class="flex  justify-between items-center w-full">
-                <!-- <h4 class="font-bold">Gerer les offres</h4> -->
-                <!-- {{ data }} -->
-                <h2 class="text-2xl font-semibold mb-4">Manage Job Offers</h2>
-                <div class="flex justify-between items-center">
-                    <AddOffre :data="data" />
+        <div class="w-full min-h-screen flex flex-col">
+            <div class="flex sticky left-0 right-0  justify-between mb-6 items-center w-full">
+                <h2 class="text-2xl font-semibold">Manage Job Offers</h2>
+                <div class="flex gap-2 justify-between items-center">
+                    <input 
+                    v-model="search"
+                    @input="fetchData"
+                    type="search" placeholder="search..." class="border-[0.1rem] border-gray-200 p-2 px-3 rounded-lg text-primary cursor-pointer">
                     <button type="button"
                     @click="exportToExcel(columns,data.offer, 'Liste_des_offres.xlsx')"
-                    class="bg-primary p-2 px-3 rounded-lg text-white cursor-pointer">
+                    class="border-[0.1rem] border-gray-200 p-2 px-3 rounded-lg text-primary cursor-pointer">
                         <i class="uil uil-export"></i>
                         <span>Export</span>
                     </button>
+                    <AddOffre :data="data" />
                 </div>
+            
             </div>
-            <div class="w-full">
+            
+            <div class=" pb-10 overflow-x-auto">
                 <div class="w-ful">
                     <Table :columns="columns" :rows="data?.offer">
                     <!-- Publication -->

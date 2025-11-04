@@ -39,10 +39,12 @@ class PublicationResource extends JsonResource
             'job' => [
                 // 'id' => $this->job->id,
                 // 'code_recrutement' => $this->job->code_recrutement,
-                'position_title' => $this->job->position_title,
-                'center' => $this->job->center,
-                'country_duty_station' => $this->job->country_duty_station,
-                'city_duty_station' => $this->job->city_duty_station,
+                'position_title' => $this?->job?->position_title,
+                'center' => $this?->job?->center,
+                'country_duty_station' => $this?->job?->country_duty_station,
+                'city_duty_station' => $this?->job?->city_duty_station,
+                'grade' => $this?->job?->grade,
+                'division' => $this?->job?->division,
                 // ajoute d'autres champs si besoin
             ],
             'files' => collect($this->files)->map(function ($file) {

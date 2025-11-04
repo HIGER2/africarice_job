@@ -96,7 +96,7 @@ const labelsMap = {
                 </div>
                 <div class="w-full">
                     
-                    <div class="overflow-x-aut ">
+                  <div class="overflow-x-auto pb-10">
                     <Table :columns="columns" :rows="data?.data">
                             <!-- Slot document (avec lien téléchargeable) -->
                             <template #documents="{ row }">

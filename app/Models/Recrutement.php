@@ -12,14 +12,11 @@ class Recrutement extends Model
     protected $fillable = [
         'center',
         'uuid',
-        'country_duty_station',
-        'city_duty_station',
-        'position_title',
+
         'recrutement_id',
         'contract_from',
         'contract_to',
-        'grade',
-        'division',
+
         'program',
         'sub_unit',
         'education_level',
@@ -37,7 +34,12 @@ class Recrutement extends Model
         'initiative_lead',
         'initiative_personnel',
         'salary_post',
-
+        'reference',
+        'grade',
+        'division',
+        'country_duty_station',
+        'city_duty_station',
+        'position_title',
         'manager',
         'reason',
         'reason_replacement',

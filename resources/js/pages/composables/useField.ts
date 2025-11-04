@@ -6,14 +6,48 @@ export  function useFiledStore(){
 
             const fieldAddOffre = [
                 [
-                    { type: "text", key: "reference", label: "Post Reference / Référence du poste" },
+                    { type: "text", key: "reference", label: "Post Reference" },
+                ],
+                
+                [
+                    { type: "text", key: "position_title", label: "Post Title" },
                 ],
                 [
-                    { type: "text", key: "position_title", label: "Post Title / Titre du poste" },
-                    { type: "select", options:[...country], key: "country_duty_station", label: "Country / Pays" },
+                    { type: "text", key: "program", label: "Program",
+                        
+                    },
                 ],
                 [
-                    { type: "select", options:[...country], key: "assign_by", label: "Assign by" },
+                    { type: "select", options:[...country], key: "country_duty_station", label: "Country" },
+                    { type: "text", key: "city_duty_station", label: "City duty station" },
+                ],
+                [
+                    { type: "select", options:[
+                        {label:"GSS1",value:"GSS1"},
+                        {label:"GSS2",value:"GSS2"},
+                        {label:"GSS3",value:"GSS3"},
+                        {label:"GSS4",value:"GSS4"},
+                        {label:"GSS5",value:"GSS5"},
+                        {label:"GSS6",value:"GSS6"},
+                        {label:"GSS7",value:"GSS7"},
+                        {label:"GSS8",value:"GSS8"},
+                        {label:"GSS9",value:"GSS9"},
+                        {label:"IRSPDF",value:"IRSPDF"},
+                        {label:"IRSAPS",value:"IRSAPS"},
+                        {label:"IRSPS",value:"IRSPPS"},
+                        {label:"IRSEPS",value:"IRSPEPS"},
+                        {label:"Consultant Local",value:"consultant_local"},
+                        {label:"Consultant International",value:"consultant_international"},
+                    ], key: "grade", label: "Grade" },
+                    { type: "select",options:[
+                        {label:"Corporate",value:'corporate'},
+                        {label:"Recherche",value:'recherche'},
+                        {label:"DGO",value:'DGO'},
+                        {label:"Finance",value:'finance'},
+                    ], key: "division", label: "Division" },
+                ],
+                [
+                    { type: "select", options:[], key: "assign_by", label: "Assign by" },
                 ],
                 [
                     { type: "text", key: "manager", label: "Manager fullname" },
@@ -54,7 +88,7 @@ export  function useFiledStore(){
                     ], key: "type", label: "Publication type" },
                 ],
                 [
-                    { type: "text", key: "refereason_replacementrence", label: "Replacement fullname" },
+                    { type: "text", key: "reason_replacement", label: "Replacement fullname" },
                 ],
                 [
                     { type: "date", key: "published_at", label: "Published On / Publié le" },
@@ -108,7 +142,16 @@ export  function useFiledStore(){
     
             const fieldDiploma = [
                 [
-                    { type: "text", key: "diploma", label: "Diploma / Diplôme" },
+                    { type: "select",options:[
+                        {label:"Doctorat/Doctorate", value:"doctorate"},
+                        {label:"Maîtrise/Master", value:"Maîtrise/Master"},
+                        {label:"Licence/ Bachelor’s  degree", value:"Licence/ Bachelor’s  degree"},
+                        {label:"BTS", value:"BTS"},
+                        {label:"Baccalauréat/ Baccalaureate", value:"baccalaureate"},
+                        {label:"BEPC", value:"BEPC"},
+                        {label:"CEPE", value:"CEPE"},
+                        {label:"Autre", value:"autre"},
+                    ], key: "diploma", label: "Diploma / Diplôme" },
                     { type: "text", key: "option", label: "Diploma Option / Option du diplôme" },
                 ],
             ]
@@ -122,11 +165,14 @@ export  function useFiledStore(){
                     { type: "date", key: "start_date", label: "Start Date / Date de début" },
                     { type: "date", key: "end_date", label: "End Date / Date de fin" },
                 ],
+                [
+                    { type: "checkbox", key: "current", label: "Are you still currently working in this position ? / Travaillez-vous encore actuellement à ce poste ? :" },
+                ],
             ]
     
             const cgiarFiled = [
                 [
-                    { type: "checkbox", key: "current", label: "Check if currently working for CGIAR center / Cocher si vous travaillez actuellement pour un centre du CGIAR" },
+                    { type: "checkbox", key: "current", label: "Check if you have previously worked, or are currently working, for a CGIAR center. / Travaillez-vous encore actuellement à ce poste ? :" },
                 ],
                 [
                     { 
@@ -256,7 +302,6 @@ export  function useFiledStore(){
                     { type: "text", key: "company", label: "Company / Entreprise" },
                 ],
             ]
-
 
 
             return {

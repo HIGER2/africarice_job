@@ -151,8 +151,59 @@ const exportCv = reactive({
 
     <!-- General Information -->
     <div class="grid grid-cols-2 gap-2">
+         <div class="w-full border border-gray-100 p-4 rounded-md">
+            <!-- <h2 class="text-xl font-semibold text-gray-800 mt-8 mb-4">Job Details</h2> -->
+            <div class="grid grid-cols-2 gap-6 text-sm">
+                <div>
+                    <p class="text-gray-500">Position Title</p>
+                    <p class="font-medium">{{ data?.data[0]?.job.position_title }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Duty Country</p>
+                    <p class="font-medium">{{ data?.data[0]?.job.city_duty_station }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Duty City</p>
+                    <p class="font-medium">{{ data?.data[0]?.job.country_duty_station }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Grade</p>
+                    <p class="font-medium">{{ data?.data[0]?.job.grade }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Division</p>
+                    <p class="font-medium">{{ data?.data[0]?.job.grade }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Program</p>
+                    <p class="font-medium">{{ data?.data[0]?.job.program }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Reason</p>
+                    <p class="font-medium">{{ data?.data[0]?.job.reason ?? 'Not specified' }}</p>
+                </div>
+               <div>
+                    <p class="text-gray-500">Replacement fullname</p>
+                    <p class="font-medium">{{ data?.data[0]?.job.reason_replacement ?? 'Not specified' }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Center</p>
+                    <p class="font-medium">{{ data.data[0]?.job?.center ?? 'Not specified' }}</p>
+                </div>
+               
+                
+            </div>
+        </div>
         <div class="w-full border border-gray-100 p-4 rounded-md">
             <div class="grid grid-cols-2 gap-6 text-sm">
+                 <div>
+                    <p class="text-gray-500">Recruiter</p>
+                    <p class="font-medium">{{ data?.data[0]?.job.assign_by ?? 'Not specified' }}</p>
+                </div>
+                 <div>
+                    <p class="text-gray-500">Manager</p>
+                    <p class="font-medium">{{ data?.data[0]?.job.manager ?? 'Not specified' }}</p>
+                </div>
                 <div>
                     <p class="text-gray-500">Reference</p>
                     <p class="font-medium">{{ data?.data[0]?.reference }}</p>
@@ -164,7 +215,6 @@ const exportCv = reactive({
                 <div>
                     <p class="text-gray-500">Status</p>
                     <StatusOffer :status="data?.data[0]?.status"/>
-
                 </div>
                 <div>
                     <p class="text-gray-500">Published on</p>
@@ -178,35 +228,7 @@ const exportCv = reactive({
         </div>
          <!-- Job Details -->
           <!-- <pre>{{ data?.data[0]?.job }}</pre> -->
-        <div class="w-full border border-gray-100 p-4 rounded-md">
-            <!-- <h2 class="text-xl font-semibold text-gray-800 mt-8 mb-4">Job Details</h2> -->
-            <div class="grid grid-cols-2 gap-6 text-sm">
-                <div>
-                    <p class="text-gray-500">Position Title</p>
-                    <p class="font-medium">{{ data?.data[0]?.job.position_title }}</p>
-                </div>
-                <div>
-                    <p class="text-gray-500">Duty Country</p>
-                    <p class="font-medium">{{ data?.data[0]?.job.country_duty_station }}</p>
-                </div>
-                <div>
-                    <p class="text-gray-500">Reason</p>
-                    <p class="font-medium">{{ data?.data[0]?.job.reason ?? 'Not specified' }}</p>
-                </div>
-                <div>
-                    <p class="text-gray-500">Center</p>
-                    <p class="font-medium">{{ data.data[0]?.job?.center ?? 'Not specified' }}</p>
-                </div>
-                <div>
-                    <p class="text-gray-500">Recruiter</p>
-                    <p class="font-medium">{{ data?.data[0]?.job.assign_by ?? 'Not specified' }}</p>
-                </div>
-                <div>
-                    <p class="text-gray-500">reason_replacement</p>
-                    <p class="font-medium">{{ data?.data[0]?.job.reason_replacement ?? 'Not specified' }}</p>
-                </div>
-            </div>
-        </div>
+       
     </div>
 
    
@@ -254,7 +276,7 @@ const exportCv = reactive({
                     </div>
 
             </div>
-            <div class="w-full bg-white ">
+            <div class="w-full overflow-x-auto pb-10 bg-white ">
                 <Table :columns="columns" :rows="data?.data[0]?.candidat">
                         <template #documents="{ row }">
                             <div class="flex flex-col gap-2">
