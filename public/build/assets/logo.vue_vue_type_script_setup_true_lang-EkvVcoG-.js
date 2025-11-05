@@ -1,0 +1,1 @@
+import{p as o,a as s,o as e,u as n}from"./app-Bv8aSyPj.js";const t="/build/assets/logo-pdMKclYs.png",c=["src"],p=o({__name:"logo",setup(a){return(l,r)=>(e(),s("img",{src:n(t),alt:"Logo",class:"w-40 object-contain"},null,8,c))}});export{p as _};

@@ -5,6 +5,7 @@ import axios from 'axios'
 import { Inertia } from '@inertiajs/inertia'
 import Spinnercomponent from './components/Spinnercomponent.vue'
 import countryCode from '../data/country.json'
+import phoneCode from '../data/phoneCodes.json'
 import { usePage } from '@inertiajs/inertia-vue3';
 
 const formData = reactive({
@@ -125,8 +126,8 @@ async function handleRegister() {
             v-model="formData.country_code"
             class="p-3 max-w-max border rounded-l-lg focus:ring-2 focus:ring-primary focus:outline-none"
           >
-            <option v-for="country in countryCode" :key="country.code" :value="country.code">
-              {{ country.code }}
+            <option v-for="country in phoneCode" :key="country.value" :value="country.value">
+              {{ country.value }}
             </option>
           </select>
 

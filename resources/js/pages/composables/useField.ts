@@ -1,5 +1,6 @@
 
 import country from '../../data/country.json'
+import phoneCode from '../../data/phoneCodes.json'
 
 
 export  function useFiledStore(){
@@ -336,10 +337,7 @@ const statusOptions = [
                 ],
                 [
                 { type: "select-input",
-                    options: country.map(item => ({
-                            label: item.code,
-                            value: item.code
-                        })),
+                    options: [...phoneCode],
                     label: "Phone / Téléphone" ,
                     keySelect: "country_code", 
                     keyInput: "phone",
