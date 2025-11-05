@@ -12,10 +12,10 @@ createInertiaApp({
   },
 })
 
-// Désactiver le cache - recharger les données à chaque navigation
-import { router } from '@inertiajs/inertia'
+// // Désactiver le cache - recharger les données à chaque navigation
+// import { router } from '@inertiajs/inertia'
 
-router.on('before', (event) => {
-  // Forcer le rechargement des données
-  event.detail.visit.preserveState = false
-})
+// router.on('before', (event) => {
+//   // Forcer le rechargement des données
+//   event.detail.visit.preserveState = false
+// })
