@@ -152,6 +152,42 @@ class AppController extends Controller
         ]);
     }
 
+
+    public function deleteApplicationData(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            $uuid = $request->uuid;
+            $type = $request->type;
+
+            // Vérifie que le type est valide
+            if (!in_array($type, ['experiences', 'references', 'diplomas'])) {
+                return response()->json(['message' => 'Type invalide.'], 400);
+            }
+
+            // Vérifie si l'élément existe
+            $exists = $user->application->$type()->where('uuid', $uuid)->exists();
+
+            if (!$exists) {
+                return response()->json(['message' => 'Élément non trouvé.'], 404);
+            }
+
+            // Supprime l'élément
+            $user->application->$type()->where('uuid', $uuid)->delete();
+
+            return response()->json([
+                'message' => 'Suppression réussie. / Deletion successful.'
+            ]);
+        } catch (\Exception $e) {
+            // Retourne une erreur si quelque chose ne va pas
+            return response()->json([
+                'message' => 'Une erreur est survenue. / An error occurred.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
     // Inscription
     public function registerOrUpdate(Request $request)
     {
@@ -281,7 +317,7 @@ class AppController extends Controller
         $user->save();
         Auth::login($user);
         // Retourner succès / token
-        $redirect = $user->is_active == 'active' ? '/' : '/completed';
+        $redirect = $user->is_active == 'active' ? ($user->role == 'admin' ? '/manager/offres' : '/') : '/completed';
         return response()->json([
             'message' => 'Connexion réussie',
             'user' => $user,
@@ -518,7 +554,6 @@ class AppController extends Controller
             //throw $th;
         }
     }
-
 
     public function storeCompletedProfile(CandidatureRequest $request)
     {
@@ -939,11 +974,14 @@ class AppController extends Controller
 
             if ($publication) {
                 // 🔹 Mise à jour de la publication
+                $publishedAt = Carbon::parse($offre['published_at'], 'Africa/Abidjan');
+                $expiresAt  = Carbon::parse($offre['expires_at'], 'Africa/Abidjan');
+
                 $publication->update([
                     'type'         => $offre['type'] ?? null,
                     'published_by' => Auth::id(),
-                    'published_at' => $offre['published_at'],
-                    'expires_at'   => $offre['expires_at'],
+                    'published_at' => $publishedAt,
+                    'expires_at'   => $expiresAt,
                     'status'       => $status,
                 ]);
 
@@ -960,7 +998,7 @@ class AppController extends Controller
                     'division'           => $offre['division'] ?? null,
                     'grade'           => $offre['grade'] ?? null,
                     'program'           => $offre['program'] ?? null,
-                    'assign_by'           => $offre['assign_by'] ?? Auth::id(),
+                    'assign_by'           => $offre['assign_by'] ?? null,
                 ]);
             } else {
                 // 🔹 Création du recrutement
@@ -972,14 +1010,12 @@ class AppController extends Controller
                     'manager'             => $offre['manager'],
                     'reason'              => $offre['reason'],
                     'reason_replacement'  => $offre['reason_replacement'] ?? null,
-                    'assign_by'           => $offre['assign_by'] ?? Auth::id(),
+                    'assign_by'           => $offre['assign_by'] ?? null,
                     'city_duty_station'     => $offre['city_duty_station'] ?? null,
                     'division'           => $offre['division'] ?? null,
                     'grade'           => $offre['grade'] ?? null,
                     'program'           => $offre['program'] ?? null,
-
                 ]);
-
                 // 🔹 Création de la publication
                 $publication = Publication::create([
                     'uuid'         => $offre['uuid'],

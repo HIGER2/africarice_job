@@ -8,7 +8,11 @@ import FormFields from './FormFields.vue';
 const props =defineProps({
   form: Object,
   documents: Array,
-  notApply: Boolean
+  notApply: Boolean,
+  messageCV:{
+    type: String,
+    default:false
+  }
 })
 
 const initReference={
@@ -112,6 +116,9 @@ const removeReference = (index: number) => {
         </div>
       </label>
     </div>
+    <p v-if="messageCV">
+        {{ messageCV }}
+    </p>
   </div>
 
   <!-- List of Uploaded Documents -->

@@ -3,7 +3,7 @@ import { Inertia } from "@inertiajs/inertia";
 export function useRepository(){
     
 
-    const addTrackingOffer = async (formData:any) => {
+     const addTrackingOffer = async (formData:any) => {
         try {
                 // const errors = validateForm(form);
                 // if (errors.length > 0) {
@@ -35,7 +35,33 @@ export function useRepository(){
         }
         };
 
+    const deleteItemApplication = async (formData) => {
+        try {
+                if (!confirm("Would you like to confirm your application?")) {
+                    return false; // Annule l'envoi si l'utilisateur clique sur "Annuler"
+                }
+                
+            // Envoi de la requête
+            const response = await window.axios.post('/manager/application/user/delete', formData);
+    
+            const message = 'Tracker has been successfully add. ✅'
+                Inertia.reload()
+        } catch (error) {
+            let message = error.response?.data?.message ? error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'
+            if (error.response && error.response.data && error.response.data.errors) {
+            // Récupère tous les messages d'erreur et les transforme en texte
+            const messages = Object.values(error.response.data.errors)
+                .flat() // aplatit les tableaux
+                .join('\n');
+            } else {
+            alert(message);
+            }
+         
+        }
+        };
+
         return{
-            addTrackingOffer
+            addTrackingOffer,
+            deleteItemApplication
         }
 }

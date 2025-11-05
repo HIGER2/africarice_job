@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class OffreRequest extends FormRequest
 {
@@ -16,7 +17,13 @@ class OffreRequest extends FormRequest
     {
         return [
             'offre.uuid' => 'required|string|max:255',
-            'offre.reference' => 'required|string|max:255',
+            'offre.reference' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('publications', 'reference')
+                    ->ignore($this->offre['uuid'], 'uuid'), // <-- ignore l'offre actuelle
+            ],
             'offre.position_title' => 'required|string|max:255',
             'offre.country_duty_station' => 'required|string|max:255',
             'offre.published_at' => 'required|date',
@@ -27,6 +34,9 @@ class OffreRequest extends FormRequest
             'offre.status' => 'required|string|max:255',
             'offre.reason_replacement' => 'nullable|string|max:255',
             'offre.assign_by' => 'nullable|string|max:255',
+            'offre.program' => 'nullable|string|max:255',
+            'offre.city_duty_station' => 'nullable|string|max:255',
+            'offre.grade' => 'required|string|max:255',
             'offre.type' => 'nullable|string|max:255',
         ];
     }

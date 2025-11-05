@@ -13,7 +13,7 @@ const slots = useSlots();
  <div class="w-full   rounded-md">
     <table class="w-full border-collapse ">
     <!-- En-tête -->
-    <thead class=" bg-white">
+    <thead class=" bg-gray-50">
       <tr>
         <th
           v-for="col in columns"
@@ -28,7 +28,7 @@ const slots = useSlots();
         <th
           v-if="slots.actions"
           scope="col"
-          class="px-6 sticky right-0 bg-white py-4 text-right text-[11px] font-bold text-primary uppercase tracking-wider"
+          class="px-6 sticky right-0  border-b border-gray-300 bg-gray-50 py-4 text-right text-[11px] font-bold text-primary uppercase"
         >
           Actions
         </th>

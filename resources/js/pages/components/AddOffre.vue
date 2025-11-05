@@ -24,8 +24,10 @@ const change=(e)=>{
 
 const handleSubmit = async() => {
   loading.value = true
-  await submitOffre(newOffre)
-  open.value = false
+  await submitOffre(newOffre,()=>{
+       open.value = false
+  })
+  
   loading.value = false
 };
 
@@ -59,15 +61,15 @@ watch(
     <transition name="fade">
       <div 
         v-if="open" 
-        class="fixed inset-0 overflow-auto bg-black/50 bg-opacity-50 flex items-center justify-center z-50"
+        class="fixed inset-0 top-0    bg-black/50 bg-opacity-50 flex  justify-center z-50"
         @click.self="open = false"
       >
         <!-- Modal -->
-        <form action="" @submit.prevent="handleSubmit">
+        <form action="" @submit.prevent="handleSubmit" class="overflow-auto w-full h-screen">
           <transition name="scale">
           <div 
             v-if="open"
-            class="bg-white flex flex-col overflow-hidden  h-[560px]  rounded-2xl shadow-lg p-6 w-lg relative"
+            class="bg-white  flex my-4 flex-col mx-auto  rounded-lg p-6 w-lg relative"
           >
             <!-- Bouton fermer -->
               <div class="flex items-center justify-between mb-2">

@@ -2,10 +2,12 @@
 <script lang="ts" setup>
 import Profile from './components/Profile.vue';
 import ButtonBack from './components/ui/ButtonBack.vue';
+// import { useApplyForm } from './composables';
 
 defineProps({
   user: Object,
 })
+
 </script>
 
 

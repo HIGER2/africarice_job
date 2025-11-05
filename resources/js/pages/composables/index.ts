@@ -505,10 +505,13 @@ export function useApplyForm(){
     }
     };
 
-    async function submitOffre(data: any) {
+    async function submitOffre(data: any,callback:()=>void) {
     try {
         // Convertir reactive en objet natif
-       
+            if (!confirm("Would you like to confirm your application?")) {
+                    return false; // Annule l'envoi si l'utilisateur clique sur "Annuler"
+            }
+                
         const rawData = toRaw(data)
 
         // Créer FormData
@@ -530,6 +533,8 @@ export function useApplyForm(){
             'Content-Type': 'multipart/form-data',
         },
         })
+        
+        if (callback) callback()
         Inertia.reload()
     } catch (error: any) {
         let message = error.response?.data?.message ? error.response?.data?.message:'Erreur lors de l\'envoi du formulaire ❌'

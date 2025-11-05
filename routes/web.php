@@ -42,6 +42,7 @@ Route::prefix('manager')->name('manager.')->middleware(['auth', 'role:admin'])->
     Route::post('/parametre', [AppController::class, 'storeEmail'])->name('parametre');
     Route::post('/parametre/email', [AppController::class, 'storeEmail'])->name('email.add');
     Route::post('/parametre/user', [AppController::class, 'storeUser'])->name('user.add');
+    Route::post('/application/user/delete', [AppController::class, 'deleteApplicationData'])->name('application.delete');
 });
 
 

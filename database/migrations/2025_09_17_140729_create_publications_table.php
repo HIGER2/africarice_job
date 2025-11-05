@@ -25,14 +25,13 @@ return new class extends Migration
                 ->constrained('users') // ou 'staff' si tu as une table staff
                 ->onDelete('set null');
 
-
             // $table->boolean('is_published')->default(false);
             // $table->boolean('is_closed')->default(false);
             $table->enum('status', [
                 'pending',
-                'published',
-                'in_review',
+                'open',
                 'on_hold',
+                'cancelled',
                 'closed',
                 'archived',
             ])->default('pending');

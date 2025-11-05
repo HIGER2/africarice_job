@@ -15,33 +15,66 @@ return new class extends Migration
             $table->id();
             $table->foreignId('publication_id')->constrained()->onDelete('cascade'); // publication liée
             $table->enum('status', [
-                // L’offre vient d’être créée et n’a pas encore été traitée
-                'pending',
+                // SLA / Guidelines
+                '0_handled_by_hosted_center',
 
-                // L’offre est en cours d’examen par le manager ou le RH
-                'in_review',
+                // 1/9 - Recruitment form validation
+                '1_recruitment_form_validation',
 
-                // Des candidats ont été présélectionnés pour l’offre
-                'shortlisted',
+                // 2/9 - Job announcement process
+                '2_job_announcement_process',
+                '2a_translation_ongoing',
+                '2b_translation_received',
+                '2c_advertising',
+                '2d_selection_criteria_request',
+                '2e_selection_criteria_transmission',
 
-                // Entretiens programmés pour un ou plusieurs candidats
-                'interview_scheduled',
+                // 3/9 - Longlist process
+                '3_longlist_process',
+                '3a_application_downloading',
+                '3b_longlist_matrix',
 
-                // Entretiens terminés
-                'interview_completed',
+                // 4/9 - Shortlist process
+                '4_shortlist_process',
+                '4a_shortlist_matrix_ongoing',
+                '4b_shortlist_matrix_consolidation',
+                '4c_shortlist_matrix_approval',
 
-                // Une ou plusieurs offres envoyées aux candidats
-                'offer_sent',
+                // 5/9 - Interview process
+                '5_interview_process',
+                '5a_interview_date_plan',
+                '5b_rating_sheet_transmission',
 
-                // Au moins un candidat a accepté l’offre
-                'offer_accepted',
+                // 6/9 - Recruitment report
+                '6_recruitment_report',
+                '6a_report_to_send',
+                '6b_report_sent',
+                '6c_report_signature_process',
+                '6d_report_approved_process',
 
-                // Tous les postes pourvus ou l’offre est terminée
-                'closed',
+                // 7/9 - Offer process
+                '7_offer_process',
+                '7a_offer_drafted',
+                '7b_offer_sent',
+                '7c_offer_negotiation',
+                '7d_offer_accepted',
+                '7e_offer_rejected',
 
-                // Pour l’archivage et l’historique des offres terminées
-                'archived',
-            ])->default('pending');
+                // 8/9 - Reference check
+                '8_reference_check',
+                '8a_reference_details_acknowledge',
+                '8b_emails_to_send',
+                '8c_references_to_receive',
+
+                // 9/9 - Contract drafting
+                '9_contract_drafting',
+                '9a_tors_signature',
+                '9b_contract_to_send',
+                '9c_contract_sent',
+                '9d_countersigned_contract_to_send',
+                '9e_process_finalized'
+            ])->default('0_handled_by_hosted_center');
+
             $table->text('comment')->nullable();
             $table->date('date')->nullable();
 

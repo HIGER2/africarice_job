@@ -1,6 +1,6 @@
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
 import { useApplyForm } from '../composables';
 import AddOffre from './AddOffre.vue';
 import Table from './Table.vue';
@@ -73,7 +73,6 @@ const setRowData = (data) => {
 }
 
 
-
 function fetchData() {
    // Annuler le précédent timer
         if (timer) clearTimeout(timer)
@@ -113,9 +112,19 @@ const Updated=async(data)=>{
     }
 }
 
-onBeforeUnmount(() => {
+// onMounted(()=>{
+//   alert("hello")
+// })
+
+onBeforeMount(() => {
+    // alert("upfate")
   // Quand vous quittez la page
-  router.reload()
+//   Inertia.reload()
+Inertia.reload({
+    only: ['data'],   // les props que tu veux recharger
+    preserveScroll: true,        // optionnel
+    preserveState: true          // optionnel
+  })
 })
 
 // const getDetails=(uuid)=>{
@@ -126,7 +135,7 @@ onBeforeUnmount(() => {
 <template>
   <div>
         <div class="w-full min-h-screen flex flex-col">
-            <div class="flex sticky left-0 right-0  justify-between mb-6 items-center w-full">
+            <div class="flex   justify-between mb-6 items-center w-full">
                 <h2 class="text-2xl font-semibold">Manage Job Offers</h2>
                 <div class="flex gap-2 justify-between items-center">
                     <input 
@@ -141,7 +150,6 @@ onBeforeUnmount(() => {
                     </button>
                     <AddOffre :data="data" />
                 </div>
-            
             </div>
             
             <div class=" pb-10 overflow-x-auto">

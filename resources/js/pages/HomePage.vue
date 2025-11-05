@@ -172,10 +172,13 @@ Your talent is our future: send us your spontaneous application.
           <span class="px-3 py-1.5 bg-green-50 text-green-700 rounded-lg text-xs font-medium border border-green-200">
             <i class="uil uil-calendar-alt"></i> Published: {{ formatDate(pub.published_at) }}
           </span>
-          
-          <span class="px-3 py-1.5 bg-orange-50 text-orange-700 rounded-lg text-xs font-medium border border-orange-200">
+            <span class="px-3 py-1.5 bg-orange-50 text-orange-700 rounded-lg text-xs font-medium border border-orange-200">
+                <i class="uil uil-clock"></i>
+                Expires: {{ formatDate(pub.expires_at) }} <small class="text-gray-400">(GMT+0)</small>
+            </span>
+          <!-- <span class="px-3 py-1.5 bg-orange-50 text-orange-700 rounded-lg text-xs font-medium border border-orange-200">
             <i class="uil uil-clock"></i> Expires: {{ formatDate(pub.expires_at) }}
-          </span>
+          </span> -->
         </div>
       </div>
     </div>
@@ -183,14 +186,14 @@ Your talent is our future: send us your spontaneous application.
     <div class="flex flex-col md:items-end gap-3 w-full md:w-auto">
       <button 
         @click="toggleDetails(pub.uuid)" 
-        class="px-3 py-2 bg-white border-2 border-secondary text-secondary rounded-xl font-medium hover:bg-secondary cursor-pointer hover:text-white transition-all duration-200 w-full md:min-w-[120px]"
+        class="px-3 py-2 bg-white border-2 border-secondary text-secondary rounded-lg font-medium hover:bg-secondary cursor-pointer hover:text-white transition-all duration-200 w-full md:min-w-[120px]"
       >
         <i class="uil uil-eye"></i>
         {{ opened.includes(pub.uuid) ? 'Close' : 'View' }}
       </button>
       <a 
         :href="`/apply-job/${pub.uuid}`" 
-        class="px-3 py-2 bg-gradient-to-r bg-primary text-white rounded-xl font-medium hover:shadow-lg transform hover:scale-105 transition-all duration-200 w-full md:min-w-[120px] text-center"
+        class="px-3 py-2 bg-gradient-to-r bg-primary text-white rounded-lg font-medium hover:shadow-lg transform hover:scale-105 transition-all duration-200 w-full md:min-w-[120px] text-center"
       >
         <i class="uil uil-message"></i> Apply
       </a>

@@ -82,8 +82,8 @@ onMounted(() => {
             </div>
         </div> -->
         <div class="w-full flex flex-col relative h-screen  overflow-hidden">
-            <nav class="w-full items-center justify-between sticky top-0  z-10 bg-white flex p-2 border-b border-gray-100">
-                <div class="flex items-center  px-5">
+            <nav class="w-full px-6 items-center justify-between sticky top-0  z-10 bg-white flex p-2 border-b border-gray-100">
+                <div class="flex items-center">
                     <a href="/">
                         <Logo/>
                     </a>
@@ -96,7 +96,7 @@ onMounted(() => {
                             v-for="(value,index) in tabs"
                             :class="
                             [
-                            step== value.path ? 'text-secondary' : ' hover:text-secondary',
+                            step== value.path ? 'text-secondary bg-green-100' : ' hover:text-secondary',
                             index==0 ? ' border-l-0' : ''
                             ]
                             "

@@ -3,6 +3,65 @@ import country from '../../data/country.json'
 
 
 export  function useFiledStore(){
+const statusOptions = [
+    { label: "0/9 - Handled by Hosted Center", value: "0_handled_by_hosted_center" },
+
+    // 1/9 - Recruitment form validation
+    { label: "1/9 - Recruitment Form Validation", value: "1_recruitment_form_validation" },
+
+    // 2/9 - Job announcement process
+    { label: "2/9 - Job Announcement Process", value: "2_job_announcement_process" },
+    { label: "2/9-a - Translation Ongoing", value: "2a_translation_ongoing" },
+    { label: "2/9-b - Translation Received", value: "2b_translation_received" },
+    { label: "2/9-c - Advertising", value: "2c_advertising" },
+    { label: "2/9-d - Selection Criteria Request", value: "2d_selection_criteria_request" },
+    { label: "2/9-e - Selection Criteria Transmission", value: "2e_selection_criteria_transmission" },
+
+    // 3/9 - Longlist process
+    { label: "3/9 - Longlist Process", value: "3_longlist_process" },
+    { label: "3/9-a - Application Downloading", value: "3a_application_downloading" },
+    { label: "3/9-b - Longlist Matrix", value: "3b_longlist_matrix" },
+
+    // 4/9 - Shortlist process
+    { label: "4/9 - Shortlist Process", value: "4_shortlist_process" },
+    { label: "4/9-a - Shortlist Matrix Ongoing", value: "4a_shortlist_matrix_ongoing" },
+    { label: "4/9-b - Shortlist Matrix Consolidation", value: "4b_shortlist_matrix_consolidation" },
+    { label: "4/9-c - Shortlist Matrix Approval", value: "4c_shortlist_matrix_approval" },
+
+    // 5/9 - Interview process
+    { label: "5/9 - Interview Process", value: "5_interview_process" },
+    { label: "5/9-a - Interview Date Plan", value: "5a_interview_date_plan" },
+    { label: "5/9-b - Rating Sheet Transmission", value: "5b_rating_sheet_transmission" },
+
+    // 6/9 - Recruitment report
+    { label: "6/9 - Recruitment Report", value: "6_recruitment_report" },
+    { label: "6/9-a - Report To Send", value: "6a_report_to_send" },
+    { label: "6/9-b - Report Sent", value: "6b_report_sent" },
+    { label: "6/9-c - Report Signature Process", value: "6c_report_signature_process" },
+    { label: "6/9-d - Report Approved Process", value: "6d_report_approved_process" },
+
+    // 7/9 - Offer process
+    { label: "7/9 - Offer Process", value: "7_offer_process" },
+    { label: "7/9-a - Offer Drafted", value: "7a_offer_drafted" },
+    { label: "7/9-b - Offer Sent", value: "7b_offer_sent" },
+    { label: "7/9-c - Offer Negotiation", value: "7c_offer_negotiation" },
+    { label: "7/9-d - Offer Accepted", value: "7d_offer_accepted" },
+    { label: "7/9-e - Offer Rejected", value: "7e_offer_rejected" },
+
+    // 8/9 - Reference Check
+    { label: "8/9 - Reference Check", value: "8_reference_check" },
+    { label: "8/9-a - Reference Details Acknowledge", value: "8a_reference_details_acknowledge" },
+    { label: "8/9-b - Emails To Send", value: "8b_emails_to_send" },
+    { label: "8/9-c - References To Receive", value: "8c_references_to_receive" },
+
+    // 9/9 - Contract Drafting
+    { label: "9/9 - Contract Drafting", value: "9_contract_drafting" },
+    { label: "9/9-a - TORS Signature", value: "9a_tors_signature" },
+    { label: "9/9-b - Contract To Send", value: "9b_contract_to_send" },
+    { label: "9/9-c - Contract Sent", value: "9c_contract_sent" },
+    { label: "9/9-d - Countersigned Contract To Send", value: "9d_countersigned_contract_to_send" },
+    { label: "9/9-e - Process Finalized", value: "9e_process_finalized" }
+];
 
             const fieldAddOffre = [
                 [
@@ -47,18 +106,20 @@ export  function useFiledStore(){
                     ], key: "division", label: "Division" },
                 ],
                 [
-                    { type: "select", options:[], key: "assign_by", label: "Assign by" },
+                    { type: "select", options:[], key: "assign_by", label: "Assign to" },
                 ],
                 [
                     { type: "text", key: "manager", label: "Manager fullname" },
                 ],
                 [
-                { type: "select", options:[ { label: 'Pending', value: 'pending' },
-                        { label: 'Published', value: 'published' },
-                        { label: 'In Review', value: 'in_review' },
+                { type: "select", options:[ 
+                        { label: 'Pending', value: 'pending' },
+                        { label: 'Open', value: 'open' },
                         { label: 'On Hold', value: 'on_hold' },
                         { label: 'Closed', value: 'closed' },
-                        { label: 'Archived', value: 'archived' },], key: "status", label: "Status" },
+                        { label: 'Cancelled', value: 'cancelled' },
+                        ],
+                        key: "status", label: "Status" },
                     { type: "select",  options: [
                             { label: 'AfricaRice', value: 'africarice' },
                             { label: 'Alliance Bioversity & CIAT', value: 'alliance_bioversity_ciat' },
@@ -103,17 +164,7 @@ export  function useFiledStore(){
                                         key: "status",
                                         label: "Status",
                                         placeholder: "Select status",
-                                    options: [
-                                            { label: "Pending", value: "pending" },               // L’offre vient d’être créée
-                                            { label: "In Review", value: "in_review" },          // L’offre est en cours d’examen
-                                            { label: "Shortlisted", value: "shortlisted" },      // Candidats présélectionnés
-                                            { label: "Interview Scheduled", value: "interview_scheduled" }, // Entretiens programmés
-                                            { label: "Interview Completed", value: "interview_completed" }, // Entretiens terminés
-                                            { label: "Offer Sent", value: "offer_sent" },        // Offre envoyée aux candidats
-                                            { label: "Offer Accepted", value: "offer_accepted" },// Offre acceptée par un candidat
-                                            { label: "Closed", value: "closed" },               // L’offre est terminée / postes pourvus
-                                            { label: "Archived", value: "archived" },           // Offre archivée pour historique
-                                        ]
+                                    options: [...statusOptions]
                                         },
                                     ],
 

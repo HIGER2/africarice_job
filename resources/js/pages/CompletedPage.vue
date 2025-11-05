@@ -14,6 +14,8 @@ const notApply = computed(() => {
   return query.get('not_apply') || false
 })
 
+const messageCV= "NB: Pour joindre votre CV, veuillez renommer votre CV de la façon suivante : Titre du poste recherché - Noms et Prénoms / To attach your CV, please rename your CV file as follows: Job Title – First Name Last Name"
+
 // const user = page.props?.auth?.user
 
 const props = defineProps({
@@ -125,6 +127,7 @@ const handleSubmit=async()=>{
               :is="components[currentStep]" 
               :documents="documentPreview" 
               :form="form"
+              :messageCV="messageCV"
               :notApply="notApply"
               />
             </keep-alive>  

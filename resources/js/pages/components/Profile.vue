@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import ButtonBack from './ui/ButtonBack.vue';
 import UploadCv from './UploadCv.vue';
 import UpdateUser from './UpdateUser.vue';
+import { useApplyForm } from '../composables';
 
 defineProps({
   user: Object,
@@ -12,6 +13,20 @@ defineProps({
 const isOpen = ref(false)
 const setOPen=(data)=>{
     isOpen.value = data
+}
+const isLoading=ref(false)
+const {deleteItemApplication}=useApplyForm()
+
+const handleDelete=async(id,type)=>{
+    if(isLoading.value) return false
+    isLoading.value  =true
+    await deleteItemApplication({
+        uuid: id,
+        type : type
+    })
+
+    isLoading.value  =false
+    
 }
 </script>
 
@@ -108,8 +123,18 @@ const setOPen=(data)=>{
             <div class="bg-white rounded-2xl p-6 border border-gray-200 ">
             <h2 class="text-lg font-semibold mb-4 border-b pb-2">🎓 Diplômes</h2>
             <ul class="list-disc pl-6 text-gray-700 space-y-1">
-                <li v-for="d in user?.application?.diplomas" :key="d.uuid">
-                {{ d.diploma }} <span class="text-sm text-gray-500">(Option : {{ d.option }})</span>
+                <li v-for="d in user?.application?.diplomas" :key="d.uuid"
+                class="flex gap-2 items-center"
+                >
+                    {{ d.diploma }} <span class="text-sm text-gray-500">(Option : {{ d.option }})</span>
+                    <button 
+                    :disabled="isLoading"
+                        @click="handleDelete(d.uuid,'diplomas')"
+                        class="text-[16px] text-red-600 w-11 h-11 rounded-full cursor-pointer hover:bg-red-50 text-center"
+                        type="button" 
+                        title="delete diploma">
+                        <i class="uil uil-trash"></i>
+                    </button>
                 </li>
             </ul>
             </div>
@@ -118,10 +143,21 @@ const setOPen=(data)=>{
             <div class="bg-white rounded-2xl p-6 border border-gray-200 ">
             <h2 class="text-lg font-semibold mb-4 border-b pb-2">💼 Expériences professionnelles</h2>
             <ul class="divide-y divide-gray-200">
-                <li v-for="exp in user?.application?.experiences" :key="exp.uuid" class="py-3">
-                <p class="font-medium">{{ exp.position }} chez {{ exp.company_name }}</p>
-                <p class="text-sm text-gray-500">{{ exp.start_date }} → {{ exp.current ? "Actuel" : exp.end_date }}</p>
-                </li>
+                <li v-for="exp in user?.application?.experiences" :key="exp.uuid" 
+                class="py-3  flex items-end gap-1">
+                <div>
+                    <p class="font-medium">{{ exp.position }} chez {{ exp.company_name }}</p>
+                    <p class="text-sm text-gray-500">{{ exp.start_date }} → {{ exp.current ? "Actuel" : exp.end_date }}</p>
+                </div>
+                <button 
+                    :disabled="isLoading"
+                    @click="handleDelete(exp.uuid,'experiences')"
+                    class="text-[16px] text-red-600 w-11 h-11 rounded-full cursor-pointer hover:bg-red-50 text-center"
+                    type="button" 
+                    title="delete diploma">
+                    <i class="uil uil-trash"></i>
+                </button>
+            </li>
             </ul>
             </div>
 
@@ -129,11 +165,22 @@ const setOPen=(data)=>{
             <div class="bg-white rounded-2xl p-6 border border-gray-200 ">
             <h2 class="text-lg font-semibold mb-4 border-b pb-2">📇 Références</h2>
             <div class="grid md:grid-cols-2 gap-4">
-                <div v-for="ref in user?.application?.references" :key="ref.uuid" class="border p-4 rounded-xl bg-gray-50 border border-gray-200 -sm">
-                <p class="font-semibold text-gray-800">{{ ref.full_name }}</p>
-                <p class="text-sm text-gray-500">{{ ref.function }}</p>
-                <p class="text-sm">📱 {{(ref.country_code ?? '')+ref.phone }}</p>
-                <p class="text-sm">✉️ {{ ref.email }}</p>
+                <div v-for="ref in user?.application?.references" :key="ref.uuid" 
+                class=" flex justify-between items-start p-4 rounded-xl bg-gray-50 border border-gray-200 -sm">
+                    <div>
+                        <p class="font-semibold text-gray-800">{{ ref.full_name }}</p>
+                        <p class="text-sm text-gray-500">{{ ref.function }}</p>
+                        <p class="text-sm">📱 {{(ref.country_code ?? '')+ref.phone }}</p>
+                        <p class="text-sm">✉️ {{ ref.email }}</p>
+                    </div>
+                    <button 
+                        :disabled="isLoading"
+                        @click="handleDelete(ref.uuid,'references')"
+                        class="text-[16px] text-red-600 w-11 h-11 rounded-full cursor-pointer hover:bg-red-50 text-center"
+                        type="button" 
+                        title="delete diploma">
+                        <i class="uil uil-trash"></i>
+                    </button>
                 </div>
             </div>
             </div>
