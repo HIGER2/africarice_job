@@ -352,7 +352,6 @@ const statusOptions = [
                 ],
             ]
 
-
             return {
                 fieldAddOffre,
                 fieldAddOffreTracker,

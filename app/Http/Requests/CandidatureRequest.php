@@ -72,7 +72,7 @@ class CandidatureRequest extends FormRequest
             'experiences.*.company_name' => 'required|string|max:255',
             'experiences.*.position' => 'required|string|max:255',
             'experiences.*.start_date' => 'required|date',
-            'experiences.*.end_date' => 'nullable|date|after_or_equal:experience.*.start_date',
+            // 'experiences.*.end_date' => 'nullable|date|after_or_equal:experience.*.start_date',
             // 'experience.*.current' => 'required|boolean',
 
             // Identification
