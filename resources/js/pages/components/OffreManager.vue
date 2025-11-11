@@ -160,6 +160,12 @@ Inertia.reload({
                     <template #ongoing="{ row }">
                         <StatusOngoing :status="row.ongoing" />
                     </template>
+
+                    <template #candidates_count="{ row }">
+                       <div class="max-w-max p-0.4 px-1 min-w-6  rounded-full text-center font-bold leading-4 bg-green-200">
+                         {{ row.candidates_count }}
+                       </div>
+                    </template>
                     <!-- Statut -->
                     <template #status="{ row }">
                     <StatusOffer  :status="row?.status" />
