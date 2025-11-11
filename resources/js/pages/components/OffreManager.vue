@@ -20,23 +20,25 @@ const columns = [
   { key: "reference", label: "# Ref" },
   { key: "assign_by", label: "Recruiter" },
   { key: "type", label: "Type" },
-  { key: "manager", label: "Manager" },
-  { key: "center", label: "Recruitment Entity" },
+ 
   { key: "position_title", label: "Position" },
+  { key: "status", label: "Status" },
+  { key: "ongoing", label: "Ongoing status" },
+  { key: "candidates_count", label: "Number of candidates" },
+   { key: "manager", label: "Manager" },
+  { key: "center", label: "Recruitment Entity" },
   { key: "country_duty_station", label: "Country duty station" },
   { key: "city_duty_station", label: "City duty station" },
   { key: "division", label: "Division" },
   { key: "grade", label: "Grade" },
   { key: "program", label: "Program" },
-  { key: "status", label: "Status" },
-  { key: "ongoing", label: "Ongoing status" },
+  
   { key: "comment", label: "Comment tacking" },
   { key: "date_tracking", label: "Date tracking" },
   { key: "reason", label: "Reason" },
   { key: "reason_replacement", label: "Replacement fullname" },
   { key: "published_at", label: "Published on" },
   { key: "expires_at", label: "Expires on" },
-  { key: "candidates_count", label: "Number of candidates" },
 ];
 
 const {exportToExcel}=useApplyForm()
