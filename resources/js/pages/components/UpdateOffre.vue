@@ -154,18 +154,17 @@ watch(
     <Transition name="fade">
       <div 
         v-if="isOpen" 
-        class="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black/50 p-4"
+        class="fixed inset-0 top-0    bg-black/50 bg-opacity-50 flex  justify-center z-50"
         @click.self="closeModal"
       >
         <Transition name="scale">
           <form 
             v-if="isOpen"
             @submit.prevent="handleSubmit"
-            class="w-full max-w-2xl"
+            class=" overflow-auto w-full h-screen"
           >
-         
             <div 
-              class="relative flex h-[90vh]  w-lg flex-col overflow-hidden rounded-2xl bg-white p-6 shadow-xl"
+              class="bg-white  flex my-4 flex-col mx-auto  rounded-lg p-6 w-lg relative"
             >
               <!-- En-tête -->
               <div class="mb-4 flex items-center justify-between">
@@ -216,7 +215,7 @@ watch(
               </div>
 
               <!-- Contenu scrollable -->
-              <div class="flex-1 space-y-4 overflow-y-auto px-2">
+              <div class="mt-7 flex-1  overflow-y-auto p-2">
                 <!-- Groupes de champs -->
                  <!-- <pre>{{ newOffre.offre }}</pre> -->
                 <template v-for="(groupe, index) in fieldAddOffre" :key="`groupe-${index}`">
@@ -228,7 +227,7 @@ watch(
                       :field="field"
                       v-model="newOffre.offre[field.key]"
                       :disabled="isPublishedDatePassed(field.key)"
-                      
+                      :min="filed?.min"
                     />
                   </div>
                 </template>

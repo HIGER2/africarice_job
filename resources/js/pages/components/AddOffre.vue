@@ -66,7 +66,7 @@ watch(
       >
         <!-- Modal -->
         <form action="" @submit.prevent="handleSubmit" class="overflow-auto w-full h-screen">
-          <transition name="scale">
+        <transition name="scale">
           <div 
             v-if="open"
             class="bg-white  flex my-4 flex-col mx-auto  rounded-lg p-6 w-lg relative"
@@ -99,7 +99,7 @@ watch(
                     :label="filed.label"
                     :field="filed"
                     v-model="newOffre.offre[filed.key]"
-                    :min="filed.min"
+                    :min="filed?.min"
                 />
                 </div>
                

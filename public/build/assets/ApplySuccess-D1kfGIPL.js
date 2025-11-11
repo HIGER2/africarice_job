@@ -1,1 +1,0 @@
-import e from"./SuccessSubmission-D0BD_CnT.js";import{p as o,a,o as t,b as c}from"./app-D6zQCepI.js";const m=o({__name:"ApplySuccess",setup(n){return(r,s)=>(t(),a("div",null,[c(e)]))}});export{m as default};
