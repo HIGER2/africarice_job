@@ -6,6 +6,7 @@ import Spinnercomponent from "./Spinnercomponent.vue";
 import { Inertia } from "@inertiajs/inertia";
 import axios from "axios";
 import countryCode from '../../data/country.json'
+import phoneCode from '../../data/phoneCodes.json'
 
 const props = defineProps<{
   row?: boolean | null
@@ -156,9 +157,9 @@ console.log(props.row);
                                   v-model="formData.country_code"
                                   class="p-3 max-w-max border rounded-l-lg focus:ring-2 focus:ring-primary focus:outline-none"
                                 >
-                                  <option v-for="country in countryCode" :key="country.code" :value="country.code">
-                                    {{ country.abbreviation }} ({{ country.code }})
-                                  </option>
+                                      <option v-for="country in phoneCode" :key="country.value" :value="country.value">
+                                        {{ country.value }}
+                                      </option>
                                 </select>
 
                                 <!-- Champ téléphone -->
