@@ -151,6 +151,12 @@ export function useApplyForm(){
                 Object.keys(item).forEach(key => {
                 const el = document.getElementById(`${index+key}`)
                 if (el) {
+                if (prefix=='experiences' ) {
+                    if (key =='end_date' && item['current'] ) {
+                        el.classList.remove('is-invalid')
+                        return false
+                    }
+                }
                     const value = item[key]
                     if (isEmpty(value)) {
                     el.classList.add('is-invalid')
@@ -198,9 +204,9 @@ export function useApplyForm(){
             }
 
             // Passe à l’étape suivante si tout est valide
-            if (currentStep.value < components.length - 1) {
-                currentStep.value++
-            }
+            // if (currentStep.value < components.length - 1) {
+            //     currentStep.value++
+            // }
             return true
     }
 
@@ -379,7 +385,8 @@ export function useApplyForm(){
             : 'Votre candidature a été soumise avec succès. ✅ | Your application has been successfully submitted. ✅';
 
         if (uuid) {
-                alert(message);
+            // alert(message);
+            Inertia.visit(`/apply-job/success/${uuid}`);
         }else{
             Inertia.visit('/profile');
         }

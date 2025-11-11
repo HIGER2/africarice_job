@@ -4,6 +4,7 @@ import NavBar from './components/NavBar.vue';
 import OverlayLoader from './components/OverlayLoader.vue';
 import { useApplyForm } from './composables';
 import { usePage } from '@inertiajs/inertia-vue3';
+import SuccessSubmission from './components/SuccessSubmission.vue';
 // import { usePage } from '@inertiajs/vue3'
 
 const page = usePage()
@@ -53,11 +54,12 @@ const handleSubmit=async(uuid,notApply=false)=>{
 </script>
 
 <template>
-  <div class="w-full ">
-    <NavBar :user="user.data" />
-            <OverlayLoader v-model="isLoading" text="Traitement..."/>
+  <div class="w-full bg-gray-50 ">
+    
+      <NavBar :user="user.data" />
+        <OverlayLoader v-model="isLoading" text="Traitement..."/>
 
-      <div class="max-w-xl mx-auto mt-4">
+    <div class="max-w-xl mx-auto mt-4">
         <a href="/" 
           class="px-4 py-2 text-sm font-medium bg-gray-100 text-primary rounded-xl hover:shadow-lg hover:bg-gray-200 inline-flex items-center gap-2 transition-all duration-200 mb-3"
         >
@@ -80,7 +82,7 @@ const handleSubmit=async(uuid,notApply=false)=>{
           <p><strong>Expire le :</strong> {{ formatDate(publication.expires_at) }}</p>
         </div>
       </div> -->
-        <div v-if="publication" class="bg-white border border-gray-200 rounded-lg p-5 mb-6">
+        <div v-if="publication" class=" border bg-white border-gray-200 rounded-lg p-5 mb-6">
           <h2 class="text-xl font-semibold mb-3">{{ publication.job.position_title }}</h2>
           <p class="text-gray-600">
             {{ publication.job.center }} • {{ publication.job.city_duty_station }},
@@ -106,7 +108,7 @@ const handleSubmit=async(uuid,notApply=false)=>{
           </h3> -->
 
         </div>
-      <div class="bg-white ">
+        <div class=" ">
           <h3  v-if="publication" class="text-lg font-semibold text-gray-800 mb-4">
             Votre candidature / Your Application 
           </h3>
@@ -114,7 +116,7 @@ const handleSubmit=async(uuid,notApply=false)=>{
           <!-- Here your stepper -->
           <!-- <p class="text-gray-500">Multi-step form…</p> -->
           
-          <div class="w-full border border-gray-200 rounded-lg p-5">
+          <div class="w-full bg-white border border-gray-200 rounded-lg p-5">
             <div class="flex items-center w-full mb-6">
               <template v-for="(section, index) in components" :key="index">
                 <div 
@@ -122,7 +124,8 @@ const handleSubmit=async(uuid,notApply=false)=>{
                   class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-full font-semibold"
                   :class="index <= currentStep ? 'bg-secondary text-white' : 'bg-gray-300 text-gray-700'"
                 >
-                  {{ index + 1 }}
+                  <span v-if="currentStep < index">{{ index + 1 }}</span>
+                  <i v-else class="uil uil-pen"></i>
                 </div>
 
                 <div 
@@ -144,7 +147,7 @@ const handleSubmit=async(uuid,notApply=false)=>{
             </keep-alive>  
           </div>
           
-            <div class="w-full flex justify-between  border-t-gray-200 bg-white mt-6  bottom-0 p-4">
+            <div class="w-full flex justify-between  border-t-gray-200  mt-6  bottom-0 p-4">
               <button 
                 @click="prevStep" 
                 class="px-4 py-2 cursor-pointer bg-gray-400 text-white rounded-lg" 
@@ -170,7 +173,6 @@ const handleSubmit=async(uuid,notApply=false)=>{
               </button>
             </div>
         </div>
-
   
   </div>
 

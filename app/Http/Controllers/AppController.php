@@ -51,6 +51,17 @@ class AppController extends Controller
         ]);
     }
 
+    public function applySuccess($uuid)
+    {
+        $publication = Publication::with('job')
+            ->where('uuid', $uuid)
+            ->first();
+        if ($publication) {
+            return Inertia::render('ApplySuccess', ['publication' => $publication]);
+        }
+        return redirect()->route('home')->with('error', 'Publication introuvable');
+    }
+
     public function offreDetail($uuid)
     {
 

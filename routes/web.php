@@ -4,7 +4,7 @@ use App\Http\Controllers\AppController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', [AppController::class, 'index']);
+Route::get('/', [AppController::class, 'index'])->name('home');
 Route::post('/register', [AppController::class, 'registerOrUpdate']);
 Route::post('/verify-email', [AppController::class, 'verifyEmail']);
 Route::post('/verify-pin', [AppController::class, 'verifyPin']);
@@ -57,6 +57,7 @@ Route::post('/completed/save', [AppController::class, 'storeCompletedProfile'])-
 
 Route::get('/apply-spontaneous', [AppController::class, 'spontanousApplication'])->middleware('auth');
 Route::post('/apply-job/save', [AppController::class, 'storeOrUpdate'])->middleware('auth');
+Route::get('/apply-job/success/{uuid}', [AppController::class, 'applySuccess'])->middleware('auth');
 Route::get('/profile', [AppController::class, 'profile'])->middleware('auth');
 Route::post('/upload-cv', [AppController::class, 'uploadCv'])->name('cv.add')->middleware('auth');
 Route::delete('/user/document', [AppController::class, 'deleteUserDocument'])->middleware('auth');

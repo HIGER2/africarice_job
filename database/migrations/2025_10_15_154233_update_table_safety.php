@@ -11,16 +11,18 @@ return new class extends Migration
         // 🔹 Liste des tables et colonnes à vérifier / ajouter
         $tables = [
 
-            // 'publication_applications' => [
-            //     'publication_id' => [
-            //         // 'update' => function (Blueprint $table) {
-            //         //     $table->foreignId('publication_id')->nullable()->change();
-            //         // },
-            //     ],
-            //     // 'application_type' => [
-            //     //     'create' => fn(Blueprint $table) => $table->enum('application_type', ['normal', 'spontaneous'])->default('normal')
-            //     // ],
-            // ],
+            'publication_applications' => [
+                'reference' => [
+                    // 'update' => function (Blueprint $table) {
+                    //     $table->foreignId('publication_id')->nullable()->change();
+                    // },
+                    'create' => fn(Blueprint $table) => $table->string('reference')->unique()->nullable()
+
+                ],
+                // 'application_type' => [
+                //     'create' => fn(Blueprint $table) => $table->enum('application_type', ['normal', 'spontaneous'])->default('normal')
+                // ],
+            ],
             // 'references' => [
             //     'country_code' => [
             //         // 'create' => fn(Blueprint $table) =>

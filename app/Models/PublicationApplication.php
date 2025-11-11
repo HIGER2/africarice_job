@@ -17,7 +17,8 @@ class PublicationApplication extends Model
         'publication_id',
         'application_type',
         'status',
-        'date'
+        'date',
+        'reference',
     ];
 
     protected $casts = [
@@ -43,6 +44,16 @@ class PublicationApplication extends Model
         static::creating(function ($model) {
             $model->uuid = Str::uuid()->toString();
             $model->date = Carbon::now()->toDateString();
+
+            // Génération d'une référence unique
+            $date = Carbon::now()->format('Ymd');       // ex : 20251111
+            $random = Str::upper(Str::random(6));       // ex : A8DKP2
+            $reference = "CANDID-$date-$random";
+            while (self::where('reference', $reference)->exists()) {
+                $random = Str::upper(Str::random(6));
+                $reference = "CANDID-$date-$random";
+            }
+            $model->reference = $reference;
         });
     }
 }
