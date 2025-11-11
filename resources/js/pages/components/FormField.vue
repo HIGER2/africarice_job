@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-3 w-full flex gap-2"
+  <div class="mb-4 w-full flex gap-2"
     :class="field.type =='checkbox' ? ' items-center gap-1': ' flex-col '"
   >
     <label :for="$attrs.id ?? field.key" class="text-gray-700 text-[13px] font-medium">

@@ -85,7 +85,6 @@ watch(
                 <i class="uil uil-times"></i>
                 </button>
               </div>
-
             <!-- Contenu -->
               <!-- {{ newOffre }} -->
             <div class="mt-7 flex-1  overflow-y-auto p-2">
@@ -102,7 +101,6 @@ watch(
                     :min="filed?.min"
                 />
                 </div>
-               
                 </template>
                   <div  class="w-full mb-4" v-for="value in fieldAddDocument">
                     <label class="cursor-pointer">

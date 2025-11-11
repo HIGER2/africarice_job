@@ -36,7 +36,7 @@ class OffreRequest extends FormRequest
             'offre.assign_by' => 'nullable|string|max:255',
             'offre.program' => 'nullable|string|max:255',
             'offre.city_duty_station' => 'nullable|string|max:255',
-            'offre.grade' => 'required|string|max:255',
+            'offre.grade' => 'nullable|string|max:255',
             'offre.type' => 'nullable|string|max:255',
         ];
     }

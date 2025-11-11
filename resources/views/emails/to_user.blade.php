@@ -19,9 +19,8 @@
 
     <p>
         Candidature envoyée avec succès
-        Ceci est une réponse automatique confirmant que votre candidature en ligne a été validée pour le poste de of <strong>{{ $candidature->publication->job->position_title }}</strong>.
-        Veuillez noter que seuls les candidats présélectionnés seront contactés.
-        Pour toute question, veuillez nous contacter par courriel à l'adresse <a href="mailto:africaricehr@cgiar.org">africaricehr@cgiar.org.</a>
+        Ceci est une réponse automatique confirmant que votre candidature en ligne a été validée pour le poste de   <strong>{{ $candidature->publication->job->position_title }}</strong>.
+        Veuillez noter que seul(e)s les candidat(e)s présélectionné(e)s seront contacté(e)s. Pour toute autre question, veuillez nous contacter par courriel à l'adresse <a href="mailto:africaricehr@cgiar.org">africaricehr@cgiar.org.</a>
     </p>
 
     <p>Cordialement</p>

@@ -28,7 +28,6 @@ class OffreDetailResource extends JsonResource
             'expires_at' => $this->expires_at,
             // 'created_at' => $this->created_at,
             // 'updated_at' => $this->updated_at,
-
             // Relation vers le job
             'job' => $this->whenLoaded('job', function () {
                 return [
@@ -64,8 +63,8 @@ class OffreDetailResource extends JsonResource
             // Relation vers les candidatures
             // 'candidat' => $this->whenLoaded('candidatures'),
             'candidat' => $this->whenLoaded('candidatures', function () {
-                // return$this->candidatures->pluck('user');
-                return CanditureUser::collection($this->candidatures->pluck('user'));
+                return ApplicationUser::collection($this->candidatures);
+                // return CanditureUser::collection($this->candidatures->pluck('user'));
             }),
         ];
     }

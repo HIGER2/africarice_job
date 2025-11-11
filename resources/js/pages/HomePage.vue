@@ -206,7 +206,7 @@ Your talent is our future: send us your spontaneous application.
       class="mt-4 border-t pt-3 text-sm text-gray-600 space-y-2"
     >
       <p><strong>Type:</strong> {{ pub.type }}</p>
-      <p><strong>Garde:</strong> {{ pub.job?.grade }}</p>
+      <p><strong>Grade:</strong> {{ pub.job?.grade }}</p>
       <p><strong>Division:</strong> {{pub.job?.division }}</p>
       <p><strong>Published on:</strong> {{ formatDate(pub.published_at) }}</p>
       <p><strong>Expires on:</strong> {{ formatDate(pub.expires_at) }}</p>
@@ -216,7 +216,7 @@ Your talent is our future: send us your spontaneous application.
       </p>
 
       <div class="max-w-max">
-        <h2 class="text-lg font-semibold mb-4">Documents</h2>
+        <h2 class="text-lg font-semibold mb-4">Job details</h2>
 
         <div v-if="pub.files.length > 0" class="space-y-2">
           <div 

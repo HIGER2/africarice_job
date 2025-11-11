@@ -74,10 +74,11 @@ class Publication extends Model
 
     public function scopeDate($query)
     {
-        $now = Carbon::now('Africa/Abidjan');
+        $now = Carbon::today('Africa/Abidjan');
+
         return $query->where('status', 'open')
-            ->whereDate('published_at', '<=', $now)
-            ->whereDate('expires_at', '>=', $now);
+            ->where('published_at', '<=', $now)
+            ->where('expires_at', '>=', $now);
     }
 
     public function scopeInternal($query)

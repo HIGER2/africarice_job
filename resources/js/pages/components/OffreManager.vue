@@ -20,7 +20,6 @@ const columns = [
   { key: "reference", label: "# Ref" },
   { key: "assign_by", label: "Recruiter" },
   { key: "type", label: "Type" },
- 
   { key: "position_title", label: "Position" },
   { key: "status", label: "Status" },
   { key: "ongoing", label: "Ongoing status" },
@@ -32,7 +31,6 @@ const columns = [
   { key: "division", label: "Division" },
   { key: "grade", label: "Grade" },
   { key: "program", label: "Program" },
-  
   { key: "comment", label: "Comment tacking" },
   { key: "date_tracking", label: "Date tracking" },
   { key: "reason", label: "Reason" },

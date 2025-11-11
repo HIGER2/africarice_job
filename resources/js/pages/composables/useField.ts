@@ -83,6 +83,7 @@ const statusOptions = [
                 ],
                 [
                     { type: "select", options:[
+                        {label:"unspecified",value:""},
                         {label:"GSS1",value:"GSS1"},
                         {label:"GSS2",value:"GSS2"},
                         {label:"GSS3",value:"GSS3"},
@@ -220,11 +221,16 @@ const statusOptions = [
                 ],
                 [
                     { type: "date", key: "start_date", label: "Start Date / Date de début" },
-                    { type: "date", key: "end_date", label: "End Date / Date de fin" },
+                    // { type: "date", key: "end_date", label: "End Date / Date de fin" },
                 ],
                 [
-                    { type: "checkbox", key: "current", label: "Are you still currently working in this position ? / Travaillez-vous encore actuellement à ce poste ? :" },
+                    { type: "checkbox", key: "current", label: "Check if you currently working at this position / Cochez si vous occupez actuellement ce poste :" },
                 ],
+                [
+                    // { type: "date", key: "start_date", label: "Start Date / Date de début" },
+                    { type: "date", key: "end_date", label: "End Date / Date de fin" },
+                ],
+               
             ]
     
             const cgiarFiled = [

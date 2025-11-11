@@ -31,7 +31,7 @@ const labelsMap = {
     origin_experience_years: "Experience",
     origin_french_level: "French Level",
     origin_english_level: "English Level",
-    date: "Application date",
+    date_application: "Application date",
 }
 
 
@@ -107,6 +107,7 @@ const exportCv = reactive({
 <div class="w-full mx-auto bg-white rounded-2xl     ">
      <!-- <pre>{{ data.data[0]?.job?.center }}</pre> -->
     <div class="flex justify-between items-center ">
+        
         <!-- <ButtonBack path="/manager/offres" /> -->
         <div class="flex items-center gap-2 mb-3">
             <!-- <StatusOffer :status="data?.data[0]?.status"/> -->

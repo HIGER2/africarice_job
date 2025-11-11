@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full mb-3">
+  <div class="w-full mb-4">
     <label class="text-sm font-medium text-gray-700 mb-1">
     {{ field.label }}
     </label>

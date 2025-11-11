@@ -19,7 +19,7 @@ class CanditureUser extends JsonResource
 
         $this->application->diplomas->map(function ($diploma, $index) use (&$flattened) {
             $num = $index + 1;
-            $flattened["diploma{$num}"] = $diploma->diploma ?? 'n/a';
+            $flattened["diploma{$num}"] = $diploma->diploma . " ($diploma->option)" ?? 'n/a';
             // $flattened["option{$num}"] = $diploma->option;
         });
         $this->application->references->map(function ($reference, $index) use (&$flattened) {
@@ -27,14 +27,11 @@ class CanditureUser extends JsonResource
             $flattened["reference{$num}"] = "Nom : " . $reference->full_name .  '; company name : ' . $reference->company . '; function: ' . $reference->function . '; phone: ' . ($reference->country_code ?? '') . $reference->phone . '; email: ' . $reference->email;
             // $flattened["option{$num}"] = $diploma->option;
         });
-
         $this->application->experiences->map(function ($experience, $index) use (&$flattened) {
             $num = $index + 1;
             $flattened["experience{$num}"] = "Entreprise{$num} : " . $experience->company_name . '; Poste: ' . $experience->position . '; De: ' . $experience->start_date . '; A: ' . ($experience->current ? 'Présent' : $experience->end_date);
             // $flattened["option{$num}"] = $diploma->option;
         });
-
-
         return [
             // 'candidature_id' => $this->id,
             'uuid' => $this->uuid,
@@ -74,9 +71,9 @@ class CanditureUser extends JsonResource
                 ? Carbon::parse($this->application->identification->birth_date)->age . " ans"
                 : 'N/A',
 
-            'date' => $this->application?->date
-                ? Carbon::parse($this->application->date)->format('d/m/Y')
-                : 'N/A',
+            // 'date' => $this->application?->date
+            //     ? Carbon::parse($this->application->date)->format('d/m/Y')
+            //     : 'N/A',
 
             'origin_nationality'      => $this->application?->origin?->nationality ?? 'N/A',
             'second_nationality'      => $this->application?->origin?->second_nationality ?? 'N/A',

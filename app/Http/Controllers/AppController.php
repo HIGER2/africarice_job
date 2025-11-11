@@ -709,9 +709,10 @@ class AppController extends Controller
 
         switch ($step) {
             case 'offres':
-                Publication::whereDate('expires_at', '<', Carbon::now('Africa/Abidjan')->toDateString())
+                Publication::where('expires_at', '<', Carbon::today('Africa/Abidjan'))
                     ->where('status', '!=', 'closed')
                     ->update(['status' => 'closed']);
+
                 $offres = OffreResource::collection(
                     Publication::with(['job', 'files', 'candidatures.user', 'lastTracking'])
                         ->when($search, function ($q) use ($search) {
@@ -971,20 +972,20 @@ class AppController extends Controller
 
             // Déterminer le statut
             $status = $offre['status'] ?? 'pending';
-            if (Carbon::parse($offre['expires_at'], 'Africa/Abidjan')
-                ->lt(Carbon::now('Africa/Abidjan'))
-            ) {
-                $status = 'closed';
-            }
+            // if (Carbon::parse($offre['expires_at'], 'Africa/Abidjan')
+            //     ->lt(Carbon::now('Africa/Abidjan'))
+            // ) {
+            //     $status = 'closed';
+            // }
 
             // Vérifier si la publication existe
             $publication = Publication::where("uuid", $offre["uuid"])->first();
 
             if ($publication) {
                 // 🔹 Mise à jour de la publication
-                $publishedAt = Carbon::parse($offre['published_at'], 'Africa/Abidjan');
-                $expiresAt  = Carbon::parse($offre['expires_at'], 'Africa/Abidjan');
-
+                $publishedAt = Carbon::parse($offre['published_at'], 'Africa/Abidjan')->endOfDay();
+                $expiresAt  = Carbon::parse($offre['expires_at'], 'Africa/Abidjan')->endOfDay();
+                // Carbon::parse($request->expires_at)->endOfDay()
                 $publication->update([
                     'type'         => $offre['type'] ?? null,
                     'published_by' => Auth::id(),
