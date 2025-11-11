@@ -84,6 +84,7 @@ const handleSubmit = async() => {
                     :label="filed.label"
                     :field="filed"
                     v-model="newOffreTrakinck[filed.key]"
+                    :min="filed?.min"
                 />
                 </div>
                

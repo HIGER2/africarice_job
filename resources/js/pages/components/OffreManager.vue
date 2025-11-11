@@ -136,7 +136,7 @@ Inertia.reload({
   <div>
         <div class="w-full min-h-screen flex flex-col">
             <div class="flex   justify-between mb-6 items-center w-full">
-                <h2 class="text-2xl font-semibold">Manage Job Offers</h2>
+                <h2 class="text-2xl font-semibold">Manage Job </h2>
                 <div class="flex gap-2 justify-between items-center">
                     <input 
                     v-model="search"
@@ -168,15 +168,14 @@ Inertia.reload({
                     <!-- Actions -->
                         <template #actions="{ row }">
                           <div class="flex items-center gap-2">
-                            <button @click="Updated(row)" type="button" class="px-3 cursor-pointer py-1 text-sm border rounded-md hover:bg-gray-50">
+                            <button @click="Updated(row)" type="button" class="border-[0.1rem] border-gray-200  px-3 rounded-lg text-primary py-1 text-[12px]  cursor-pointer pyrder  hover:bg-gray-50">
                              <Spinnercomponent v-if="loading && isIndex ==row.uuid " />
                              <span v-else>Edit</span>
-
                             </button>
-                            <a :href="`/manager/offres/${row.uuid}`" class="px-3 py-1 text-sm border rounded-md hover:bg-gray-50">
+                            <a :href="`/manager/offres/${row.uuid}`" class="border-[0.1rem] border-gray-200  px-3 rounded-lg text-primary  py-1 text-[12px]  hover:bg-gray-50">
                                 View
                             </a>
-                             <a :href="`/manager/offerTracker/${row.uuid}`" class="px-3 py-1 text-sm border rounded-md hover:bg-gray-50">
+                             <a :href="`/manager/offerTracker/${row.uuid}`" class="border-[0.1rem] border-gray-200  px-3 rounded-lg text-primary  py-1 text-[12px]  hover:bg-gray-50">
                                 Tracking
                             </a>
                           </div>

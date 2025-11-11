@@ -22,6 +22,13 @@ const addReference = () => {
 const removeReference = (index: number) => {
   props.form.experiences.splice(index, 1)
 }
+
+const showCurrent = (key,index)=>{
+  if (key !=='current') return true
+  else {
+    if (index==0) return true
+  }
+}
 </script>
 
 <template>
@@ -29,15 +36,18 @@ const removeReference = (index: number) => {
   <h2 class="text-xl font-bold mb-4">Your Most Recent Experience</h2>
 
   <div class="w-full mb-2 border-b border-b-gray-300 py-3" 
-       v-for="(refItem, indexRef) in form.experiences" :key="indexRef">
+      v-for="(refItem, indexRef) in form.experiences" :key="indexRef">
     <div class="w-full flex gap-2" v-for="(fieldGroup, index) in fieldExperience" :key="index">
       <template v-for="value in fieldGroup" :key="value.key">
+
         <FormField
           :field="value"
           :id="`${indexRef}${value.key}`"
           v-model="form.experiences[indexRef][value.key]"
           :disabled="value.key == 'end_date' && form.experiences[indexRef].current"
+          v-if="showCurrent(value.key,indexRef)"
         />
+
       </template>
     </div>
 

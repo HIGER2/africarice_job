@@ -14,7 +14,7 @@ const props = defineProps({
 
 const tabs = [
     {
-        label: 'Manage Job Offers',
+        label: 'Manage Job',
         icon: 'uil uil-briefcase-alt',
         path: 'offres',
     },
@@ -82,7 +82,7 @@ onMounted(() => {
             </div>
         </div> -->
         <div class="w-full flex flex-col relative h-screen  overflow-hidden">
-            <nav class="w-full px-6 items-center justify-between sticky top-0  z-10 bg-white flex p-2 border-b border-gray-100">
+            <nav class="w-full px-6 items-center justify-between sticky top-0  z-10 bg-white flex p-2 border-b border-gray-200">
                 <div class="flex items-center">
                     <a href="/">
                         <Logo/>

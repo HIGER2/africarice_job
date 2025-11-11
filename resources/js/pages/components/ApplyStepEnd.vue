@@ -116,9 +116,9 @@ const removeReference = (index: number) => {
         </div>
       </label>
     </div>
-    <p v-if="messageCV">
+    <!-- <p v-if="messageCV">
         {{ messageCV }}
-    </p>
+    </p> -->
   </div>
 
   <!-- List of Uploaded Documents -->

@@ -30,7 +30,7 @@ const formatDate = (date) => {
   })
 }
 
-const { fields, form, payLoad,documentPreview, currentStep, handleFile, components, nextStep, prevStep, submitForm } = useApplyForm()
+const { fields, form, payLoad,documentPreview,setStep, currentStep, handleFile, components, nextStep, prevStep, submitForm } = useApplyForm()
 
 const isLoading =ref(false)
 
@@ -106,20 +106,20 @@ const handleSubmit=async(uuid,notApply=false)=>{
           </h3> -->
 
         </div>
-      <div class="bg-white border border-gray-200 rounded-lg p-5">
-          <h3 class="text-lg font-semibold text-gray-800 mb-4 text-center">
-            Votre candidature<br />
-            <span class="text-gray-500 text-base">Your Application</span>
+      <div class="bg-white ">
+          <h3  v-if="publication" class="text-lg font-semibold text-gray-800 mb-4">
+            Votre candidature / Your Application 
           </h3>
 
           <!-- Here your stepper -->
           <!-- <p class="text-gray-500">Multi-step form…</p> -->
           
-          <div class="w-full">
+          <div class="w-full border border-gray-200 rounded-lg p-5">
             <div class="flex items-center w-full mb-6">
               <template v-for="(section, index) in components" :key="index">
                 <div 
-                  class="w-10 h-10 flex items-center justify-center rounded-full font-semibold"
+                  @click="setStep(index)"
+                  class="w-10 h-10 cursor-pointer flex items-center justify-center rounded-full font-semibold"
                   :class="index <= currentStep ? 'bg-secondary text-white' : 'bg-gray-300 text-gray-700'"
                 >
                   {{ index + 1 }}
@@ -129,7 +129,8 @@ const handleSubmit=async(uuid,notApply=false)=>{
                   v-if="index < components.length - 1" 
                   class="flex-1 h-1"
                   :class="index < currentStep ? 'bg-secondary' : 'bg-gray-300'"
-                ></div>
+                >
+              </div>
               </template>
             </div>
 
@@ -141,8 +142,9 @@ const handleSubmit=async(uuid,notApply=false)=>{
               :notApply="notApply"
               />
             </keep-alive>  
-
-            <div class="flex justify-between border-t border-t-gray-200 bg-white mt-6 sticky bottom-0 p-4">
+          </div>
+          
+            <div class="w-full flex justify-between  border-t-gray-200 bg-white mt-6  bottom-0 p-4">
               <button 
                 @click="prevStep" 
                 class="px-4 py-2 cursor-pointer bg-gray-400 text-white rounded-lg" 
@@ -167,7 +169,6 @@ const handleSubmit=async(uuid,notApply=false)=>{
                 Submit
               </button>
             </div>
-          </div>
         </div>
 
   

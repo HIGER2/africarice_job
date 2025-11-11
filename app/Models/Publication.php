@@ -20,7 +20,6 @@ class Publication extends Model
         'status',
         'published_by',
         'published_at',
-        'uuid',
         'expires_at'
     ];
 

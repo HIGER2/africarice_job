@@ -101,7 +101,7 @@ const statusOptions = [
                     ], key: "grade", label: "Grade" },
                     { type: "select",options:[
                         {label:"Corporate",value:'corporate'},
-                        {label:"Recherche",value:'recherche'},
+                        {label:"Research",value:'research'},
                         {label:"DGO",value:'DGO'},
                         {label:"Finance",value:'finance'},
                     ], key: "division", label: "Division" },
@@ -153,7 +153,9 @@ const statusOptions = [
                     { type: "text", key: "reason_replacement", label: "Replacement fullname" },
                 ],
                 [
-                    { type: "date", key: "published_at", label: "Published On / Publié le" },
+                    { type: "date", 
+                    min: new Date().toISOString().split("T")[0], 
+                    key: "published_at", label: "Published On / Publié le" },
                     { type: "date", key: "expires_at", label: "Closing Date / Date de clôture" },
                 ],
             ]
@@ -183,6 +185,7 @@ const statusOptions = [
                                         type: "date",
                                         key: "date",
                                         label: "Date",
+                                        min: new Date().toISOString().split("T")[0], 
                                         placeholder: "Select date",
                                         },
                                     ],
@@ -224,7 +227,7 @@ const statusOptions = [
     
             const cgiarFiled = [
                 [
-                    { type: "checkbox", key: "current", label: "Check if you have previously worked, or are currently working, for a CGIAR center. / Travaillez-vous encore actuellement à ce poste ? :" },
+                    { type: "checkbox", key: "current", label: "Check if you have previously worked, or are currently working, for a CGIAR center. / Cochez si vous avez déjà travaillé, ou si vous travaillez actuellement, pour un centre du CGIAR. :" },
                 ],
                 [
                     { 

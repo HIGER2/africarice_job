@@ -160,11 +160,11 @@ const exportCv = reactive({
                 </div>
                 <div>
                     <p class="text-gray-500">Duty Country</p>
-                    <p class="font-medium">{{ data?.data[0]?.job.city_duty_station }}</p>
+                    <p class="font-medium">{{ data?.data[0]?.job.country_duty_station }}</p>
                 </div>
                 <div>
                     <p class="text-gray-500">Duty City</p>
-                    <p class="font-medium">{{ data?.data[0]?.job.country_duty_station }}</p>
+                    <p class="font-medium">{{ data?.data[0]?.job.city_duty_station  }}</p>
                 </div>
                 <div>
                     <p class="text-gray-500">Grade</p>
@@ -172,7 +172,7 @@ const exportCv = reactive({
                 </div>
                 <div>
                     <p class="text-gray-500">Division</p>
-                    <p class="font-medium">{{ data?.data[0]?.job.grade }}</p>
+                    <p class="font-medium">{{ data?.data[0]?.job.division }}</p>
                 </div>
                 <div>
                     <p class="text-gray-500">Program</p>

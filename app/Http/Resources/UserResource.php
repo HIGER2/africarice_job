@@ -74,7 +74,7 @@ class UserResource extends JsonResource
                         'company_name' => $e->company_name,
                         'position'     => $e->position,
                         'start_date'   => $e->start_date,
-                        'end_date'     => $e->end_date,
+                        'end_date'     => $e->end_date ?? "",
                         'current'      => $e->current,
                     ];
                 }),

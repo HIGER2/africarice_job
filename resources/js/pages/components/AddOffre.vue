@@ -99,6 +99,7 @@ watch(
                     :label="filed.label"
                     :field="filed"
                     v-model="newOffre.offre[filed.key]"
+                    :min="filed.min"
                 />
                 </div>
                

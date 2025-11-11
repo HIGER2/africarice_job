@@ -90,15 +90,14 @@ export function useApplyForm(){
         reference:{...initReference},
         documents:{...initDoc},
     }
-    
 
     const form = reactive({
-        diplomas: [{...initDiploma}],
+        diplomas: [],
         cgiar_information:{},
-        experiences: [{...initExperience}],
+        experiences: [],
         identification: {},
         origin: {},
-        references: [{...useFiled.fieldExperience}],
+        references: [],
         documents:[{...initDoc},{...initDoc}],
     })
     const documentPreview = ref([]);
@@ -206,12 +205,19 @@ export function useApplyForm(){
     }
 
     const nextStep = (current:any,form) => {
-        // validateStep(current,form)
-         if (currentStep.value < components.length - 1) {
-                currentStep.value++
-            }
+        // console.log('====================================');
+        // console.log();
+        // console.log('====================================');
+        let valid =  validateStep(current,form)
+        if (!valid) return
+        if (currentStep.value < components.length - 1) {
+            currentStep.value++
+        }
     }
 
+    const setStep = (current:any) => {
+        if (currentStep.value>current) currentStep.value = current
+    }
     
     const addReference = () => {
         form.reference.push({ ...initReference }); // crée un nouvel objet
@@ -305,32 +311,11 @@ export function useApplyForm(){
             alert(errors.join("\n- "));
             return false
             } 
-            
             if (!confirm("Do you confirm this operation?\nConfirmez-vous cette opération ?")) {
                 return false; // Annule l'envoi si l'utilisateur clique sur "Annuler"
             }
         const formData = new FormData();
-
-        // Ajouter les données JSON
         formData.append('uuid',uuid ? uuid : '');
-        // formData.append('identification', JSON.stringify(form.identification));
-        // formData.append('origin', JSON.stringify(form.origin));
-        // formData.append('diplomas', JSON.stringify(form.diplomas));
-        // formData.append('experience', JSON.stringify(form.experience));
-        // formData.append('reference', JSON.stringify(form.reference));
-        // formData.append('cgiar_information', JSON.stringify(form.cgiar_information));
-
-        // // Ajouter les fichiers
-        // form.documents.forEach((doc, index) => {
-        //    if (doc.id) {
-        //         formData.append(`documents[${index}][id]`, doc.id);
-        //     }
-        //     // Ajouter le fichier seulement s'il est valide
-        //     if (doc.file instanceof File) {
-        //         formData.append(`documents[${index}][file]`, doc.file);
-        //     }
-        // });
-
                         
         // Identification (objet simple)
         Object.keys(form.identification).forEach(key => {
@@ -388,7 +373,6 @@ export function useApplyForm(){
 
         // console.log('Réponse du serveur :', response.data?.data?.message);
 
-        console.log(uuid);
         
         const message = !uuid
             ? 'Vos informations ont été mises à jour avec succès. ✅ | Your information has been successfully updated. ✅'
@@ -764,6 +748,7 @@ export function useApplyForm(){
     downloadZip,
     uploadCv,
     submitCompleted,
+    setStep,
     // fieldAddOffreTracker,
     ...repository,
     ...useFiled,

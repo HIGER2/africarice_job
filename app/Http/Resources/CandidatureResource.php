@@ -43,7 +43,7 @@ class CandidatureResource extends JsonResource
             'publication_reference' => optional($this->publication)->reference,
             'publication_type' => optional($this->publication)->type,
             // 'publication_is_published' => $this->publication->is_published,
-            'publication_is_closed' => optional($this->publication)->status,
+            'status' => optional($this->publication)->status,
             // 'job_id' => $this->publication->job->id,
             'job_position_title' => optional($this->publication?->job)->position_title,
             'date' => Carbon::parse($this->date)->format('d/m/Y'),

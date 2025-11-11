@@ -27,7 +27,7 @@ const labelsMap = {
 //   publication_id: "ID Publication",
 //   publication_type: "Type Publication",
 //   publication_is_published: "Publication Publiée",
-  publication_is_closed: "Publication Clôturée",
+  status: "Status",
 
 //   job_id: "ID Poste",
   job_position_title: "Intitulé Poste",

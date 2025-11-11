@@ -108,7 +108,7 @@ class AppController extends Controller
         if ($uuid) {
             $publication = Publication::with('job')
                 ->where('uuid', $uuid)
-                ->where('status', 'published')
+                ->where('status', 'open')
                 // ->where('expires_at', '>=', now())
                 ->first();
         }
@@ -354,9 +354,6 @@ class AppController extends Controller
                         'message' => "Cette offre est clôturée. | This job posting is closed."
                     ], 403);
                 }
-
-
-
 
                 // 1. Vérifie si la candidature existe déjà
                 $existingApplication = PublicationApplication::where('user_id', $userId)
