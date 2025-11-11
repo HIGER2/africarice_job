@@ -156,7 +156,9 @@ const statusOptions = [
                     { type: "date", 
                     min: new Date().toISOString().split("T")[0], 
                     key: "published_at", label: "Published On / Publié le" },
-                    { type: "date", key: "expires_at", label: "Closing Date / Date de clôture" },
+                    {   type: "date", key: "expires_at",
+                        min: new Date().toISOString().split("T")[0],
+                        label: "Closing Date / Date de clôture" },
                 ],
             ]
     

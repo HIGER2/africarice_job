@@ -52,7 +52,7 @@ Route::get('/apply-job/{uuid?}', [AppController::class, 'applyJob'])
 
 Route::get('/completed', [AppController::class, 'completedProfile'])
     ->middleware('auth')
-    ->name('apply.job');
+    ->name('completed.job');
 Route::post('/completed/save', [AppController::class, 'storeCompletedProfile'])->middleware('auth');
 
 Route::get('/apply-spontaneous', [AppController::class, 'spontanousApplication'])->middleware('auth');
