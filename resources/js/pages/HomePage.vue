@@ -216,7 +216,7 @@ Your talent is our future: send us your spontaneous application.
       </p>
 
       <div class="max-w-max">
-        <h2 class="text-lg font-semibold mb-4">Job details</h2>
+        <h2 class="text-lg font-semibold mb-4">Job description</h2>
 
         <div v-if="pub.files.length > 0" class="space-y-2">
           <div 

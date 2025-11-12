@@ -1,0 +1,1 @@
+import{_ as e}from"./Profile.vue_vue_type_script_setup_true_lang-C2-6dRsq.js";import{p as r,a as t,o as n,b as o}from"./app-DdKep4Ue.js";const p=r({__name:"CandidatManagerDetail",props:{data:Array},setup(a){return(s,c)=>(n(),t("div",null,[o(e,{user:a.data.data},null,8,["user"])]))}});export{p as _};
